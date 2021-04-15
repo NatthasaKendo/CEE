@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index_style.css">
-    <script src="index_script.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index_style.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <title>Game Title</title>
-</head>
-<body>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+    <script src="index_script.js"></script>
+  </head>
+  <body>
     <h1>Game Title</h1>
 
     <form>
-        <table>
-            <tr>
-                <td><label for="name">Name: </label></td>
-                <td><input type="text" id="name" name="name"></td>
-            </tr>
-            <br>
-            <tr>
-                <td><label for="img">Profile Image: </label></td>
-                <td><input type="file" id="img" accept="image/*"></td>
-            </tr>
-            <tr>
-                <td><button type="submit" id="host">Create a Room</button></td>
-                <td><button type="submit" id="join">Join a Room</button><br>
-                    <div id="join-room">
-                        <label for="roomID">Room ID:</label>
-                        <input type="text" id="roomID" name="roomID">
-                        <button type="submit" value="submit">Submit</button>
-                    </div>
-                </td>
-            </tr>
-        </table>
+      <table>
+        <tr>
+          <td><label for="name">Name: </label></td>
+          <td><input type="text" id="name" name="name" /></td>
+        </tr>
+        <br />
+        <tr>
+          <td><label for="img">Profile Image: </label></td>
+          <td><input type="file" id="img" accept="image/*" /></td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit" id="host" onclick="createRoom()">
+              Create a Room
+            </button>
+          </td>
+          <td>
+            <button type="submit" id="join">Join a Room</button><br />
+            <div id="join-room">
+              <label for="roomID">Room ID:</label>
+              <input type="text" id="roomID" name="roomID" />
+              <button type="submit" value="submit">Submit</button>
+            </div>
+          </td>
+        </tr>
+      </table>
     </form>
-
-</body>
+  </body>
 </html>
