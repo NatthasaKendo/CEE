@@ -18,10 +18,10 @@ const db = firebase.firestore();
 
 function addName() {
     console.log("Add name");
-    const name = document.getElementById('fname').value;
+    const name = document.getElementById('name').value;
     console.log(name);
     db.collection("test_name").add({
-        namee: name,
+        name: name,
     })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);

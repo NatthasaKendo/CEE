@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script src="room_script.js"></script>
+    <link rel="stylesheet" href="room_style.css" />
+
+    <title>Room</title>
+  </head>
+
+  <body>
+
+    <h1>Room Code: </h1>
+    <h1 id="code"></h1>
+
+    <h2>Player: </h2>
+    <h2 id="player-count"></h2>
+
+    <table id="player-list">
+        <tr id="player1">
+            <td><img src="" alt="Player" width="600px"></td>
+            <td id = "name">Player1</td>
+        </tr>
+    </table>
+    <div id="host">
+        <button onclick="start()">Start</button>
+    </div>
+    <div id="member">
+        <p>Waiting for host to start ...</p>
+    </div>
+  </body>
+
+</html>
