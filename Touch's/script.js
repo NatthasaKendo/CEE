@@ -11,17 +11,17 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+//firebase.analytics();
 
 const db = firebase.firestore();
-const test_name_ref = db.collection("test_name");
+//const test_name_ref = db.collection("test_name");
 
 function addName() {
-    console.log("add name");
+    console.log("Add name");
     const name = document.getElementById('fname').value;
     console.log(name);
     db.collection("test_name").add({
-        name: name,
+        namee: name,
     })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
@@ -32,4 +32,21 @@ function addName() {
 
 }
 
-addName("test");
+function createRoom() {
+    console.log("Create room");
+    const id = generateRoomId();
+    console.log(id);
+    var data = { answer: [""], name: [""], question: "", round: 0, score: [0] };
+    db.collection("roomID").doc(id).set(data);
+    console.log("Created Room with ID:" + id.toString())
+}
+
+function generateRoomId() {
+    var id = "";
+    for (i = 0; i < 4; i++) {
+        var random = Math.floor(Math.random() * 10);
+        id += random.toString();
+    }
+    console.log(id);
+    return id;
+}
