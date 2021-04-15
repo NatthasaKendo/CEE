@@ -1,0 +1,19 @@
+#join-room{
+    display: none;
+    position: absolute;
+    top: 20%; right: 45%;
+    transform: translate(50%,-50%);
+}
+
+.header {
+    text-align: center;
+}
+
+#namespace {
+    text-align: center;
+}
+
+#space{
+    display: flex;
+    justify-content: center;
+}
