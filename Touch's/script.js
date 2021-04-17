@@ -18,10 +18,10 @@ const db = firebase.firestore();
 
 function addName() {
     console.log("Add name");
-    const name = document.getElementById('fname').value;
+    const name = document.getElementById('name').value;
     console.log(name);
     db.collection("test_name").add({
-        namee: name,
+        name: name,
     })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
@@ -32,13 +32,64 @@ function addName() {
 
 }
 
-function createRoom() {
-    console.log("Create room");
+async function createRoom(hostName) {
+    console.log("Creating room with id:");
     const id = generateRoomId();
-    console.log(id);
-    var data = { answer: [""], name: [""], question: "", round: 0, score: [0] };
-    db.collection("roomID").doc(id).set(data);
+    var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
+    db.collection("roomID").doc(id).set(data).then(() => {
+        addMember(hostName, id);
+    })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });;
     console.log("Created Room with ID:" + id.toString())
+
+
+}
+
+async function addMember(name, roomID) {
+    console.log("Adding member...");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    //console.log("data " + data);
+    var nameList = data.name;
+    //console.log("nameList " + nameList);
+    if (checkNameExist(name, nameList)) {
+        console.log("Name already exists.");
+    } else if (!(checkNameExist(name, nameList))) {
+        data.answer.push("");
+        data.name.push(name);
+        data.profile_pic.push("");
+        data.score.push(0);
+        //console.log(data.name);
+        db.collection("roomID").doc(roomID).set(data).then(() => {
+            console.log("Document successfully overwritten!");
+            console.log("Added member as host with name: " + name);
+        })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    }
+
+}
+
+function checkNameExist(newName, namesInData) {
+    for (i = 0; i < namesInData.length; i++) {
+        if (newName == namesInData[i]) return true;
+    } return false;
 }
 
 function generateRoomId() {
@@ -49,4 +100,22 @@ function generateRoomId() {
     }
     console.log(id);
     return id;
+}
+
+async function getData(roomID) {
+    //var data = db.collection("roomID").doc(roomID).get();
+    var docRef = db.collection("roomID").doc(roomID);
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            //console.log("Document data:", doc.data());
+            var data = doc.data();
+            //console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
 }

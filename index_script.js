@@ -32,13 +32,43 @@ function addName() {
 
 }
 
-function createRoom() {
+function createRoom(hostName) {
     console.log("Create room");
     const id = generateRoomId();
     console.log(id);
-    var data = { answer: [""], name: [""], question: "", round: 0, score: [0] };
+    var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
     db.collection("roomID").doc(id).set(data);
     console.log("Created Room with ID:" + id.toString())
+    addMember(hostName, id);
+
+}
+
+function addMember(name, roomID) {
+    console.log("Add member");
+    var data = db.collection("roomID").doc(roomID).get();
+    var nameList = data[name];
+    if (checkNameExist(name, nameist)) {
+        console.log("Name already exists.");
+    } else if (!(checkNameExist(name, nameist))) {
+        data[answer].push("");
+        data[name].push(name);
+        data[profile_pic].push("");
+        data[score].push(0);
+        db.collection("roomID").doc(roomID).set(data).then(() => {
+            console.log("Document successfully overwritten!");
+            console.log("Added member as host with name: " + name);
+        })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    }
+
+}
+
+function checkNameExist(newName, namesInData) {
+    for (i = 0; i < namesInData.length; i++) {
+        if (newName == namesInData[i]) return true;
+    } return false;
 }
 
 function generateRoomId() {

@@ -13,9 +13,19 @@
       <label for="fname">Name:</label><br />
       <input type="text" id="fname" name="fname" /><br />
       <label>Room ID:</label><br />
-      <input type="text" id="" name="fname" /><br />
-      <button type="button" onclick="generateRoomId()">Add Name</button>
-      <button type="button" onclick="createRoom()">Create Room</button>
+      <input type="text" id="roomID" name="fname" /><br />
+      <button
+        type="button"
+        onclick="addMember(document.getElementById('fname').value,document.getElementById('roomID').value)"
+      >
+        Join Room
+      </button>
+      <button
+        type="button"
+        onclick="createRoom(document.getElementById('fname').value)"
+      >
+        Create Room
+      </button>
     </form>
   </body>
 </html>
