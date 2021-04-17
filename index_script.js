@@ -81,10 +81,16 @@ function generateRoomId() {
     return id;
 }
 
-function show(){
-    $("#join-room").show();
-}
+$(document).ready(function () {
+    /*For Jquery Script */
 
-function hide(){
-    $("#join-room").hide();
-}
+    $("#join-btn").on({
+        mouseenter: function () {
+            $("#join-room").show();
+        },
+        mouseleave: function () {
+            $("#join-room").hide();
+        },
+    })
+
+})
