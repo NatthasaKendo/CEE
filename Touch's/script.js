@@ -119,3 +119,26 @@ async function getData(roomID) {
         console.log("Error getting document:", error);
     });
 }
+
+function deleteAllRooms() {
+    //console.log("came")
+    db.collection("roomID").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id, " => ", doc.data());
+            db.collection("roomID").doc(doc.id).delete().then(() => {
+                console.log("Document " + doc.id + " successfully deleted!");
+            }).catch((error) => {
+                console.error("Error removing document: ", error);
+            });
+        });
+    });
+}
+
+function deleteRoom(roomID) {
+    db.collection("roomID").doc(roomID).delete().then(() => {
+        console.log("Document " + roomID + " successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
