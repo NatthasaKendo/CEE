@@ -1,7 +1,7 @@
 function joinRoom() {
-    var x = document.getElementById("join-room");
+    var x = document.getElementById("id01");
     if(window.getComputedStyle(x).display === "none") {
-        x.style.display = "block";
+        x.style.display = "flex";
     }
     else{
         x.style.display = "none";

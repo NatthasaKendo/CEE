@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="background.css">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
     <meta charset="UTF-8">
@@ -12,19 +13,59 @@
 </head>
 
 <body>
-    <h1 class="header">Comp Eng Ess project </h1>
-    <label id="namespace">Name: </label>
-    <div id="space">
-        <input type="text" id="name" name="name"><br>
-        <button type="submit" value="host">Host a Room</button>
-        <button type="submit" value="join" onclick="joinRoom()">Join a Room</button><br>
-    </div> 
-    
-    <div id="join-room">
-        <label for="roomID">Room ID:</label>
-        <input type="text" id="roomID" name="roomID">
-        <button type="submit" value="submit">Submit</button>
+    <div class="context">
+        <h1>Game Title</h1>
+        <div id="button">
+            <a href="#">
+                <span>Create a Room</span>
+                <div class="liquid"></div>
+            </a>
+            <a href="#" onclick="joinRoom()">
+                <span>Join a Room</span>
+                <div class="liquid"></div>
+            </a>
+        </div>
+        <div id="id01" class="modal">
+  
+            <form class="modal-content animate" action="/action_page.php" method="post">
+              <div class="imgcontainer" style="background-color:#f1f1f1">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="img_avatar2.png" alt="Avatar" class="avatar">
+              </div>
+          
+              <div class="container" style="background-color:#f1f1f1">
+                <label for="uname"><b>Name: </b></label>
+                <input type="text" placeholder="Enter Name" name="uname" required>
+          
+                <label for="psw"><b>RoomID: </b></label>
+                <input type="text" placeholder="Enter RoomID" name="psw" required>
+                  
+                <button type="submit">Join</button>
+
+              </div>
+          
+              <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+              </div>
+            </form>
+          </div>
     </div>
+    <div class="area" >
+        <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+        </ul>
+    </div >
+    
+    
 </body>
 
 </html>

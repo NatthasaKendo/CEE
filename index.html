@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script src="index_script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index_style.css" />
+
+    <title>Game Title</title>
+  </head>
+
+  <body>
+
+    <h1>Game Title</h1>
+
+    <form>
+      <table id = "login">
+        <tr>
+          <td><label for="name" id="label">Name: </label></td>
+          <td><input type="text" id="name" name="name" /></td>
+        </tr>
+        <br/>
+        <tr>
+          <td><label for="img" id="label">Profile Image: </label></td>
+          <td><input type="file" class="button" accept="image/*" /></td>
+        </tr>
+        <tr>
+          <td>
+            <button onclick="createRoom()" class="button">Create a Room</button>
+          </td>
+          <td>
+            <button onmouseover="show()" onmouseout="hide()" class="button">Join a Room</button><br />
+            <div id="join-room" onmouseover="show()" onmouseout="hide()"></div>
+              <label for="roomID" id="label">Room ID:</label>
+              <input type="text" class="button" name="roomID" />
+              <button value="submit" class="button">Submit</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+
+</html>
