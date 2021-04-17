@@ -1,0 +1,41 @@
+html{
+    overflow-y: hidden; /* hide scroller*/
+    overflow-x: hidden;
+}
+  
+.header{
+    color: blanchedalmond;
+    background-color: black;
+    width: 100%;
+    height: 50px;
+}
+
+
+.top div{
+    display: inline-block;
+    margin: 10px;
+    padding: 5px;
+    height: 200px;
+}
+  
+.sidebar{
+    background-color: aquamarine;
+    
+    text-align: center;
+    width: 30%;
+    min-width: 200px;
+}
+
+.main{
+    background-color: beige;
+    
+    width: 60%;
+    min-width: 400px;
+
+}
+
+.bottom{
+    background-color: chocolate;
+    margin: 10px;
+    width: 95%;
+}
