@@ -1,30 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-    <title>Document</title>
-</head>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
 
-<body>
-    <h1 class="header">Comp Eng Ess project </h1>
-    <label id="namespace">Name: </label>
-    <div id="space">
-        <input type="text" id="name" name="name"><br>
-        <button type="submit" value="host">Host a Room</button>
-        <button type="submit" value="join" onclick="joinRoom()">Join a Room</button><br>
-    </div> 
-    
-    <div id="join-room">
-        <label for="roomID">Room ID:</label>
-        <input type="text" id="roomID" name="roomID">
-        <button type="submit" value="submit">Submit</button>
-    </div>
-</body>
+    <script src="index_script.js"></script>
+    <link rel="stylesheet" href="index_style.css" />
+
+    <title>Game Title</title>
+  </head>
+
+  <body>
+
+    <h1>Game Title</h1>
+
+    <form>
+      <table>
+        <tr>
+          <td><label for="name">Name: </label></td>
+          <td><input type="text" id="name" name="name" /></td>
+        </tr>
+        <br />
+        <tr>
+          <td><label for="img">Profile Image: </label></td>
+          <td><input type="file" id="img" accept="image/*" /></td>
+        </tr>
+        <tr>
+          <td>
+            <button id="host" onclick="createRoom()">Create a Room</button>
+          </td>
+          <td>
+            <button type="submit" id="join">Join a Room</button><br />
+            <div id="join-room">
+              <label for="roomID">Room ID:</label>
+              <input type="text" id="roomID" name="roomID" />
+              <button type="submit" value="submit">Submit</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
 
 </html>
