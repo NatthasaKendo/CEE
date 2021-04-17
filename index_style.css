@@ -2,6 +2,11 @@ h1 {
   text-align: center;
 }
 
+form table{
+  margin-right: auto;
+  margin-left: auto;
+}
+
 td {
   vertical-align: top;
 }
