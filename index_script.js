@@ -80,3 +80,11 @@ function generateRoomId() {
     console.log(id);
     return id;
 }
+
+function show(){
+    $("#join-room").show();
+}
+
+function hide(){
+    $("#join-room").hide();
+}

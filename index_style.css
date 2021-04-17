@@ -2,6 +2,10 @@ h1 {
   text-align: center;
 }
 
-td{
+td {
   vertical-align: top;
+}
+
+#join-room {
+  display: none;
 }
