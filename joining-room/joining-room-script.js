@@ -69,13 +69,13 @@ async function refreshRoom(){
     }else{
         $("#host-joining-room").css("display","none");
     }
-    if(data.round!=0){
+    console.log(data.round);
+    if((!host) && data.round==1){
         change_page();
     }
 }
 
 async function startGame(){
-    console.log("Click");
     var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
@@ -92,9 +92,34 @@ async function startGame(){
         console.log("Error getting document:", error);
     });
     data.round = 1;
+    console.log(data.round);
     db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+        console.log("Round: 1");
         change_page();
     })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
+}
+
+async function check(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    console.log(data.round);
 }
 
 var loadFile = function (event) {

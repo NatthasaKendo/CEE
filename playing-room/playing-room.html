@@ -3,19 +3,23 @@
 
 <head>
     <title>Jquery</title>
-    <link rel="stylesheet" href="playing-room-style.css"></link>
+    <!--
+        <link rel="stylesheet" href="playing-room-style.css"></link>
+    -->
+    
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
 </head>
 
-<body >
+<body onload="initializeRoom()">
 
-    <div class="round">Round </div>
+    <div>Round </div>
+    <div class="round"></div>
     <div class="black-card">
         
     </div>
-
+    <button type="button" onclick="check()">check</button>
     <div class="players">
         <table>
             <tr>
