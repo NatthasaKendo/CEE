@@ -29,7 +29,6 @@ async function createRoom() {
                 console.error("Error writing document: ", error);
             });;
         console.log("Created Room with ID:" + roomID.toString())
-        window.location.replace("../joining-room/joining-room.html");
     }
 }
 
@@ -38,7 +37,6 @@ async function joinRoom(){
     var roomID = $("#room-ID").val();
     if(playerName != null && playerName != ""){
         addMember(playerName, roomID);
-        window.location.replace("../joining-room/joining-room.html");
     }
 }
 
@@ -73,6 +71,7 @@ async function addMember(name, roomID) {
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Added member as host with name: " + name);
+            change_page("../joining-room/joining-room.html");
         })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -124,3 +123,7 @@ var loadFile = function (event) {
         URL.revokeObjectURL(output.src) // free memory
     }
 };
+
+function change_page(fileNameInDotHtml) {
+    window.location.href = fileNameInDotHtml;
+}
