@@ -78,6 +78,7 @@ async function addMember(name, roomID) {
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Added member as host with name: " + name);
+            change_page("joining-room.html");
         })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -141,4 +142,8 @@ function deleteRoom(roomID) {
     }).catch((error) => {
         console.error("Error removing document: ", error);
     });
+}
+
+function change_page(fileNameInDotHtml) {
+    window.location.href = fileNameInDotHtml;
 }
