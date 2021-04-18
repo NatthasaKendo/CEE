@@ -63,7 +63,7 @@ async function refreshRoom(){
         markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td></tr>";
         $("#player-list").append(markup);
     }
-    if(data.name[0]==name)  host=true;
+    if(data.name[0]==player)  host=true;
     if(host){
         $("#player-joining-room").css("display","none");
     }else{
