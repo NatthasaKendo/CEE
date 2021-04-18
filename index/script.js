@@ -32,22 +32,29 @@ function addName() {
 
 }
 
-function createRoom(hostName) {
+function createRoom() {
+    var x = document.getElementById("id02") ;
+    if(window.getComputedStyle(x).display === "none"){
+        x.style.display = "flex" ;
+    }
+    else{
+        x.style.display = "none";
+    }
     console.log("Create room");
     const id = generateRoomId();
     console.log(id);
     var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
     db.collection("roomID").doc(id).set(data);
     console.log("Created Room with ID:" + id.toString())
-    addMember(hostName, id);
-
+    addMember(id);
 }
 
-function addMember(name, roomID) {
+function addMember(roomID) {
     console.log("Add member");
+    var name = $("player-name").value;
     var data = db.collection("roomID").doc(roomID).get();
     var nameList = data[name];
-    if (checkNameExist(name, nameist)) {
+    if (checkNameExist(name, nameList)) {
         console.log("Name already exists.");
     } else if (!(checkNameExist(name, nameist))) {
         data[answer].push("");
@@ -62,7 +69,6 @@ function addMember(name, roomID) {
                 console.error("Error writing document: ", error);
             });
     }
-
 }
 
 function checkNameExist(newName, namesInData) {
@@ -99,16 +105,6 @@ function joinRoom() {
     var x = document.getElementById("id01");
     if(window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
-    }
-    else{
-        x.style.display = "none";
-    }
-}
-
-function createRoom() {
-    var x = document.getElementById("id02") ;
-    if(window.getComputedStyle(x).display === "none"){
-        x.style.display = "flex" ;
     }
     else{
         x.style.display = "none";
