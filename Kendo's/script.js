@@ -32,28 +32,49 @@ function addName() {
 
 }
 
-function createRoom(hostName) {
-    console.log("Create room");
+async function createRoom(hostName) {
+    console.log("Creating room with id:");
     const id = generateRoomId();
-    console.log(id);
     var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
-    db.collection("roomID").doc(id).set(data);
+    db.collection("roomID").doc(id).set(data).then(() => {
+        addMember(hostName, id);
+    })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });;
     console.log("Created Room with ID:" + id.toString())
-    addMember(hostName, id);
+
 
 }
 
-function addMember(name, roomID) {
-    console.log("Add member");
-    var data = db.collection("roomID").doc(roomID).get();
-    var nameList = data[name];
-    if (checkNameExist(name, nameist)) {
+async function addMember(name, roomID) {
+    console.log("Adding member...");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    //console.log("data " + data);
+    var nameList = data.name;
+    //console.log("nameList " + nameList);
+    if (checkNameExist(name, nameList)) {
         console.log("Name already exists.");
-    } else if (!(checkNameExist(name, nameist))) {
-        data[answer].push("");
-        data[name].push(name);
-        data[profile_pic].push("");
-        data[score].push(0);
+    } else if (!(checkNameExist(name, nameList))) {
+        data.answer.push("");
+        data.name.push(name);
+        data.profile_pic.push("");
+        data.score.push(0);
+        //console.log(data.name);
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Added member as host with name: " + name);
@@ -81,19 +102,46 @@ function generateRoomId() {
     return id;
 }
 
-$(document).ready(function () {
-    /*For Jquery Script */
+async function getData(roomID) {
+    //var data = db.collection("roomID").doc(roomID).get();
+    var docRef = db.collection("roomID").doc(roomID);
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            //console.log("Document data:", doc.data());
+            var data = doc.data();
+            //console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+}
 
-    $("#join-btn").on({
-        mouseenter: function () {
-            $("#join-room").show();
-        },
-        mouseleave: function () {
-            $("#join-room").hide();
-        },
-    })
+function deleteAllRooms() {
+    //console.log("came")
+    db.collection("roomID").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id, " => ", doc.data());
+            db.collection("roomID").doc(doc.id).delete().then(() => {
+                console.log("Document " + doc.id + " successfully deleted!");
+            }).catch((error) => {
+                console.error("Error removing document: ", error);
+            });
+        });
+    });
+}
 
-})
+function deleteRoom(roomID) {
+    db.collection("roomID").doc(roomID).delete().then(() => {
+        console.log("Document " + roomID + " successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
 
 function joinRoom() {
     var x = document.getElementById("id01");
