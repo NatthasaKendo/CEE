@@ -34,7 +34,8 @@ async function createRoom() {
 
 async function joinRoom(){
     var playerName = $("#player-name").val();
-    var roomID = $("#room-ID").val();
+    var roomID = $("#room-id").val();
+    console.log(roomID);
     if(playerName != null && playerName != ""){
         addMember(playerName, roomID);
     }
@@ -42,6 +43,7 @@ async function joinRoom(){
 
 async function addMember(name, roomID) {
     console.log("Adding member...");
+    
     var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {

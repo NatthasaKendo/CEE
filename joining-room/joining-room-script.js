@@ -20,6 +20,11 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
+db.collection("test_name").doc("point").onSnapshot((doc) => {
+    console.log("Current data: ", doc.data());
+    refreshRoom();
+});
+
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -29,6 +34,33 @@ function getUrlVars() {
     roomID = vars["roomID"];
     console.log(player);
     console.log(roomID);
+}
+
+async function refreshRoom(){
+    $("#room-id").html(roomID)
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    var playerCount = data.name.length;
+    $("#player-count").html(playerCount);
+    for(i=0 ; i<playerCount ; i++){
+        var profileURL = data.profile_pic[i];
+        var name = data.name[i];
+        markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td></tr>";
+        $("#player-list").append(markup);
+    }
 }
 
 var loadFile = function (event) {
