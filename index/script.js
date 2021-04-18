@@ -33,13 +33,6 @@ function addName() {
 }
 
 function createRoom() {
-    var x = document.getElementById("id02") ;
-    if(window.getComputedStyle(x).display === "none"){
-        x.style.display = "flex" ;
-    }
-    else{
-        x.style.display = "none";
-    }
     console.log("Create room");
     const id = generateRoomId();
     console.log(id);
@@ -50,6 +43,21 @@ function createRoom() {
 }
 
 function joinRoom() {
+    var roomID = $("#room-ID").value;
+    addMember(roomID);
+}
+
+function createRoomPopUp(){
+    var x = document.getElementById("id02") ;
+    if(window.getComputedStyle(x).display === "none"){
+        x.style.display = "flex" ;
+    }
+    else{
+        x.style.display = "none";
+    }
+}
+
+function joinRoomPopUp(){
     var x = document.getElementById("id01");
     if(window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
@@ -57,8 +65,6 @@ function joinRoom() {
     else{
         x.style.display = "none";
     }
-    var roomID = $("#room-ID").value;
-    addMember(roomID);
 }
 
 function addMember(roomID) {
