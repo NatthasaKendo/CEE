@@ -33,8 +33,8 @@ async function createRoom() {
 }
 
 async function joinRoom(){
-    var playerName = $("#player-name").val;
-    var roomID = $("#room-ID").val;
+    var playerName = $("#player-name").val();
+    var roomID = $("#room-ID").val();
     if(playerName != null && playerName != "")    addMember(playerName, roomID);
 }
 
