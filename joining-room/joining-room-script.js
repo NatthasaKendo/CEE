@@ -40,6 +40,7 @@ async function refreshRoom(){
     $("#room-id").html(roomID)
     var docRef = db.collection("roomID").doc(roomID);
     var data;
+    var host = false;
     await docRef.get().then(async (doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
@@ -62,6 +63,44 @@ async function refreshRoom(){
         markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td></tr>";
         $("#player-list").append(markup);
     }
+    if(data.name[0]==player)  host=true;
+    if(host){
+        $("#player-joining-room").css("display","none");
+    }else{
+        $("#host-joining-room").css("display","none");
+    }
+    console.log(data.round);
+    if((!host) && data.round==1){
+        change_page();
+    }
+}
+
+async function startGame(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    data.round = 1;
+    console.log(data.round);
+    db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+        console.log("Round: 1");
+        change_page();
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
 }
 
 var loadFile = function (event) {
@@ -71,3 +110,8 @@ var loadFile = function (event) {
         URL.revokeObjectURL(output.src) // free memory
     }
 };
+
+function change_page() {
+    console.log("test");
+    window.location.href = "../playing-room/playing-room.html" + "?name=" + player + "&roomID=" + roomID;
+}
