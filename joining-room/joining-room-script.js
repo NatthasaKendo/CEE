@@ -69,10 +69,32 @@ async function refreshRoom(){
     }else{
         $("#host-joining-room").css("display","none");
     }
+    if(data.round!=0){
+        change_page();
+    }
 }
 
-function startGame(){
-
+async function startGame(){
+    console.log("Click");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    data.round = 1;
+    db.collection("roomID").doc(roomID).set(data).then(() => {
+        change_page();
+    })
 }
 
 var loadFile = function (event) {
@@ -82,3 +104,8 @@ var loadFile = function (event) {
         URL.revokeObjectURL(output.src) // free memory
     }
 };
+
+function change_page() {
+    console.log("test");
+    window.location.href = "../playing-room/playing-room.html" + "?name=" + player + "&roomID=" + roomID;
+}
