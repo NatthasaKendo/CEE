@@ -66,8 +66,8 @@ async function refreshRoom(){
     if(data.name[0]==name)  host=true;
     if(host){
         $("#player-joining-room").css("display","none");
-    }else{$("#host-joining-room").css("display","none");
-
+    }else{
+        $("#host-joining-room").css("display","none");
     }
 }
 
