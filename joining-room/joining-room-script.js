@@ -20,6 +20,11 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
+db.collection("test_name").doc("point").onSnapshot((doc) => {
+    console.log("Current data: ", doc.data());
+    refreshRoom();
+});
+
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -31,7 +36,7 @@ function getUrlVars() {
     console.log(roomID);
 }
 
-async function initializeRoom(){
+async function refreshRoom(){
     $("#room-id").html(roomID)
     var docRef = db.collection("roomID").doc(roomID);
     var data;
