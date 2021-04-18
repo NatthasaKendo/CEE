@@ -30,12 +30,14 @@ async function createRoom() {
             });;
         console.log("Created Room with ID:" + roomID.toString())
     }
+    window.location.replace("../joining-room/joining-room.html");
 }
 
 async function joinRoom(){
     var playerName = $("#player-name").val();
     var roomID = $("#room-ID").val();
     if(playerName != null && playerName != "")    addMember(playerName, roomID);
+    window.location.replace("../joining-room/joining-room.html");
 }
 
 async function addMember(name, roomID) {
