@@ -15,13 +15,18 @@
     <title>Room</title>
   </head>
 
-  <body onload="roomCode()">
+  <body onload="initializeRoom()">
 
     <div class="context">
-      <h1>Room Code: <span id="myText"></span></h1>
+      <h1>Room Code: <span id="room-id"></span></h1>
       <div id="list">
-        <label>Player List: </label><br> 
-        
+        <p>Player: </p>
+        <p id="player-count"></p>
+        <br> 
+        <table id="player-list">
+            <td id="player-profile"></td>
+            <td id="player-name"></td>
+        </table>
       </div>
     </div>
     <div class="area" >
