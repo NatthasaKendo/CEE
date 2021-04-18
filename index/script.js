@@ -49,6 +49,18 @@ function createRoom() {
     addMember(id);
 }
 
+function joinRoom() {
+    var x = document.getElementById("id01");
+    if(window.getComputedStyle(x).display === "none") {
+        x.style.display = "flex";
+    }
+    else{
+        x.style.display = "none";
+    }
+    var roomID = $("#room-ID").value;
+    addMember(roomID);
+}
+
 function addMember(roomID) {
     console.log("Add member");
     var name = $("player-name").value;
@@ -100,16 +112,6 @@ $(document).ready(function () {
     })
 
 })
-
-function joinRoom() {
-    var x = document.getElementById("id01");
-    if(window.getComputedStyle(x).display === "none") {
-        x.style.display = "flex";
-    }
-    else{
-        x.style.display = "none";
-    }
-}
 
 var loadFile = function(event) {
     var output = document.getElementById('output');
