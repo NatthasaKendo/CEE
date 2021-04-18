@@ -33,7 +33,8 @@ function addName() {
 }
 
 function createRoom() {
-    var name = $("player-name").value;
+    var name = $("#host-name").val;
+    console.log(name);
     if (name != null && name != "") {
         console.log("Create room");
         const id = generateRoomId();
@@ -47,8 +48,9 @@ function createRoom() {
 }
 
 function joinRoom() {
-    var roomID = $("#room-ID").value;
-    addMember(roomID);
+    var name = $("#player-name").val;
+    var roomID = $("#room-ID").val;
+    if(name != null && name != "")  addMember(roomID);
 }
 
 function createRoomPopUp() {
