@@ -12,13 +12,13 @@ body {
 .context {
   width: 100%;
   position: absolute;
-  top: 20vh;
+  top: 10vh;
 }
 
 .context h1 {
   text-align: center;
   color: #fff;
-  font-size: 100px;
+  font-size: 60px;
 }
 
 .area {
