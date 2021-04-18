@@ -4,27 +4,45 @@
 <head>
     <title>Jquery</title>
     <link rel="stylesheet" href="playing-room-style.css"></link>
-
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
     <script src="playing-room-script.js"></script>
 </head>
 
 <body >
 
-    <div class="header">Head</div>
-    <div class="top">
-        <div class="sidebar">
-        <p>Sidebar</p>
-        </div>
+    <div class="round">Round </div>
+    <div class="black-card">
         
-        <div class="main">
-            <p>Main</p>
-        </div>
     </div>
 
-    <p class="bottom">Test</p>
-    <div>
+    <div class="players">
+        <table>
+            <tr>
+                <th></th>
+                <th>Player </th>
+                <th></th>
+                <th>Score</th>
+            </tr>
+            <tr>
+                <td><img class="profile-1" src="" alt="Avatar1"></td>
+                <td class="player-1">Player1</td>
+                <td class="judge-state-1">(Judge)</td>
+                <td class="score-1">0</td>
+            </tr>
+        </table>
+    </div>
 
+    <div class="judge-waiting">
+        <p>Waiting for other player to choose the card ...</p>
+    </div>
+
+    <div class="player-choosing">
+        <table class="white-card-option">
+            <td>card content1</td>
+            <input>
+        </table>
     </div>
 
 
