@@ -31,6 +31,10 @@ function getUrlVars() {
     console.log(roomID);
 }
 
+function roomCode(){
+    document.getElementById("myText").innerHTML = roomID ;
+}
+
 var loadFile = function (event) {
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);

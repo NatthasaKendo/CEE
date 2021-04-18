@@ -15,14 +15,27 @@
     <title>Room</title>
   </head>
 
-  <body onload="roomCode()">
+  <body>
 
     <div class="context">
-      <h1>Room Code: <span id="myText"></span></h1>
-      <div id="list">
-        <label>Player List: </label><br> 
-        
-      </div>
+      <h1>Room Code: </h1>
+    <h1 id="code"></h1>
+
+    <h2>Player: </h2>
+    <h2 id="player-count"></h2>
+
+    <table id="player-list">
+        <tr id="player1">
+            <td><img src="" alt="Player" width="600px"></td>
+            <td id = "name">Player1</td>
+        </tr>
+    </table>
+    <div id="host">
+        <button onclick="start()">Start</button>
+    </div>
+    <div id="member">
+        <p>Waiting for host to start ...</p>
+    </div>
     </div>
     <div class="area" >
       <ul class="circles">
