@@ -33,18 +33,18 @@ function addName() {
 }
 
 async function createRoom(hostName) {
-    console.log("Creating room with id:");
-    const id = generateRoomId();
-    var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
-    db.collection("roomID").doc(id).set(data).then(() => {
-        addMember(hostName, id);
-    })
-        .catch((error) => {
-            console.error("Error writing document: ", error);
-        });;
-    console.log("Created Room with ID:" + id.toString())
-
-
+    if (hostName != null && hostName != "") {
+        console.log("Creating room with id:");
+        const id = generateRoomId();
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
+        db.collection("roomID").doc(id).set(data).then(() => {
+            addMember(hostName, id);
+        })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });;
+        console.log("Created Room with ID:" + id.toString())
+    }
 }
 
 async function addMember(name, roomID) {
