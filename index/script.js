@@ -87,19 +87,6 @@ function generateRoomId() {
     return id;
 }
 
-$(document).ready(function () {
-    /*For Jquery Script */
-
-    $("#join-btn").on({
-        mouseenter: function () {
-            $("#join-room").show();
-        },
-        mouseleave: function () {
-            $("#join-room").hide();
-        },
-    })
-
-})
 
 function joinRoom() {
     var x = document.getElementById("id01");
