@@ -17,7 +17,7 @@ const db = firebase.firestore();
 //const test_name_ref = db.collection("test_name");
 
 async function createRoom() {
-    var hostName = $("#host-name").val;
+    var hostName = $("#host-name").val();
     if (hostName != null && hostName != "") {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
