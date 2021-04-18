@@ -103,25 +103,6 @@ async function startGame(){
     });
 }
 
-async function check(){
-    var docRef = db.collection("roomID").doc(roomID);
-    var data;
-    await docRef.get().then(async (doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-            data = doc.data();
-            console.log("Returning data" + data);
-            return data;
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-    console.log(data.round);
-}
-
 var loadFile = function (event) {
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
