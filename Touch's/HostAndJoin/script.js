@@ -78,7 +78,7 @@ async function addMember(name, roomID) {
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Added member as host with name: " + name);
-            change_page("joining-room.html");
+            change_page("../WaitingRoom/joining-room.html", roomID);
         })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -144,6 +144,7 @@ function deleteRoom(roomID) {
     });
 }
 
-function change_page(fileNameInDotHtml) {
-    window.location.href = fileNameInDotHtml;
+function change_page(fileNameInDotHtml, roomID) {
+    window.location.href = fileNameInDotHtml + "?roomID=" + roomID;
 }
+
