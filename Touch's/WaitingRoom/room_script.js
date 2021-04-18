@@ -16,23 +16,35 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 //const test_name_ref = db.collection("test_name");
 
-db.collection("test_name").doc("point")
+//const urlParams = new URLSearchParams(window.location.search);
+const roomID = getParameterByName("roomID", url = window.location.href)
+//document.getElementById("queryString").innerHTML = urlParams;
+
+db.collection("roomID").doc(roomID)
     .onSnapshot((doc) => {
         console.log("Current data: ", doc.data());
-        updatePointToHtml(doc.data().point);
+        countPlayers();
     });
 
+setRoomCode();
 
-function addPoint() {
-    var docRef = db.collection("test_name").doc("point");
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+function countPlayers() {
+    var docRef = db.collection("roomID").doc(roomID);
 
     docRef.get().then((doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
-            var oldPoint = doc.data().point;
-            var newPoint = oldPoint + 1;
-            docRef.set({ point: newPoint });
-            updatePointToHtml(newPoint);
+            var count = doc.data().name.length;
+            document.getElementById("player-count").textContent = count;
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -40,16 +52,8 @@ function addPoint() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-
 }
 
-function resetPoint() {
-    var docRef = db.collection("test_name").doc("point");
-    docRef.set({ point: 0 });
-    updatePointToHtml(0);
-
-}
-
-function updatePointToHtml(point) {
-    document.getElementById("point").innerHTML = point.toString();
+function setRoomCode() {
+    document.getElementById("roomCode").textContent = "Room Code: " + roomID;
 }
