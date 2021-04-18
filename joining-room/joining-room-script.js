@@ -20,7 +20,7 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
-db.collection("test_name").doc("point").onSnapshot((doc) => {
+db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
     refreshRoom();
 });
@@ -55,6 +55,7 @@ async function refreshRoom(){
     });
     var playerCount = data.name.length;
     $("#player-count").html(playerCount);
+    $("#player-list").html("");
     for(i=0 ; i<playerCount ; i++){
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
