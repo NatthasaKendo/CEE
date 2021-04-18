@@ -68,7 +68,7 @@ function addMember(roomID) {
     var nameList = data[name];
     if (checkNameExist(name, nameList)) {
         console.log("Name already exists.");
-    } else if (!(checkNameExist(name, nameist))) {
+    } else if (!(checkNameExist(name, nameList))) {
         data[answer].push("");
         data[name].push(name);
         data[profile_pic].push("");
