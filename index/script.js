@@ -33,13 +33,17 @@ function addName() {
 }
 
 function createRoom() {
-    console.log("Create room");
-    const id = generateRoomId();
-    console.log(id);
-    var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
-    db.collection("roomID").doc(id).set(data);
-    console.log("Created Room with ID:" + id.toString())
-    addMember(id);
+    var name = $("player-name").value;
+    if (name != null && name != "") {
+        console.log("Create room");
+        const id = generateRoomId();
+        console.log(id);
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [] };
+        db.collection("roomID").doc(id).set(data);
+        console.log("Created Room with ID:" + id.toString())
+        addMember(id);
+    }
+
 }
 
 function joinRoom() {
@@ -47,22 +51,22 @@ function joinRoom() {
     addMember(roomID);
 }
 
-function createRoomPopUp(){
-    var x = document.getElementById("id02") ;
-    if(window.getComputedStyle(x).display === "none"){
-        x.style.display = "flex" ;
+function createRoomPopUp() {
+    var x = document.getElementById("id02");
+    if (window.getComputedStyle(x).display === "none") {
+        x.style.display = "flex";
     }
-    else{
+    else {
         x.style.display = "none";
     }
 }
 
-function joinRoomPopUp(){
+function joinRoomPopUp() {
     var x = document.getElementById("id01");
-    if(window.getComputedStyle(x).display === "none") {
+    if (window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
     }
-    else{
+    else {
         x.style.display = "none";
     }
 }
@@ -106,10 +110,10 @@ function generateRoomId() {
 }
 
 
-var loadFile = function(event) {
+var loadFile = function (event) {
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
-    output.onload = function() {
-      URL.revokeObjectURL(output.src) // free memory
+    output.onload = function () {
+        URL.revokeObjectURL(output.src) // free memory
     }
-  };
+};
