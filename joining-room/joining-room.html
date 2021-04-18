@@ -15,24 +15,29 @@
   </head>
 
   <body>
-
-    <div class="context">
-      <h1>Room Code: <span id="room-id"></span></h1>
-      <div id="list">
-        <p>Player: </p>
-        <p id="player-count"></p>
-        <br> 
-        <table id="player-list"></table>
-      </div>
-    </div>
-
-    <div id="player-joining-room">
-      <p>Waiting for host to start ...</p>
-    </div>
-
-    <div id="host-joining-room">
-      <button type="button" onclick="startGame()">Start</button>
-    </div>
+    <table>
+      <tr>
+        <div class="context">
+          <h1>Room Code: <span id="room-id"></span></h1>
+          <div id="list">
+            <p>Player: </p>
+            <p id="player-count"></p>
+            <br> 
+            <table id="player-list"></table>
+          </div>
+        </div>
+      </tr>
+      <tr>
+        <div id="player-joining-room">
+          <p>Waiting for host to start ...</p>
+        </div>
+      </tr>
+      <tr>
+        <div id="host-joining-room">
+          <button type="button" onclick="startGame()">Start</button>
+        </div>
+      </tr>
+    </table>
 
     <div class="area" >
       <ul class="circles">
