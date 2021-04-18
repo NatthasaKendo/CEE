@@ -7,8 +7,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="script.js"></script>
     <title>Document</title>
@@ -19,11 +19,10 @@
         <h1>Game Title</h1>
         <div id="button">
             <a href="#">
-                <span type="button"
-                onclick="createRoom()">Create a Room</span>
+                <span type="button" >Create a Room</span>
                 <div class="liquid"></div>
             </a>
-            <a href="#" onclick="joinRoom()">
+            <a href="#">
                 <span>Join a Room</span>
                 <div class="liquid"></div>
             </a>
@@ -41,7 +40,7 @@
                 <label for="uname"><b>Player Name: </b></label>
                 <input type="text" placeholder="Enter Name" name="uname" required><br>
           
-                <label for="psw" id="room-ID"><b>RoomID: </b></label>
+                <label for="psw" id="roomID"><b>RoomID: </b></label>
                 <input type="text" placeholder="Enter RoomID" name="psw" required>
                 <button type="submit" id="button">Join</button>
               </div> 
