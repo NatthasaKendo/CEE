@@ -71,7 +71,7 @@ async function addMember(name, roomID) {
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Added member as host with name: " + name);
-            change_page("../joining-room/joining-room.html");
+            change_page("../joining-room/joining-room.html" + "?name=" + name + "&roomID=" + roomID);
         })
             .catch((error) => {
                 console.error("Error writing document: ", error);
