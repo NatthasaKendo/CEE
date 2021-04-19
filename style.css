@@ -1,0 +1,19 @@
+#name {
+    border-radius: 25px;
+    padding: 20px;
+    width: 200px;
+    height: 10px;
+}
+
+#roomID {
+    border-radius: 25px;
+    padding: 20px;
+    width: 200px;
+    height: 10px;
+}
+
+h1{ 
+    color : blue; 
+    font-size: 144; 
+    align-content: center;
+}
