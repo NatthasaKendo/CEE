@@ -137,6 +137,7 @@ async function uploadProfilePicture(id){
         var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
         imageRef.put(file).then((snapshot) => {
             console.log('Uploaded a blob or file named: ' + currentProfile + " !");
+            updateProfile("#"+id.slice(13,id.length)+"-image");
         });
     }else    console.log("No image selected");
 }
@@ -155,14 +156,11 @@ function deleteProfilePicture(imageName) {
     });
 }
 
-function updateProfile() {
-    var name = document.getElementById("name").value;
-    var roomID = document.getElementById("roomID").value;
-    var imageName = roomID + "-" + name;
+function updateProfile(id) {
     var storageRef = firebase.storage().ref();
-    storageRef.child('profile_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
-        var test = url;
-        document.getElementById("profile_image").src = test;
+    storageRef.child('profile_pictures/' + currentProfile + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        $(id).attr("src",url);
     }).catch(function (error) {
     });
 }
