@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     
     <title>Document</title>
@@ -34,8 +35,8 @@
               <div class="imgcontainer">
                 <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                 <img src="img_avatar2.png" alt="Avatar" class="avatar"><br>
-                <input type="file" id="image-upload-player" accept="image/*" onchange="loadFile(event)">
-                <button type="button" onclick="uploadProfilePicture()">Upload</button>
+                <input type="file" id="image-upload-player" accept="image/*">
+                <button type="button" onclick="uploadProfilePicture('image-upload-player')">Upload</button>
               </div>
           
               <div class="container">
@@ -54,8 +55,8 @@
               <div class="imgcontainer">
                 <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
                 <img src="img_avatar2.png" alt="Avatar" class="avatar"><br>
-                <input type="file" id="image-upload-host" accept="image/*" onchange="loadFile(event)">
-                <button type="button" onclick="uploadProfilePicture()">Upload</button>
+                <input type="file" id="image-upload-host" accept="image/*">
+                <button type="button" onclick="uploadProfilePicture('image-upload-host')">Upload</button>
               </div>
           
               <div class="container">

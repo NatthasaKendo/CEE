@@ -16,6 +16,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 //const test_name_ref = db.collection("test_name");
 
+var currentProfile;
+
 async function createRoom() {
     var hostName = $("#host-name").val();
     if (hostName != null && hostName != "") {
@@ -67,7 +69,8 @@ async function addMember(name, roomID) {
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
         data.name.push(name);
-        data.profile_pic.push("");
+        console.log(currentProfile);
+        data.profile_pic.push(currentProfile);
         data.score.push(0);
         //console.log(data.name);
         db.collection("roomID").doc(roomID).set(data).then(() => {
@@ -118,6 +121,52 @@ function joinRoomPopUp() {
     }
 }
 
+async function uploadProfilePicture(id){
+    if(currentProfile == "" || currentProfile == null){
+        var imageName = generateId(10);
+        currentProfile = "randomize-"+imageName;
+    }
+    var file = document.getElementById(id).files[0];
+    if(file != "" && file != null){
+        console.log(file);
+        //Declare Variables
+        console.log(currentProfile);
+        // Create a root reference
+        var storageRef = firebase.storage().ref();
+        // Create a reference to 'images/mountains.jpg'
+        var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
+        imageRef.put(file).then((snapshot) => {
+            console.log('Uploaded a blob or file named: ' + currentProfile + " !");
+        });
+    }else    console.log("No image selected");
+}
+
+function deleteProfilePicture(imageName) {
+    console.log("Delete picture with name: "+imageName);
+    // Create a reference to the file to delete
+    var storageRef = firebase.storage().ref();
+    var imageRef = storageRef.child('profile_pictures/' + imageName + '.jpg');
+    // Delete the file
+    imageRef.delete().then(() => {
+        // File deleted successfully
+        console.log("Deleted profile picture of "+imageName)
+    }).catch((error) => {
+        // Uh-oh, an error occurred!
+    });
+}
+
+function updateProfile() {
+    var name = document.getElementById("name").value;
+    var roomID = document.getElementById("roomID").value;
+    var imageName = roomID + "-" + name;
+    var storageRef = firebase.storage().ref();
+    storageRef.child('profile_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        var test = url;
+        document.getElementById("profile_image").src = test;
+    }).catch(function (error) {
+    });
+}
+
 var loadFile = function (event) {
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
@@ -128,4 +177,14 @@ var loadFile = function (event) {
 
 function change_page(fileNameInDotHtml) {
     window.location.href = fileNameInDotHtml;
+}
+
+function dec2hex (dec) {
+    return dec.toString(16).padStart(2, "0")
+}
+
+function generateId (len) {
+    var arr = new Uint8Array((len || 40) / 2)
+    window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
 }
