@@ -60,11 +60,15 @@ async function initializeRoom(){
     for(i=0 ; i<playerCount ; i++){
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
-        //var judgeState = ((playerdata.round-1)%playerCount == i)? "(Judge)" : "";
         var judgeState = (i==judge)?   "(Judge)" : "";
         var score = data.score[i];
-        markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td><td>"+judgeState+"</td><td>"+score+"</td></tr>";
-        $("#player-list").append(markup);
+        var tempURL = ""
+        var storageRef = firebase.storage().ref();
+        await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
+            tempURL = url;
+        }).catch(function (error) {
+        });
+        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+name+"</td><td>"+judgeState+"</td><td>"+score+"</td></tr>");
     }
     if(data.name[judge]==player){
         $("#player-choosing").css("display","none");
