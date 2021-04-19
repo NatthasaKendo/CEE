@@ -58,3 +58,15 @@ html {
 #card-list {
   display: none;
 }
+
+.loser {
+  background-color: gray;
+}
+
+.winner {
+  background-color: yellow;
+}
+
+#next-roound {
+  display: none;
+}

@@ -16,14 +16,15 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 //const test_name_ref = db.collection("test_name");
 
-var isGenerated = false;
 var player = "";
 var roomID = "";
+var playerSlot = 0;
+getUrlVars();
+
+var isGenerated = false;
 var cardCount = 0;
 var chosenCard = "";
-var playerSlot = 0;
 var isJudge = false;
-getUrlVars();
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -47,25 +48,25 @@ async function refreshRoom(){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-
-    if(!isGenerated){
-        await generatePlayerData();
-        isGenerated = true;
-    }
+    $("#judge-waiting").css("display","none");
+    $("#player-choosing").css("display","none");
+    $("#judging").css("display","none");
+    $("#waiting").css("display","none");
+    $("#next-round").css("display","none");
+    $("#card-list").css("display","none");
     if(data.gameState==0){
-        $("#judging").css("display","none");
-        $("#waiting").css("display","none");
-        if(isJudge){
-            $("#player-choosing").css("display","none");
-            $("#judge-waiting").css("display","block");
-        }else{
-            $("#judge-waiting").css("display","none");
+        if(!isGenerated){
+            resetVar();
+            await generatePlayerData();
+            console.log("generate at stage " + 0);
+            isGenerated = true;
+        }
+        if(isJudge) $("#judge-waiting").css("display","block");
+        else{
             $("#player-choosing").css("display","block");
-            if(cardCount == 0)  generateCard();
+            if(cardCount == 0) generateCard();
         }
     }else if(data.gameState==1){
-        $("#judge-waiting").css("display","none");
-        $("#player-choosing").css("display","none");
         $("#card-list").css("display","block");
         if(isJudge){
             if(data.cardOrder == "" || data.cardOrder == null)  generateCardOrder();
@@ -74,8 +75,11 @@ async function refreshRoom(){
         }else{
             generateChoosingCard();
         }
-    }else{
-
+    }else if(data.gameState == 2){
+        $("#card-list").css("display","block");
+        isGenerated = false;
+        await generatePlayerData();
+        generateChoosingCard();
     }
 }
 
@@ -115,6 +119,7 @@ async function generatePlayerData(){
     $("#player-count").html(playerCount);
     $("#player-list").html("<tr><th></th><th>Player</th><th></th><th>Score</th></tr>");
     for(i=0 ; i<playerCount ; i++){
+        var markup = "";
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
         if(name == player)  playerSlot = i;
@@ -126,7 +131,9 @@ async function generatePlayerData(){
             tempURL = url;
         }).catch(function (error) {
         });
-        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+name+"</td><td>"+judgeState+"</td><td>"+score+"</td></tr>");
+        markup += "<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+name+"</td><td>"+judgeState+"</td><td>"+score+"</td></tr>";
+        $("#player-list").append(markup);
+        console.log("Added player " + name + " successfully");
     }
     if (data.name[judge] == player) isJudge = true;
     console.log(isJudge);
@@ -196,7 +203,7 @@ async function sendChosenCard(){
         console.log("Error getting document:", error);
     });
     data.answer[playerSlot] = $(chosenCard).text();
-    console.log(data.answer[playerSlot]);
+    console.log(player + " chosen the card "+data.answer[playerSlot]);
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -258,9 +265,78 @@ async function generateChoosingCard(){
     for(i=0;i<data.cardOrder.length;i++){
         if((data.round-1)%data.cardOrder.length == data.cardOrder[i])   continue;
         var markup = "<tr><td id='card-" +data.cardOrder[i]+"' class=''>" + data.answer[data.cardOrder[i]] + "</td>";
-        if(isJudge){
+        if(isJudge && data.gameState != 2){
             markup += "<td><button type='button' onclick='judgeChoose(" + data.cardOrder[i] + ")'>Choose</button></td></tr>";
+        }else if(data.gameState == 2){
+            console.log("Chosen card is " + data.chosenCard);
+            console.log("Winner is " + data.name[data.chosenCard]);
+            if(data.chosenCard == data.cardOrder[i])    markup += "<td class='winner'>" + data.name[data.cardOrder[i]] + "</td></tr>";
+            else    markup += "<td class='loser'>" + data.name[data.cardOrder[i]] + "</td></tr>";
+            if(isJudge) $("#next-round").css("display","block");
         }
         $("#card-list").append(markup);
     }
+}
+
+async function judgeChoose(cardNumber){
+    console.log("You choosing the card number " + cardNumber);
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    data.chosenCard = cardNumber;
+    data.score[cardNumber] += 1;
+    data.gameState = 2;
+    await db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
+}
+
+async function resetVar(){
+    cardCount = 0;
+    chosenCard = "";
+    isJudge = false;
+    $("#white-card-option").html("<tr><td><input id='add-card' type='text'></td><td><button type='button' onclick='addCard()'>Add Card</button></td></tr>");
+    $("card-list").html("");
+}
+
+async function nextRound(){
+    console.log("-----------------Next Round-----------------");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    data.gameState = 0;
+    data.round += 1
+    await db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
 }
