@@ -19,6 +19,7 @@ const db = firebase.firestore();
 var player = "";
 var roomID = "";
 var cardCount = 0;
+var chosenCard = "";
 getUrlVars();
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
@@ -82,21 +83,23 @@ async function initializeRoom(){
 
 function generateCard(){
     for(i=0;i<3;i++){
-        $("#white-card-option").find("tr:last").before("<tr><td id='card-'" +i+"'>Suppose to generate some card here-" + i + "</td><td><button id='choose-card-"+i+"'type='button' onclick='chooseCard(this)'>Choose</button></td></tr>");
+        $("#white-card-option").find("tr:last").before("<tr><td id='card-" +(i+1)+"' class=''>Suppose to generate some card here-" + (i+1) + "</td><td><button 'type='button' onclick='chooseCard("+(i+1)+")'>Choose</button></td></tr>");
     }
     cardCount = 3;
 }
 
 function addCard(){
     cardCount += 1;
-    $("#white-card-option").find("tr:last").before("<tr><tdid='card-'" +cardCount+"'>" + $("#add-card").val() + "</td><td><button id='choose-card-"+cardCount+"'type='button' onclick='chooseCard(this)'>Choose</button></td></tr>");
-    console.log("Added carnd with content :" + $("#add-card").val());
+    $("#white-card-option").find("tr:last").before("<tr><td id='card-" +cardCount+"' class=''>" + $("#add-card").val() + "</td><td><button type='button' onclick='chooseCard("+cardCount+")'>Choose</button></td></tr>");
+    console.log("Added card with content :" + $("#add-card").val());
+    $("#add-card").val("");
 }
 
-async function chooseCard(button){
-    console.log($(button).attr("id"));
-    var cardID = $(button).attr("id").slice(7,$(button).attr("id").length);
-    console.log(cardID);
+function chooseCard(cardNumber){
+    $(chosenCard).removeClass("choosing");
+    var cardID = "#card-" + cardNumber;
+    chosenCard = cardID;
+    $(cardID).addClass("choosing");
 }
 
 async function check(){
