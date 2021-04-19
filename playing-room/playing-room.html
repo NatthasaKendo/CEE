@@ -11,14 +11,12 @@
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
 </head>
 
-<body onload="initializeRoom()">
+<body>
 
-    <div>Round </div>
-    <div class="round"></div>
-    <div class="black-card">
+    <div id="round">Round: 0</div>
+    <div id="black-card">
         
     </div>
-    <button type="button" onclick="check()">check</button>
     <div class="players">
         <table id="player-list">
         </table>
@@ -26,6 +24,7 @@
 
     <div id="judge-waiting">
         <p>Waiting for other player to choose the card ...</p>
+        <button type="button" onclick="startJudging()">Temporary Judge Button</button>
     </div>
 
     <div id="player-choosing">
@@ -37,6 +36,9 @@
         </table>
     </div>
 
+    <table id="card-list">
+        <tr id="judging"></tr>
+    </table>
 
     <script src="playing-room-script.js"></script>
 </body>

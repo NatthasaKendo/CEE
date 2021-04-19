@@ -52,3 +52,9 @@ html {
 .choosing {
   background-color: rebeccapurple;
 }
+
+#judge-waiting,
+#player-choosing,
+#card-list {
+  display: none;
+}
