@@ -1,11 +1,10 @@
-#list{
+#list {
   margin-left: 2em;
   font-size: 30px;
-  font-style: bold; 
-
+  font-style: bold;
 }
 
-#start{
+#start {
   border-radius: 50px;
   background-color: black;
   color: white;
@@ -15,6 +14,18 @@
   cursor: pointer;
   width: 20%;
 }
-#start:hover{
+
+#start:hover {
   opacity: 0.8;
+}
+
+.profile-container {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
 }

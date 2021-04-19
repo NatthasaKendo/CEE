@@ -60,8 +60,13 @@ async function refreshRoom(){
     for(i=0 ; i<playerCount ; i++){
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
-        markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td></tr>";
-        $("#player-list").append(markup);
+        var tempURL = ""
+        var storageRef = firebase.storage().ref();
+        await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
+            tempURL = url;
+        }).catch(function (error) {
+        });
+        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+name+"</td></tr>");
     }
     if(data.name[0]==player)  host=true;
     if(host){
