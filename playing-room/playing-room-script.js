@@ -56,6 +56,7 @@ async function initializeRoom(){
     });
     var playerCount = data.name.length;
     var judge = (data.round-1)%playerCount
+    $("#round").text("Round: "+data.round);
     $("#player-count").html(playerCount);
     $("#player-list").html("<tr><th></th><th>Player</th><th></th><th>Score</th></tr>");
     for(i=0 ; i<playerCount ; i++){
@@ -100,23 +101,4 @@ function chooseCard(cardNumber){
     var cardID = "#card-" + cardNumber;
     chosenCard = cardID;
     $(cardID).addClass("choosing");
-}
-
-async function check(){
-    var docRef = db.collection("roomID").doc(roomID);
-    var data;
-    await docRef.get().then(async (doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-            data = doc.data();
-            console.log("Returning data" + data);
-            return data;
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-    console.log(data.round);
 }
