@@ -22,7 +22,7 @@ getUrlVars();
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
-    refreshRoom();
+    //refreshRoom();
 });
 
 function getUrlVars() {
@@ -53,48 +53,26 @@ async function initializeRoom(){
         console.log("Error getting document:", error);
     });
     var playerCount = data.name.length;
+    var judge = (data.round-1)%playerCount
     $("#player-count").html(playerCount);
-    $("#player-list").html("");
+    $("#player-list").html("<tr><th></th><th>Player</th><th></th><th>Score</th></tr>");
     for(i=0 ; i<playerCount ; i++){
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
-        markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td></tr>";
+        //var judgeState = ((playerdata.round-1)%playerCount == i)? "(Judge)" : "";
+        var judgeState = (i==judge)?   "(Judge)" : "";
+        var score = data.score[i];
+        markup = "<tr><td><img src='"+profileURL+"'></td><td>"+name+"</td><td>"+judgeState+"</td><td>"+score+"</td></tr>";
         $("#player-list").append(markup);
     }
-    if(data.name[0]==player)  host=true;
-    if(host){
-        $("#player-joining-room").css("display","none");
+    if(data.name[judge]==player){
+        $("#player-choosing").css("display","none");
     }else{
-        $("#host-joining-room").css("display","none");
+        $("#judge-waiting").css("display","none");
     }
-    console.log(data.round);
-    if(data.round!=0){
-        change_page();
-    }
+    console.log(data.name[judge]);
+    console.log(player);
 }
-
-async function startGame(){
-    console.log("Click");
-    var docRef = db.collection("roomID").doc(roomID);
-    var data;
-    await docRef.get().then(async (doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-            data = doc.data();
-            console.log("Returning data" + data);
-            return data;
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-    db.collection("roomID").doc(roomID).set(data).then(() => {
-        console.log(data.round);
-        change_page();
-    })
-} 
 
 async function check(){
     var docRef = db.collection("roomID").doc(roomID);
