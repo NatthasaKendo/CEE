@@ -74,6 +74,11 @@ async function initializeRoom(){
     console.log(player);
 }
 
+function addCard(){
+    $("#white-card-option").find("li:last").before("<li>" + $("#add-card").val() + "</li>");
+    console.log($("#add-card").val())
+}
+
 async function check(){
     var docRef = db.collection("roomID").doc(roomID);
     var data;
