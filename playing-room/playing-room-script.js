@@ -166,27 +166,51 @@ async function startJudging(){
 
 function generateCard(){
     for(i=0;i<3;i++){
-        $("#white-card-option").find("tr:last").before("<tr><td id='card-" +(i+1)+"' class=''>Suppose to generate some card here-" + (i+1) + "</td><td><button 'type='button' onclick='chooseCard("+(i+1)+")'>Choose</button></td></tr>");
+        var cardTemp = '"t",'+(i+1);
+        $("#white-card-option").find("tr:last").before("<tr><td id='card-" +(i+1)+"' class=''>Suppose to generate some card here-" + (i+1) + "</td><td><button type='button' onclick='chooseCard("+cardTemp+")'>Choose</button></td></tr>");
     }
     cardCount = 3;
 }
 
 function addCard(){
     cardCount += 1;
-    $("#white-card-option").find("tr:last").before("<tr><td id='card-" +cardCount+"' class=''>" + $("#add-card").val() + "</td><td><button type='button' onclick='chooseCard("+cardCount+")'>Choose</button></td></tr>");
+    var cardTemp = '"t",'+cardCount;
+    $("#white-card-option").find("tr:last").before("<tr><td id='card-" +cardCount+"' class=''>" + $("#add-card").val() + "</td><td><button type='button' onclick='chooseCard("+cardTemp+")'>Choose</button></td></tr>");
     console.log("Added card with content :" + $("#add-card").val());
     $("#add-card").val("");
 }
 
-function chooseCard(cardNumber){
-    $(chosenCard).removeClass("choosing");
-    var cardID = "#card-" + cardNumber;
-    chosenCard = cardID;
-    $(cardID).addClass("choosing");
-    sendChosenCard();
+async function addPictureCard(){
+    var file = document.getElementById("add-image-card").files[0];
+    if(file != "" && file != null){
+        console.log(file);
+        //Declare Variables
+        cardCount += 1;
+        var cardTemp = '"p",'+cardCount;
+        var imageName = "picture-card-"+generateId(10);
+        $("#white-card-option").find("tr:last").before("<tr><td id='card-" +cardCount+"' class=''><img src='' id='picture-card-" +cardCount+"' alt='" +imageName+"' class='picture-card'></td><td><button type='button' onclick='chooseCard("+cardTemp+")'>Choose</button></td></tr>");
+        // Create a root reference
+        var storageRef = firebase.storage().ref();
+        // Create a reference to 'images/mountains.jpg'
+        var imageRef = storageRef.child('card_pictures/' + imageName + '.jpg');
+        await imageRef.put(file).then((snapshot) => {
+            console.log('Uploaded a blob or file named: ' + imageName + " !");
+            uploadCardPicture("#picture-card-"+cardCount, imageName);
+        });
+    }else    console.log("No image selected");
 }
 
-async function sendChosenCard(){
+function chooseCard(cardType, cardNumber){
+    $(chosenCard).removeClass("choosing");
+    var cardID = "#";
+    if(cardType == "t") cardID += "card-" + cardNumber;
+    else    cardID += "picture-card-" + cardNumber;
+    chosenCard = cardID;
+    $(cardID).addClass("choosing");
+    sendChosenCard(cardType);
+}
+
+async function sendChosenCard(cardType){
     var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
@@ -202,13 +226,24 @@ async function sendChosenCard(){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    data.answer[playerSlot] = $(chosenCard).text();
+    if(cardType == "t") data.answer[playerSlot] = $(chosenCard).text();
+    else    data.answer[playerSlot] = $(chosenCard).attr("alt");
+    console.log(data.answer[playerSlot]);
     console.log(player + " chosen the card "+data.answer[playerSlot]);
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
+    });
+}
+
+function uploadCardPicture(id, imageName){
+    var storageRef = firebase.storage().ref();
+    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        $(id).attr("src",url);
+    }).catch(function (error) {
     });
 }
 
@@ -264,7 +299,15 @@ async function generateChoosingCard(){
     $("#card-list").html("");
     for(i=0;i<data.cardOrder.length;i++){
         if((data.round-1)%data.cardOrder.length == data.cardOrder[i])   continue;
-        var markup = "<tr><td id='card-" +data.cardOrder[i]+"' class=''>" + data.answer[data.cardOrder[i]] + "</td>";
+        var answer = data.answer[data.cardOrder[i]];
+        var markup = "<tr><td id='card-" +data.cardOrder[i]+"' class=''>";
+        var isPicture = (answer.length == 23 && answer.slice(0,13)=="picture-card-")? true:false;
+        console.log(isPicture);
+        console.log(answer);
+        if(isPicture){
+            console.log("------------Picture Card here------------");
+            markup += "<img src='' id='picture-card-" +data.cardOrder[i]+"' alt='" +answer+"' class='picture-card'></img></td>";
+        }else markup += answer + "</td>" ; 
         if(isJudge && data.gameState != 2){
             markup += "<td><button type='button' onclick='judgeChoose(" + data.cardOrder[i] + ")'>Choose</button></td></tr>";
         }else if(data.gameState == 2){
@@ -275,6 +318,7 @@ async function generateChoosingCard(){
             if(isJudge) $("#next-round").css("display","block");
         }
         $("#card-list").append(markup);
+        if(isPicture)    uploadCardPicture("#picture-card-" + data.cardOrder[i], answer);
     }
 }
 
@@ -310,7 +354,7 @@ async function resetVar(){
     cardCount = 0;
     chosenCard = "";
     isJudge = false;
-    $("#white-card-option").html("<tr><td><input id='add-card' type='text'></td><td><button type='button' onclick='addCard()'>Add Card</button></td></tr>");
+    $("#white-card-option").html("<tr><td><input id='add-card' type='text'></td><td><button type='button' onclick='addCard()'>Add Card</button></td><td>or</td><td><input type='file' id='add-image-card' accept='image/*'></td><td><button type='button' onclick='addPictureCard()'>Add Picture as a Card</button></td></tr>");
     $("card-list").html("");
 }
 
@@ -339,4 +383,14 @@ async function nextRound(){
     .catch((error) => {
         console.error("Error writing document: ", error);
     });
+}
+
+function dec2hex (dec) {
+    return dec.toString(16).padStart(2, "0")
+}
+
+function generateId (len) {
+    var arr = new Uint8Array((len || 40) / 2)
+    window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
 }
