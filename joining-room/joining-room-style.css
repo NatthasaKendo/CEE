@@ -29,3 +29,8 @@
   -o-border-radius: 50%;
   border-radius: 50%;
 }
+
+#host-joining-room,
+#player-joining-room {
+  display: none;
+}

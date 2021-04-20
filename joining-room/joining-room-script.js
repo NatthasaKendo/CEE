@@ -70,9 +70,9 @@ async function refreshRoom(){
     }
     if(data.name[0]==player)  host=true;
     if(host){
-        $("#player-joining-room").css("display","none");
+        $("#host-joining-room").css("display","block");
     }else{
-        $("#host-joining-room").css("display","none");
+        $("#player-joining-room").css("display","block");
     }
     console.log(data.round);
     if((!host) && data.round==1){
