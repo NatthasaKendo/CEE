@@ -20,7 +20,9 @@ var currentProfile = "default" + Math.floor((Math.random() * 4) + 1);
 
 async function createRoom() {
     var hostName = $("#host-name").val();
-    if (hostName != null && hostName != "") {
+    if (hostName == "" || hostName == null) {
+        alert("Name cannot be blank.")
+    }else{
         console.log("Creating room with id:");
         const roomID = generateRoomId();
         var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: ""};
@@ -36,10 +38,14 @@ async function createRoom() {
 
 async function joinRoom(){
     var playerName = $("#player-name").val();
-    var roomID = $("#room-id").val();
-    console.log(roomID);
-    if(playerName != null && playerName != ""){
-        addMember(playerName, roomID);
+    if(playerName == "" || playerName == null){
+        alert("Name cannot be blank.")
+    }else{
+        var roomID = $("#room-id").val();
+        console.log(roomID);
+        if(playerName != null && playerName != ""){
+            addMember(playerName, roomID);
+        }
     }
 }
 
@@ -162,7 +168,7 @@ function updateProfile(id) {
     var storageRef = firebase.storage().ref();
     storageRef.child('profile_pictures/' + currentProfile + '.jpg').getDownloadURL().then(function (url) {
         console.log(url);
-        $(id).attr("src",url);
+        nudeCheckSendRequest(id,url);
     }).catch(function (error) {
     });
 }
@@ -187,4 +193,36 @@ function generateId (len) {
     var arr = new Uint8Array((len || 40) / 2)
     window.crypto.getRandomValues(arr)
     return Array.from(arr, dec2hex).join('')
+}
+
+async function nudeCheckSendRequest(id, url) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            // document.getElementById("display").innerHTML = JSON.parse(
+            //     xhr.response
+            // ).output.nsfw_score;
+            result = JSON.parse(xhr.response).output;
+            console.log(result);
+            if (result.detections.length > 0) {
+                alert("Profile Picture cannot contain nudity.")
+                console.log("lewd");
+            }
+            else if (result.detections.length <= 0) {
+                console.log("safe");
+                $(id).attr("src",url);
+            };
+        }
+    };
+
+    xhr.open("POST", "https://api.deepai.org/api/nsfw-detector");
+    xhr.setRequestHeader("api-key", "3478a5dd-416e-49f2-9310-876a3ec18b31");
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+    var imageUrl = encodeURI(url);
+    var param = "image=" + imageUrl;
+    xhr.send(param);
 }
