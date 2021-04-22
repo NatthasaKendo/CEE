@@ -18,11 +18,13 @@ const dbs = firebase.storage();
 //const test_name_ref = db.collection("test_name");
 
 
-function sendToFirebaseStorage() {
+async function sendToFirebaseStorage() {
     //Declare Variables
     var name = document.getElementById("name").value;
     var roomID = document.getElementById("roomID").value;
     var imageName = roomID + "-" + name;
+    // Check nudes
+    //nude_check();
     // Create a root reference
     var storageRef = firebase.storage().ref();
     // Create a reference to 'images/mountains.jpg'
@@ -50,16 +52,61 @@ function deleteProfile() {
     });
 }
 
-function updateProfile() {
+async function updateProfile() {
     var name = document.getElementById("name").value;
     var roomID = document.getElementById("roomID").value;
     var imageName = roomID + "-" + name;
     var storageRef = firebase.storage().ref();
-    storageRef.child('profile_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
-        var test = url;
-        document.getElementById("profile_image").src = test;
-    }).catch(function (error) {
+    storageRef.child('profile_pictures/' + imageName + '.jpg').getDownloadURL().then(async url => {
+        nudeCheckSendRequest(url);
+        // console.log(result);
+        // if (result == "safe") {
+        //     console.log("safe");
+        //     var test = url;
+        //     document.getElementById("profile_image").src = test;
+        // }
+        // else if (result == "lewd") {
+        //     console.log("lewd");
+        //     document.getElementById("lewd").innerHTML = "That's lewd";
+        // }
 
+    }).catch(error => {
+        console.log(error);
     });
 
+}
+
+// AI Stuffs
+async function nudeCheckSendRequest(url) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            // document.getElementById("display").innerHTML = JSON.parse(
+            //     xhr.response
+            // ).output.nsfw_score;
+            result = JSON.parse(xhr.response).output;
+            console.log(result);
+            if (result.detections.length > 0) {
+                console.log("lewd");
+                document.getElementById("lewd").innerHTML = "That's lewd";
+            }
+            else if (result.detections.length <= 0) {
+                console.log("safe");
+                var test = url;
+                document.getElementById("profile_image").src = test;
+                document.getElementById("lewd").innerHTML = "That's safe"
+            };
+        }
+    };
+
+    xhr.open("POST", "https://api.deepai.org/api/nsfw-detector");
+    xhr.setRequestHeader("api-key", "3478a5dd-416e-49f2-9310-876a3ec18b31");
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+    var imageUrl = encodeURI(url);
+    var param = "image=" + imageUrl;
+    xhr.send(param);
 }
