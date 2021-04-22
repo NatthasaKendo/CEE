@@ -131,14 +131,19 @@ async function generateBlackCard() {
         var index = Math.floor((Math.random() * data.black.length) + 1);
         while( usedCard.includes(index) )   index = Math.floor((Math.random() * data.black.length) + 1);
         usedCard.push(index);
-        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" +index+"' class=''>"+ data.black[index] +"</td><td><button type='button' onclick='chooseBlackCard("+index+")'>Choose</button></td></tr>");
+        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" +(i+1)+"' class=''>"+ data.black[index] +"</td><td><button type='button' onclick='chooseBlackCard("+(i+1)+")'>Choose</button></td></tr>");
     }
     cardCount = 3;
 }
 
+function addBlackCard() {
+    cardCount += 1;
+    $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" +cardCount+"' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard("+cardCount+")'>Choose</button></td></tr>");
+}
+
 async function chooseBlackCard(cardNumber){
-    console.log("You choosing the black card number " + cardNumber);
-    var docRef = db.collection("data").doc("card");
+    console.log("----------------------------------------------------------------------");
+    var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
         if (doc.exists) {
@@ -153,18 +158,19 @@ async function chooseBlackCard(cardNumber){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    data.question = cardNumber;
-    await db.collection("data").doc("card").set(data).then(() => {
+    console.log("This is the card added :" + $("#black-card-"+cardNumber).text());
+    data.question = $("#black-card-"+cardNumber).text();
+    await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
-        changeState();
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
     });
+    changeState();
 }
 
 async function generateQuestionCard() {
-    var docRef = db.collection("data").doc("card");
+    var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
         if (doc.exists) {
@@ -179,7 +185,7 @@ async function generateQuestionCard() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    $("#black-card").html(data.black[data.question]);
+    $("#black-card").html(data.question);
 }
 
 async function generatePlayerData(){
@@ -285,7 +291,6 @@ function addCard(){
     var cardTemp = '"t",'+cardCount;
     $("#white-card-option").find("tr:last").before("<tr><td id='card-" +cardCount+"' class=''>" + $("#add-card").val() + "</td><td><button type='button' onclick='chooseCard("+cardTemp+")'>Choose</button></td></tr>");
     console.log("Added card with content :" + $("#add-card").val());
-    $("#add-card").val("");
 }
 
 async function addPictureCard(){
@@ -462,7 +467,7 @@ async function resetVar(){
     cardCount = 0;
     chosenCard = "";
     isJudge = false;
-    $("#black-card-option").html('<table id = "black-card-option"><td><input id="add-card" type="text"></td><td><button type="button" onclick="addBlackCard()">Add Card</button></td></table>');
+    $("#black-card-option").html('<table id = "black-card-option"><td><input id="add-black-card" type="text"></td><td><button type="button" onclick="addBlackCard()">Add Card</button></td></table>');
     $("#white-card-option").html("<tr><td><input id='add-card' type='text'></td><td><button type='button' onclick='addCard()'>Add Card</button></td><td>or</td><td><input type='file' id='add-image-card' accept='image/*'></td><td><button type='button' onclick='addPictureCard()'>Add Picture as a Card</button></td></tr>");
     $("#card-list").html("");
     $("#black-card").html("");
