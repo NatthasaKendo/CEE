@@ -124,7 +124,7 @@ function joinRoomPopUp() {
 }
 
 async function uploadProfilePicture(id){
-    if(currentProfile == "" || currentProfile == null){
+    if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
         var imageName = generateId(10);
         currentProfile = "randomize-"+imageName;
     }
