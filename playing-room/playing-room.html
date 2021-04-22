@@ -14,9 +14,14 @@
 <body>
 
     <div id="round">Round: 0</div>
-    <div id="black-card">
-        
+    <div id="judge-choosing-black-card">
+        <table id = "black-card-option">
+            <td><input id="add-card" type="text"></td>
+            <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
+        </table>
     </div>
+    <div id = "player-waiting">Waiting for judge to choose black card</div>
+    <div id="black-card"></div>
     <div class="players">
         <table id="player-list">
         </table>
@@ -24,7 +29,7 @@
 
     <div id="judge-waiting">
         <p>Waiting for other player to choose the card ...</p>
-        <button type="button" onclick="startJudging()">Temporary Judge Button</button>
+        <button type="button" onclick="changeState()">Temporary Judge Button</button>
     </div>
 
     <div id="player-choosing">
