@@ -23,7 +23,7 @@ async function createRoom() {
     if (hostName != null && hostName != "") {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: ""};
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: ""};
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
