@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 //const test_name_ref = db.collection("test_name");
 
-var currentProfile;
+var currentProfile = "default" + Math.floor((Math.random() * 4) + 1);
 
 async function createRoom() {
     var hostName = $("#host-name").val();
@@ -102,6 +102,7 @@ function generateRoomId() {
 }
 
 function createRoomPopUp() {
+    updateProfile("#host-image");
     var x = document.getElementById("id02");
     if (window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
@@ -112,6 +113,7 @@ function createRoomPopUp() {
 }
 
 function joinRoomPopUp() {
+    updateProfile("#player-image");
     var x = document.getElementById("id01");
     if (window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
