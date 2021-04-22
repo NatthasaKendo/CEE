@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <link rel="stylesheet" href="background.css">
+<head> 
     <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="background.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>   
     <title>Document</title>
 </head>
 
 <body>
     <div class="context">
         <h1>Game Title</h1>
+        <iframe style="display: none;" src="https://www.youtube.com/embed/OCuB1LvyCv4?rel=0&autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div id="button">
             <a href="#">
                 <span type="button"
@@ -34,7 +34,7 @@
             <form class="modal-content animate" method="post">
               <div class="imgcontainer">
                 <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-                <img id="player-image" src="" alt="Avatar" class="profile-container"><br>
+                <img id="player-image" src="img_avatar2.png" alt="Avatar" class="profile-container"><br>
                 <input type="file" id="image-upload-player" accept="image/*">
                 <button type="button" onclick="uploadProfilePicture('image-upload-player')">Upload</button>
               </div>
@@ -50,11 +50,11 @@
             </form>
           </div>
           <div id="id02" class="modal">
-  
+            
             <form class="modal-content animate" method="post">
               <div class="imgcontainer">
                 <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
-                <img id="host-image" src="" alt="Avatar" class="profile-container"><br>
+                <img id="host-image" src="img_avatar2.png" alt="Avatar" class="profile-container"><br>
                 <input type="file" id="image-upload-host" accept="image/*">
                 <button type="button" onclick="uploadProfilePicture('image-upload-host')">Upload</button>
               </div>
