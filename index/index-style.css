@@ -60,20 +60,20 @@ a .liquid::before {
 a .liquid::before {
   border-radius: 45%;
   background: rgba(20, 20, 20, 1);
-  animation: animate 5s linear infinite;
+  animation: flow 5s linear infinite;
 }
 
 a .liquid::after {
   border-radius: 40%;
   background: rgba(20, 20, 20, 0.5);
-  animation: animate 10s linear infinite;
+  animation: flow 10s linear infinite;
 }
 
 a:hover .liquid {
   top: -200px;
 }
 
-@keyframes animate {
+@keyframes flow {
   0% {
     transform: translate(-50%, -75%) rotate(0deg);
   }
