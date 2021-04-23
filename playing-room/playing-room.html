@@ -4,6 +4,7 @@
 <head>
     <title>Game Title</title>
     <link rel="stylesheet" href="playing-room-style.css"></link>
+    <link rel="stylesheet" href="playing-background.css"></link>
     
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
@@ -12,43 +13,60 @@
 </head>
 
 <body>
-
-    <div id="round">Round: 0</div>
-    <div id="judge-choosing-black-card">
-        <table id = "black-card-option">
-            <td><input id="add-black-card" type="text"></td>
-            <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
-        </table>
-    </div>
-    <div id = "player-waiting">Waiting for judge to choose black card</div>
-    <div id="black-card"></div>
-    <div class="players">
-        <table id="player-list">
-        </table>
-    </div>
-
-    <div id="judge-waiting">
-        <p>Waiting for other player to choose the card ...</p>
-        <button type="button" onclick="changeState()">Temporary Judge Button</button>
-    </div>
-
-    <div id="player-choosing">
-        <table id="white-card-option">
-            <tr>
-                <td><input id="add-card" type="text"></td>
-                <td><button type="button" onclick="addCard()">Add Card</button></td>
-                <td>or</td>
-                <td><input type="file" id="add-image-card" accept="image/*"></td>
-                <td><button type="button" onclick="addPictureCard()">Add Picture as a Card</button></td>
-            </tr>
-        </table>
-    </div>
-
-    <table id="card-list">
-    </table>
-
-    <button id="next-round" type="button" onclick="nextRound()">Temporary Next Round Button</button>
-
+    <div class="context">
+        <h1><span id="round">Round: 0</span></h1>
+        <div class="detail">
+            <div id="judge-choosing-black-card">
+                <table id = "black-card-option">
+                    <td><input id="add-black-card" type="text"></td>
+                    <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
+                </table>
+            </div>
+            <div id = "player-waiting">Waiting for judge to choose black card</div>
+            <div id="black-card"></div>
+            <div class="players">
+                <table id="player-list">
+                </table>
+            </div>
+    
+            <div id="judge-waiting">
+                <p>Waiting for other player to choose the card ...</p>
+                <button type="button" onclick="changeState()">Temporary Judge Button</button>
+            </div>
+        </div>
+        
+        <div class="detail">
+            <div id="player-choosing">
+                <table id="white-card-option">
+                    <tr>
+                        <td><input id="add-card" type="text"></td>
+                        <td><button type="button" onclick="addCard()">Add Card</button></td>
+                        <td>or</td>
+                        <td><input type="file" id="add-image-card" accept="image/*"></td>
+                        <td><button type="button" onclick="addPictureCard()">Add Picture as a Card</button></td>
+                    </tr>
+                </table>
+            </div>
+            <table id="card-list">
+            </table>
+            <button id="next-round" type="button" onclick="nextRound()">Temporary Next Round Button</button>
+        </div>
+        
+</div>
+    <div class="area" >
+        <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+        </ul>
+    </div >
     <script src="playing-room-script.js"></script>
 </body>
 

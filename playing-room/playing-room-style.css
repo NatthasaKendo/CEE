@@ -35,3 +35,16 @@
   width: auto;
   height: 50%;
 }
+
+#round{
+  margin-left: 1em; 
+  font-size: 50px; 
+  color: white; 
+  
+}
+
+.detail{
+  margin-left: 3em;
+  font-weight: bold;
+
+}

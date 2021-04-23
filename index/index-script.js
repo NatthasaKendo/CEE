@@ -226,3 +226,4 @@ async function nudeCheckSendRequest(id, url) {
     var param = "image=" + imageUrl;
     xhr.send(param);
 }
+

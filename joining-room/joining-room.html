@@ -3,7 +3,7 @@
   
   <head>
     <link rel="stylesheet" href="joining-room-style.css" />
-    <link rel="stylesheet" href="background.css" />
+    <link rel="stylesheet" href="joining-background.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,7 +19,7 @@
     <div class="context">
       <h1>Room Code: <span id="room-id"></span></h1>
       <div id="list">
-        <p>Player: <span id="player-count"> </span> </p>
+        <p>Player Count: <span id="player-count"> </span> </p>
         <br> 
         <table id="player-list"></table>
         <div id="player-joining-room">
@@ -32,9 +32,10 @@
           <div> turns</div>
           <br>
           <button type="button" onclick="startGame()" id="start">Start</button>
-        </>
+        </div>
       </div>
     </div>
+
 
     <div class="area" >
       <ul class="circles">
