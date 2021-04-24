@@ -57,6 +57,8 @@ async function refreshRoom(){
     $("#waiting").css("display","none");
     $("#next-round").css("display","none");
     $("#card-list").css("display","none");
+    $("#result-player-list").css("display","none");
+    $("#back-to-index").css("display","none");
 
     if(data.gameState == 0){
         if(!isGenerated){
@@ -428,11 +430,57 @@ async function generateChoosingCard(){
             console.log("Winner is " + data.name[data.chosenCard]);
             if(data.chosenCard == data.cardOrder[i])    markup += "<td class='winner'>" + data.name[data.cardOrder[i]] + "</td></tr>";
             else    markup += "<td class='loser'>" + data.name[data.cardOrder[i]] + "</td></tr>";
-            if(isJudge) $("#next-round").css("display","block");
+            if(isJudge && data.round != data.roundMax) $("#next-round").css("display","block");
+            if(data.round == data.roundMax)   generateFinalResult();
         }
         $("#card-list").append(markup);
         if(isPicture)    uploadCardPicture("#picture-card-" + data.cardOrder[i], answer);
     }
+}
+
+async function generateFinalResult(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    $("#result-player-list").before("<p>Final Result</p>");
+    $("#result-player-list").html("<tr><th></th><th>Place</th><th>Player</th><th></th><th>Score</th></tr>");
+    var playerScore = [];
+    for(i=0;i<data.name.length;i++){
+        playerScore.push({score: data.score[i], name: data.name[i]});
+    }
+    playerScore.sort(function(a, b){return b.score - a.score});
+    var place = 1;
+    for(i=0;i<data.name.length;i++){
+        var tempURL = "";
+        var profileURL = data.profile_pic[i];
+        var storageRef = firebase.storage().ref();
+        await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
+            tempURL = url;
+        }).catch(function (error) {
+        });
+        console.log(playerScore[i].name + "   ->   " + playerScore[i].score);
+        if(i!=0 && playerScore[i-1].score == playerScore[i].score){
+            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(place-1)+"</td><td>"+data.name[i]+"</td><td>"+data.score[i]+"</td></tr>");
+        }else{
+            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(i+1)+"</td><td>"+data.name[i]+"</td><td>"+data.score[i]+"</td></tr>");
+            place += 1;
+        }
+    }
+    $("#player-list").css("display","none");
+    $("#result-player-list").css("display","block");
+    $("#back-to-index").css("display","block");
 }
 
 async function judgeChoose(cardNumber){
