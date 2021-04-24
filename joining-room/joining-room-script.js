@@ -97,7 +97,7 @@ async function startGame(){
         console.log("Error getting document:", error);
     });
     data.round = 1;
-    data.roundMax = $("#round-max").val();
+    data.roundMax = $("#round-max").val() * data.name.length;
     console.log(data.round);
     db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
