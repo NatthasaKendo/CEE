@@ -147,7 +147,7 @@ async function uploadProfilePicture(id){
             console.log('Uploaded a blob or file named: ' + currentProfile + " !");
             updateProfile("#"+id.slice(13,id.length)+"-image");
         });
-    }else    console.log("No image selected");
+    }else    alert("No image selected");
 }
 
 function deleteProfilePicture(imageName) {
