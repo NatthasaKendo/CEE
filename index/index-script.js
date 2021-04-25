@@ -71,7 +71,7 @@ async function addMember(name, roomID) {
     var nameList = data.name;
     //console.log("nameList " + nameList);
     if (checkNameExist(name, nameList)) {
-        console.log("Name already exists.");
+        alert("Name already exists.");
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
         data.name.push(name);
