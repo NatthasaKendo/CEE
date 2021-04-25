@@ -98,6 +98,10 @@ async function refreshRoom() {
         $("#card-list").css("display", "block");
         await generatePlayerData();
         generateChoosingCard();
+        $(".modal").css("display","flex");
+        $(".modal").css("justify-content","center");
+        $(".modal").css("align-items","center");
+        $(".modal").css("flex-direction","column");
     }
 }
 
