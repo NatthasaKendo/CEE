@@ -25,7 +25,6 @@ var isGenerated = false;
 var cardCount = 0;
 var chosenCard = "";
 var isJudge = false;
-var blank = 0;
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -60,11 +59,6 @@ async function refreshRoom() {
     $("#card-list").css("display", "none");
     $("#result-player-list").css("display", "none");
     $("#back-to-index").css("display", "none");
-
-    // gameState = 0 --> judge choose question card
-    //           = 1 --> player choose answer card
-    //           = 2 --> judge choosing the answer card
-    //           = 3 --> game end
 
     if (data.gameState == 0) {
         if (!isGenerated) {
@@ -144,10 +138,6 @@ async function generateBlackCard() {
     }
 }
 
-function changeBlank(questionBlank){
-    blank = questionBlank;
-}
-
 function addBlackCard() {
     cardCount += 1;
     $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
@@ -172,8 +162,6 @@ async function chooseBlackCard(cardNumber) {
     });
     console.log("This is the card added :" + $("#black-card-" + cardNumber).text());
     data.question = $("#black-card-" + cardNumber).text();
-    if(cardNumber > 3)  data.blank = blank;
-    else data.blank = countBlank(data.question);
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -444,13 +432,7 @@ async function generateChoosingCard() {
             if (data.chosenCard == data.cardOrder[i]) markup += "<td class='winner'>" + data.name[data.cardOrder[i]] + "</td></tr>";
             else markup += "<td class='loser'>" + data.name[data.cardOrder[i]] + "</td></tr>";
             if (isJudge && data.round != data.roundMax) $("#next-round").css("display", "block");
-            if (data.round == data.roundMax) {
-                generateFinalResult();
-                $(".modal").css("display","flex");
-                $(".modal").css("justify-content","center");
-                $(".modal").css("align-items","center");
-                $(".modal").css("flex-direction","column");
-            }
+            if (data.round == data.roundMax) generateFinalResult();
         }
         $("#card-list").append(markup);
         if (isPicture) uploadCardPicture("#picture-card-" + data.cardOrder[i], answer);
@@ -533,7 +515,7 @@ async function resetVar() {
     cardCount = 0;
     chosenCard = "";
     isJudge = false;
-    $("#black-card-option").html('<table id = "black-card-option"><tr><td><input id="add-black-card" type="text"> (There are  1<input type="checkbox" onclick="changeBlank(1)" >  2<input type="checkbox" onclick="changeBlank(2)" >  3<input type="checkbox" onclick="changeBlank(3)">  blank(s) in this question.) </td><td><button type="button" onclick="addBlackCard()">Add Question Card</button></td></tr>');
+    $("#black-card-option").html('<table id = "black-card-option"><td><input id="add-black-card" type="text"></td><td><button type="button" onclick="addBlackCard()">Add Card</button></td></table>');
     $("#white-card-option").html("<tr><td><input id='add-card' type='text'></td><td><button type='button' onclick='addCard()'>Add Card</button></td><td>or</td><td><input type='file' id='add-image-card' accept='image/*'></td><td><button type='button' onclick='addPictureCard()'>Add Picture as a Card</button></td></tr>");
     $("#card-list").html("");
     $("#black-card").html("");
