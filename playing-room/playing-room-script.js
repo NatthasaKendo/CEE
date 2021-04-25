@@ -104,10 +104,6 @@ async function refreshRoom() {
         $("#card-list").css("display", "block");
         await generatePlayerData();
         generateChoosingCard();
-        $(".modal").css("display","flex");
-        $(".modal").css("justify-content","center");
-        $(".modal").css("align-items","center");
-        $(".modal").css("flex-direction","column");
     }
 }
 
@@ -448,7 +444,13 @@ async function generateChoosingCard() {
             if (data.chosenCard == data.cardOrder[i]) markup += "<td class='winner'>" + data.name[data.cardOrder[i]] + "</td></tr>";
             else markup += "<td class='loser'>" + data.name[data.cardOrder[i]] + "</td></tr>";
             if (isJudge && data.round != data.roundMax) $("#next-round").css("display", "block");
-            if (data.round == data.roundMax) generateFinalResult();
+            if (data.round == data.roundMax) {
+                generateFinalResult();
+                $(".modal").css("display","flex");
+                $(".modal").css("justify-content","center");
+                $(".modal").css("align-items","center");
+                $(".modal").css("flex-direction","column");
+            }
         }
         $("#card-list").append(markup);
         if (isPicture) uploadCardPicture("#picture-card-" + data.cardOrder[i], answer);
