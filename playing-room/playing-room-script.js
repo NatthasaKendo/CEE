@@ -455,8 +455,7 @@ async function generateFinalResult(){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    $("#result-player-list").before("<p>Final Result</p>");
-    $("#result-player-list").html("<tr><th></th><th>Place</th><th>Player</th><th></th><th>Score</th></tr>");
+    $("#result-player-list").html("<tr><td>Final Result</td></tr><tr><th></th><th>Place</th><th>Player</th><th></th><th>Score</th></tr>");
     var playerScore = [];
     for(i=0;i<data.name.length;i++){
         playerScore.push({score: data.score[i], name: data.name[i]});
@@ -471,11 +470,11 @@ async function generateFinalResult(){
             tempURL = url;
         }).catch(function (error) {
         });
-        console.log(playerScore[i].name + "   ->   " + playerScore[i].score);
-        if(i!=0 && playerScore[i-1].score == playerScore[i].score){
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(place-1)+"</td><td>"+data.name[i]+"</td><td>"+data.score[i]+"</td></tr>");
+        console.log((playerScore[i]).name + "   ->   " + (playerScore[i]).score);
+        if(i!=0 && (playerScore[i-1]).score == (playerScore[i]).score){
+            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(place-1)+"</td><td>"+(playerScore[i]).name+"</td><td>"+(playerScore[i]).score+"</td></tr>");
         }else{
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(i+1)+"</td><td>"+data.name[i]+"</td><td>"+data.score[i]+"</td></tr>");
+            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+(i+1)+"</td><td>"+(playerScore[i]).name+"</td><td>"+(playerScore[i]).score+"</td></tr>");
             place += 1;
         }
     }
