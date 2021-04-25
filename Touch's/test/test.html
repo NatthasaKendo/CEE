@@ -13,8 +13,14 @@
 
   <body>
     <script src="test.js"></script>
-    <h1 id="roomCode">Room Code:</h1>
-    <h1 id="code"></h1>
-    <p id="test">test</p>
+    <input type="text" id="input" name="myfile" />
+    <button
+      type="button"
+      id="button"
+      onclick="countBlank(document.getElementById('input').value)"
+    >
+      Count
+    </button>
+    <p id="output"></p>
   </body>
 </html>
