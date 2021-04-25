@@ -134,8 +134,8 @@ async function generateBlackCard() {
         while( usedCard.includes(index) )   index = Math.floor((Math.random() * data.black.length) + 1);
         usedCard.push(index);
         $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" +(i+1)+"' class=''>"+ data.black[index] +"</td><td><button type='button' onclick='chooseBlackCard("+(i+1)+")'>Choose</button></td></tr>");
+        cardCount += 1;
     }
-    cardCount = 3;
 }
 
 function addBlackCard() {
@@ -278,14 +278,15 @@ async function generateWhiteCard(){
         console.log("Error getting document:", error);
     });
     var usedCard = [];
+    console.log("Generate Cards here -----------------")
     for(i=0;i<3;i++){
         var index = Math.floor((Math.random() * data.white.length) + 1);
         while( usedCard.includes(index) )   index = Math.floor((Math.random() * data.black.length) + 1);
         usedCard.push(index);
         var cardTemp = '"t",'+(i+1);
         $("#white-card-option").find("tr:last").before("<tr><td id='card-" +(i+1)+"' class=''>"+ data.white[index] +"</td><td><button type='button' onclick='chooseCard("+cardTemp+")'>Choose</button></td></tr>");
+        cardCount += 1;
     }
-    cardCount = 3;
 }
 
 function addCard(){
