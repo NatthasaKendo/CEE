@@ -529,6 +529,7 @@ async function generateChoosingCard() {
             if (isJudge && data.round != data.roundMax) $("#next-round").css("display", "block");
             if (data.round == data.roundMax){
                 generateFinalResult();
+                $("#player-list").css("display", "none");
                 $(".modal").css("display","flex");
                 $(".modal").css("justify-content","center");
                 $(".modal").css("align-items","center");
