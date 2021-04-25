@@ -130,12 +130,12 @@ function joinRoomPopUp() {
 }
 
 async function uploadProfilePicture(id){
-    if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
-        var imageName = generateId(10);
-        currentProfile = "randomize-"+imageName;
-    }
     var file = document.getElementById(id).files[0];
     if(file != "" && file != null){
+        if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
+            var imageName = generateId(10);
+            currentProfile = "randomize-"+imageName;
+        }
         console.log(file);
         //Declare Variables
         console.log(currentProfile);
