@@ -1,0 +1,45 @@
+#list {
+  margin-left: 2em;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#start {
+  border-radius: 50px;
+  background-color: black;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: auto;
+}
+
+#start:hover {
+  opacity: 0.8;
+}
+
+.profile-container {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+}
+
+#host-joining-room,
+#player-joining-room {
+  display: none;
+}
+
+input[type="number"] {
+  width: auto;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}

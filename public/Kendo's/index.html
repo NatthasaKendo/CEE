@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="background.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="context">
+        <h1>Game Title</h1>
+        <div id="button">
+            <a href="#">
+                <span type="button"
+                onclick="createRoom()">Create a Room</span>
+                <div class="liquid"></div>
+            </a>
+            <a href="#" onclick="joinRoom()">
+                <span>Join a Room</span>
+                <div class="liquid"></div>
+            </a>
+        </div>
+        <div id="id01" class="modal">
+  
+            <form class="modal-content animate" action="/action_page.php" method="post">
+              <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="img_avatar2.png" alt="Avatar" class="avatar"><br>
+                <input type="file" id="imageUpload" accept="image/*" onchange="loadFile(event)">
+              </div>
+          
+              <div class="container">
+                <label for="uname"><b>Player Name: </b></label>
+                <input type="text" placeholder="Enter Name" name="uname" required><br>
+          
+                <label for="psw"><b>RoomID: </b></label>
+                <input type="text" placeholder="Enter RoomID" name="psw" required>
+                <button type="submit" id="button" onclick="addMember(document.getElementById('fname').value,document.getElementById('roomID').value)">Join</button>
+              </div> 
+            </form>
+          </div>
+          <div id="id02" class="modal">
+  
+            <form class="modal-content animate" action="/action_page.php" method="post">
+              <div class="imgcontainer">
+                <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="img_avatar2.png" alt="Avatar" class="avatar">
+              </div>
+          
+              <div class="container">
+                <label for="uname"><b>Player Name: </b></label>
+                <input type="text" placeholder="Enter Name" name="uname" required><br>
+                <button type="submit" id="button" onclick="createRoom(document.getElementById('fname').value)">Host</button>
+              </div>
+            </form>
+          </div>
+    </div>
+    <div class="area" >
+        <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+        </ul>
+    </div >
+    
+    
+</body>
+
+</html>
