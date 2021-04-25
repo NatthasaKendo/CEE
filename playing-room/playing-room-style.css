@@ -47,3 +47,9 @@
   margin-left: 3em;
   font-weight: bold;
 }
+
+#result-player-list{
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}

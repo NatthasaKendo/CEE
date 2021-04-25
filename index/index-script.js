@@ -227,3 +227,5 @@ async function nudeCheckSendRequest(id, url) {
     xhr.send(param);
 }
 
+var audio = document.getElementById("song") ;
+audio.volume = 0.2; 
