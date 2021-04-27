@@ -7,11 +7,12 @@
 
 body {
   font-family: "Exo", sans-serif;
+  width: 100%;
 }
 
 .context {
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 30vh;
 }
 
@@ -19,6 +20,30 @@ body {
   text-align: center;
   color: #fff;
   font-size: 100px;
+}
+
+@media all and (max-width: 550px) {
+  .context h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 80px;
+  }
+}
+
+@media all and (max-width: 450px) {
+  .context h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 60px;
+  }
+}
+
+@media all and (max-width: 330px) {
+  .context h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 40px;
+  }
 }
 
 .area {

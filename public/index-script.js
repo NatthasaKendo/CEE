@@ -25,7 +25,7 @@ async function createRoom() {
     }else{
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: ""};
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0,timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0};
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
@@ -71,7 +71,7 @@ async function addMember(name, roomID) {
     var nameList = data.name;
     //console.log("nameList " + nameList);
     if (checkNameExist(name, nameList)) {
-        console.log("Name already exists.");
+        alert("Name already exists.");
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
         data.name.push(name);
@@ -130,12 +130,12 @@ function joinRoomPopUp() {
 }
 
 async function uploadProfilePicture(id){
-    if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
-        var imageName = generateId(10);
-        currentProfile = "randomize-"+imageName;
-    }
     var file = document.getElementById(id).files[0];
     if(file != "" && file != null){
+        if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
+            var imageName = generateId(10);
+            currentProfile = "randomize-"+imageName;
+        }
         console.log(file);
         //Declare Variables
         console.log(currentProfile);

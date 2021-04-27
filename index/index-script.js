@@ -22,10 +22,10 @@ async function createRoom() {
     var hostName = $("#host-name").val();
     if (hostName == "" || hostName == null) {
         alert("Name cannot be blank.")
-    }else{
+    } else {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0,timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0};
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0 };
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
@@ -36,14 +36,14 @@ async function createRoom() {
     }
 }
 
-async function joinRoom(){
+async function joinRoom() {
     var playerName = $("#player-name").val();
-    if(playerName == "" || playerName == null){
+    if (playerName == "" || playerName == null) {
         alert("Name cannot be blank.")
-    }else{
+    } else {
         var roomID = $("#room-id").val();
         console.log(roomID);
-        if(playerName != null && playerName != ""){
+        if (playerName != null && playerName != "") {
             addMember(playerName, roomID);
         }
     }
@@ -51,7 +51,7 @@ async function joinRoom(){
 
 async function addMember(name, roomID) {
     console.log("Adding member...");
-    
+
     var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
@@ -129,12 +129,13 @@ function joinRoomPopUp() {
     }
 }
 
-async function uploadProfilePicture(id){
+async function uploadProfilePicture(id) {
+    //console.log("Ran uploadProfilePicture(id)")
     var file = document.getElementById(id).files[0];
-    if(file != "" && file != null){
-        if(currentProfile.slice(0,7) == "default" || currentProfile == "" || currentProfile == null){
+    if (file != "" && file != null) {
+        if (currentProfile.slice(0, 7) == "default" || currentProfile == "" || currentProfile == null) {
             var imageName = generateId(10);
-            currentProfile = "randomize-"+imageName;
+            currentProfile = "randomize-" + imageName;
         }
         console.log(file);
         //Declare Variables
@@ -145,20 +146,20 @@ async function uploadProfilePicture(id){
         var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
         imageRef.put(file).then((snapshot) => {
             console.log('Uploaded a blob or file named: ' + currentProfile + " !");
-            updateProfile("#"+id.slice(13,id.length)+"-image");
+            updateProfile("#" + id.slice(13, id.length) + "-image");
         });
-    }else    alert("No image selected");
+    } else alert("No image selected");
 }
 
 function deleteProfilePicture(imageName) {
-    console.log("Delete picture with name: "+imageName);
+    console.log("Delete picture with name: " + imageName);
     // Create a reference to the file to delete
     var storageRef = firebase.storage().ref();
     var imageRef = storageRef.child('profile_pictures/' + imageName + '.jpg');
     // Delete the file
     imageRef.delete().then(() => {
         // File deleted successfully
-        console.log("Deleted profile picture of "+imageName)
+        console.log("Deleted profile picture of " + imageName)
     }).catch((error) => {
         // Uh-oh, an error occurred!
     });
@@ -168,7 +169,7 @@ function updateProfile(id) {
     var storageRef = firebase.storage().ref();
     storageRef.child('profile_pictures/' + currentProfile + '.jpg').getDownloadURL().then(function (url) {
         console.log(url);
-        nudeCheckSendRequest(id,url);
+        nudeCheckSendRequest(id, url);
     }).catch(function (error) {
     });
 }
@@ -185,11 +186,11 @@ function change_page(fileNameInDotHtml) {
     window.location.href = fileNameInDotHtml;
 }
 
-function dec2hex (dec) {
+function dec2hex(dec) {
     return dec.toString(16).padStart(2, "0")
 }
 
-function generateId (len) {
+function generateId(len) {
     var arr = new Uint8Array((len || 40) / 2)
     window.crypto.getRandomValues(arr)
     return Array.from(arr, dec2hex).join('')
@@ -211,7 +212,8 @@ async function nudeCheckSendRequest(id, url) {
             }
             else if (result.detections.length <= 0) {
                 console.log("safe");
-                $(id).attr("src",url);
+                //document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
+                $(id).attr("src", url);
             };
         }
     };
@@ -227,5 +229,5 @@ async function nudeCheckSendRequest(id, url) {
     xhr.send(param);
 }
 
-var audio = document.getElementById("song") ;
-audio.volume = 0.2; 
+var audio = document.getElementById("song");
+audio.volume = 0.2;

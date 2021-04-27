@@ -42,13 +42,13 @@
               alt="Avatar"
               class="profile-container"
             /><br />
-            <input type="file" id="image-upload-player" accept="image/*" />
-            <button
-              type="button"
-              onclick="uploadProfilePicture('image-upload-player')"
-            >
-              Upload
-            </button>
+            <input
+              type="file"
+              id="image-upload-player"
+              accept="image/*"
+              onchange="uploadProfilePicture('image-upload-player')"
+            />
+            <p id="profile-status-player"></p>
           </div>
 
           <div class="container">
@@ -88,13 +88,13 @@
               alt="Avatar"
               class="profile-container"
             /><br />
-            <input type="file" id="image-upload-host" accept="image/*" />
-            <button
-              type="button"
-              onclick="uploadProfilePicture('image-upload-host')"
-            >
-              Upload
-            </button>
+            <input
+              type="file"
+              id="image-upload-host"
+              accept="image/*"
+              onchange="uploadProfilePicture('image-upload-host')"
+            />
+            <p id="profile-status-host"></p>
           </div>
 
           <div class="container">
