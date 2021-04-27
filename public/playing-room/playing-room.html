@@ -18,8 +18,16 @@
         <div class="detail">
             <div id="judge-choosing-black-card">
                 <table id = "black-card-option">
-                    <td><input id="add-black-card" type="text"></td>
-                    <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
+                    <tr>
+                        <td><input id="add-black-card" type="text"></td>
+                        <td>There're
+                            1<input type="checkbox" onclick="changeBlank(1)" >
+                            2<input type="checkbox" onclick="changeBlank(2)" >
+                            3<input type="checkbox" onclick="changeBlank(3)" >
+                            blank(s) in this question.
+                        </td>
+                        <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
+                    </tr>
                 </table>
             </div>
             <div id = "player-waiting">Waiting for judge to choose black card</div>
@@ -27,8 +35,13 @@
             <div class="players">
                 <table id="player-list">
                 </table>
-                <table id="result-player-list">
-                </table>
+                <div class="modal">
+                    <div id="container">
+                        <table id="result-player-list">
+                        </table>
+                        <button id="back-to-index" type="button" onclick="window.location.href = '../index/index.html'">Back to Main Page</button>
+                    </div>
+                </div>
             </div>
     
             <div id="judge-waiting">
@@ -39,20 +52,40 @@
         
         <div class="detail">
             <div id="player-choosing">
-                <table id="white-card-option">
+                <table id="white-card-option-1">
+                    <tr><td>1st Blank</td></tr>
                     <tr>
                         <td><input id="add-card" type="text"></td>
-                        <td><button type="button" onclick="addCard()">Add Card</button></td>
+                        <td><button type="button" onclick="addCard(1)">Add Card</button></td>
                         <td>or</td>
-                        <td><input type="file" id="add-image-card" accept="image/*"></td>
-                        <td><button type="button" onclick="addPictureCard()">Add Picture as a Card</button></td>
+                        <td><input type="file" id="add-image-card-1" accept="image/*"></td>
+                        <td><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></td>
+                    </tr>
+                </table>
+                <table id="white-card-option-2">
+                    <tr><td>2nd Blank</td></tr>
+                    <tr>
+                        <td><input id="add-card" type="text"></td>
+                        <td><button type="button" onclick="addCard(2)">Add Card</button></td>
+                        <td>or</td>
+                        <td><input type="file" id="add-image-card-2" accept="image/*"></td>
+                        <td><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></td>
+                    </tr>
+                </table>
+                <table id="white-card-option-3">
+                    <tr><td>3rd Blank</td></tr>
+                    <tr>
+                        <td><input id="add-card" type="text"></td>
+                        <td><button type="button" onclick="addCard(3)">Add Card</button></td>
+                        <td>or</td>
+                        <td><input type="file" id="add-image-card-3" accept="image/*"></td>
+                        <td><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></td>
                     </tr>
                 </table>
             </div>
             <table id="card-list">
             </table>
             <button id="next-round" type="button" onclick="nextRound()">Temporary Next Round Button</button>
-            <button id="back-to-index" type="button" onclick="window.location.href = '../index/index.html'">Back to Main Page</button>
         </div>
         
 </div>

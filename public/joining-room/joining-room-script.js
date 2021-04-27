@@ -96,17 +96,20 @@ async function startGame(){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    data.round = 1;
-    data.roundMax = $("#round-max").val() * data.name.length;
-    console.log(data.round);
-    db.collection("roomID").doc(roomID).set(data).then(() => {
-        console.log("Document successfully overwritten!");
-        console.log("Round: 1");
-        change_page();
-    })
-    .catch((error) => {
-        console.error("Error writing document: ", error);
-    });
+    if($("#round-max").val()>0){
+        data.round = 1;
+        data.roundMax = $("#round-max").val() * data.name.length;
+        console.log(data.round);
+        db.collection("roomID").doc(roomID).set(data).then(() => {
+            console.log("Document successfully overwritten!");
+            console.log("Round: 1");
+            change_page();
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+    }else   alert("Round must be at least 1.")
+    
 }
 
 var loadFile = function (event) {

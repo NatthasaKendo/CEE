@@ -10,6 +10,8 @@ body {
   justify-content: center;
   min-height: 100vh;
   background: #0c0c0c;
+  width: auto;
+  height: auto;
 }
 
 a {
@@ -34,6 +36,7 @@ a span {
   z-index: 1;
 }
 
+/* #4973ff */
 a .liquid {
   position: absolute;
   top: -100px;
@@ -96,6 +99,17 @@ button {
   cursor: pointer;
   width: 100%;
 }
+
+.buttontext {
+  position: flex;
+}
+
+@media all and (max-width: 480px) {
+  .buttontext {
+    font-size: 15px;
+  }
+}
+
 button:hover {
   opacity: 0.8;
 }
@@ -152,6 +166,7 @@ span.psw {
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
   width: auto; /* Could be more or less, depending on screen size */
+  height: auto;
 }
 
 /* The Close Button (x) */
@@ -195,7 +210,7 @@ span.psw {
 }
 
 /* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
+@media all and (max-width: 300px) {
   span.psw {
     display: block;
     float: none;
