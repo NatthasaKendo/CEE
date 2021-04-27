@@ -21,9 +21,11 @@
                     <tr>
                         <td><input id="add-black-card" type="text"></td>
                         <td>There're
-                            1<input type="checkbox" onclick="changeBlank(1)" >
-                            2<input type="checkbox" onclick="changeBlank(2)" >
-                            3<input type="checkbox" onclick="changeBlank(3)" >
+                            <select id="blank">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
                             blank(s) in this question.
                         </td>
                         <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>

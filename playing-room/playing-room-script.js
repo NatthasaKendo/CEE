@@ -150,10 +150,6 @@ async function generateBlackCard() {
     }
 }
 
-function changeBlank(questionBlank){
-    blank = questionBlank;
-}
-
 function addBlackCard() {
     cardCount += 1;
     $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
@@ -178,7 +174,7 @@ async function chooseBlackCard(cardNumber) {
     });
     console.log("This is the card added :" + $("#black-card-" + cardNumber).text());
     data.question = $("#black-card-" + cardNumber).text();
-    if(cardNumber > 3)  data.blank = blank;
+    if(cardNumber > 3)  data.blank = $("#blank option:selected").val();
     else data.blank = countBlank(data.question);
     if(data.blank == 0) data.blank = 1;
     await db.collection("roomID").doc(roomID).set(data).then(() => {
@@ -618,7 +614,7 @@ async function resetVar() {
     chosenCard2 = "";
     chosenCard3 = "";
     isJudge = false;
-    $("#black-card-option").html('<table id = "black-card-option"><tr><td><input id="add-black-card" type="text"> (There are  1<input type="checkbox" onclick="changeBlank(1)" >  2<input type="checkbox" onclick="changeBlank(2)" >  3<input type="checkbox" onclick="changeBlank(3)">  blank(s) in this question.) </td><td><button type="button" onclick="addBlackCard()">Add Question Card</button></td></tr>');
+    $("#black-card-option").html('<table id = "black-card-option"><tr><td><input id="add-black-card" type="text"> (There are  <select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select> blank(s) in this question.) </td><td><button type="button" onclick="addBlackCard()">Add Question Card</button></td></tr>');
     $("#white-card-option-1").html('<tr><td>1st Blank</td></tr><tr><td><input id="add-card-1" type="text"></td><td><button type="button" onclick="addCard(1)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-1" accept="image/*"></td><td><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></td></tr>');
     $("#white-card-option-2").html('<tr><td>2nd Blank</td></tr><tr><td><input id="add-card-2" type="text"></td><td><button type="button" onclick="addCard(2)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-2" accept="image/*"></td><td><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></td></tr>');
     $("#white-card-option-3").html('<tr><td>3rd Blank</td></tr><tr><td><input id="add-card-3" type="text"></td><td><button type="button" onclick="addCard(3)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-3" accept="image/*"></td><td><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></td></tr>');
