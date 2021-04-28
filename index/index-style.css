@@ -86,9 +86,25 @@ a:hover .liquid {
 }
 
 #button {
-  display: flex;
   justify-content: center;
+  display: flex;
 }
+
+@media all and (orientation: portrait) {
+  #button {
+    justify-content: center;
+    display: block;
+  }
+
+  #button a {
+    display: flex;
+    float: none;
+    align-content: center;
+    text-align: center;
+    margin: auto;
+  }
+}
+
 button {
   border-radius: 50px;
   background-color: black;
@@ -106,7 +122,7 @@ button {
 
 @media all and (max-width: 480px) {
   .buttontext {
-    font-size: 15px;
+    font-size: 20px;
   }
 }
 
