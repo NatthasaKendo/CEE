@@ -64,6 +64,7 @@ async function addMember(name, roomID) {
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
+            alert("Room doesn't exist.");
         }
     }).catch((error) => {
         console.log("Error getting document:", error);
