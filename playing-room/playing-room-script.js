@@ -65,7 +65,8 @@ async function refreshRoom() {
     $("#card-list").css("display", "none");
     $("#result-player-list").css("display", "none");
     $("#back-to-index").css("display", "none");
-    $("#timer").css("display", "none");
+    $("#timer-1").css("display", "none");
+    $("#timer-2").css("display", "none");
 
     // gameState = 0 --> judge choose question card
     //           = 1 --> player choose answer card
@@ -88,10 +89,10 @@ async function refreshRoom() {
     } if (data.gameState == 1) {
         if (isGenerated) {
             console.log("isGenerated =" + isGenerated);
-            timeout = setInterval(countDown, 1000);
+            timeout = setInterval(countDown1, 1000);
             await generateQuestionCard();
             await getTimerStop();
-            setTime();
+            //setTime();
             isGenerated = false;
         }
         if (isJudge) {
@@ -107,8 +108,7 @@ async function refreshRoom() {
             if(blank >= 2)  $("#white-card-option-2").css("display", "block");
             if(blank >= 3)  $("#white-card-option-3").css("display", "block");
         }
-        setTime();
-        $("#timer").css("display", "block");
+        $("#timer-1").css("display", "block");
     } else if (data.gameState == 2) {
         $("#card-list").css("display", "block");
         if (isJudge) {
@@ -116,9 +116,13 @@ async function refreshRoom() {
         } 
         generateChoosingCard();
     } else if (data.gameState == 3) {
-        $("#card-list").css("display", "block");
         await generatePlayerData();
         generateChoosingCard();
+        timeout = setInterval(countDown2, 1000);
+        await generateQuestionCard();
+        await getTimerStop();
+        $("#card-list").css("display", "block");
+        $("#timer-2").css("display", "block");
     }
 }
 
@@ -152,19 +156,33 @@ async function getTimerStop(){
     timerStop = data.timerStop;
 }
 
-function countDown() {
-    setTime(Math.max(0, timerStop - Date.now()));
+function countDown1() {
+    setTime1(Math.max(0, timerStop - Date.now()));
     if( timerStop <= Date.now() ) { 
         clearInterval(timeout);
         if(isJudge) changeState(); 
     }
 }
 
-function setTime(remaining) {
+function setTime1(remaining) {
     var minutes = "00" + Math.floor(remaining / 60000);
     var seconds = "00" + Math.round(remaining / 1000);
     console.log(minutes + seconds);
-    if(minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN")    $("#timer").text(minutes.slice(minutes.length-2,minutes.length) + ':' + seconds.slice(seconds.length-2,seconds.length));
+    if(minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-1").text(minutes.slice(minutes.length-2,minutes.length) + ':' + seconds.slice(seconds.length-2,seconds.length));
+}
+
+function countDown2() {
+    setTime2(Math.max(0, timerStop - Date.now()));
+    if( timerStop <= Date.now() ) { 
+        clearInterval(timeout);
+        if(isJudge) changeState(); 
+    }
+}
+
+function setTime2(remaining) {
+    var seconds = Math.round(remaining / 1000);
+    console.log(seconds);
+    if(seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-2").text(seconds);
 }
 
 async function generateBlackCard() {
@@ -188,7 +206,7 @@ async function generateBlackCard() {
         var index = Math.floor((Math.random() * data.black.length));
         while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
         usedCard.push(index);
-        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + (i + 1) + "' class=''>" + data.black[index] + "</td><td><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></td></tr>");
+        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + (i + 1) + "' class='black-card'>" + data.black[index] + "</td><td><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></td></tr>");
         cardCount += 1;
     }
 }
@@ -196,7 +214,7 @@ async function generateBlackCard() {
 function addBlackCard() {
     if($("#add-black-card").val() != null && $("#add-black-card").val() != ""){
         cardCount += 1;
-        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
+        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class='black-card'>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
     }else{
         alert("Question cannot be blank.");
     }
@@ -580,7 +598,7 @@ async function generateChoosingCard() {
             console.log("Winner is " + data.name[data.chosenCard]);
             if (data.chosenCard == slot) markup += "<td class='winner'>" + data.name[slot] + "</td></tr>";
             else markup += "<td class='loser'>" + data.name[slot] + "</td></tr>";
-            if (isJudge && data.round != data.roundMax) $("#next-round").css("display", "block");
+            if (data.round != data.roundMax) $("#next-round").css("display", "block");
             if (data.round == data.roundMax){
                 generateFinalResult();
                 $("#player-list").css("display", "none");
@@ -658,6 +676,7 @@ async function judgeChoose(cardNumber) {
     data.chosenCard = cardNumber;
     data.score[cardNumber] += 1;
     data.gameState = 3;
+    data.timerStop = Date.now() + 5000;
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -678,6 +697,8 @@ async function resetVar() {
     $("#white-card-option-3").html('<tr><td>3rd Blank</td></tr><tr><td><input id="add-card-3" type="text"></td><td><button type="button" onclick="addCard(3)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-3" accept="image/*"></td><td><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></td></tr>');
     $("#card-list").html("");
     $("#black-card").html("");
+    $("#timer-1").text("01:00");
+    $("#timer-2").text("5");
 }
 
 async function nextRound() {
