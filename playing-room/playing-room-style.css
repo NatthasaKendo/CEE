@@ -91,3 +91,23 @@
   margin: 10em;
   padding: 1em;
 }
+
+button {
+  margin-left: 1em;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 20px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+}
+
+button:hover{
+  background-color: yellow;
+  color: black;
+}
