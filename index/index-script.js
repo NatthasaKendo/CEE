@@ -25,7 +25,7 @@ async function createRoom() {
     } else {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0 };
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0, timerStop: 0 };
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
@@ -35,6 +35,7 @@ async function createRoom() {
         console.log("Created Room with ID:" + roomID.toString())
     }
 }
+
 
 async function joinRoom() {
     var playerName = $("#player-name").val();
