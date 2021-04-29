@@ -18,20 +18,19 @@
         <div id="timer-1">01:00</div>
         <div class="detail">
             <div id="judge-choosing-black-card">
-                <table id = "black-card-option">
-                    <tr>
-                        <td><input id="add-black-card" type="text"></td>
-                        <td>There're
-                            <select id="blank">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                            blank(s) in this question.
-                        </td>
-                        <td><button type="button" onclick="addBlackCard()">Add Question Card</button></td>
-                    </tr>
-                </table>
+                <div id = "black-card-option">
+                    <div id="black-card-add">
+                        <input id="add-black-card" type="text">
+                        There're
+                        <select id="blank">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                        blank(s) in this question.
+                        <button type="button" onclick="addBlackCard()">Add Question Card</button>
+                    </div>
+                </div>
             </div>
             <div id = "player-waiting">Waiting for judge to choose black card</div>
             <div id="black-card"></div>
@@ -54,36 +53,33 @@
         
         <div class="detail">
             <div id="player-choosing">
-                <table id="white-card-option-1">
-                    <tr><td>1st Blank</td></tr>
-                    <tr>
-                        <td><input id="add-card" type="text"></td>
-                        <td><button type="button" onclick="addCard(1)">Add Card</button></td>
-                        <td>or</td>
-                        <td><input type="file" id="add-image-card-1" accept="image/*"></td>
-                        <td><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></td>
-                    </tr>
-                </table>
-                <table id="white-card-option-2">
-                    <tr><td>2nd Blank</td></tr>
-                    <tr>
-                        <td><input id="add-card" type="text"></td>
-                        <td><button type="button" onclick="addCard(2)">Add Card</button></td>
-                        <td>or</td>
-                        <td><input type="file" id="add-image-card-2" accept="image/*"></td>
-                        <td><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></td>
-                    </tr>
-                </table>
-                <table id="white-card-option-3">
-                    <tr><td>3rd Blank</td></tr>
-                    <tr>
-                        <td><input id="add-card" type="text"></td>
-                        <td><button type="button" onclick="addCard(3)">Add Card</button></td>
-                        <td>or</td>
-                        <td><input type="file" id="add-image-card-3" accept="image/*"></td>
-                        <td><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></td>
-                    </tr>
-                </table>
+                <div id="white-card-option-1">1st Blank
+                    <div>
+                        <input id="add-card" type="text">
+                        <button type="button" onclick="addCard(1)">Add Card</button>
+                        or
+                        <input type="file" id="add-image-card-1" accept="image/*">
+                        <button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button>
+                    </div>
+                </div>
+                <div id="white-card-option-2">2nd Blank
+                    <div>
+                        <input id="add-card" type="text">
+                        <button type="button" onclick="addCard(2)">Add Card</button>
+                        or
+                        <input type="file" id="add-image-card-2" accept="image/*">
+                        <button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button>
+                    </div>
+                </div>
+                <div id="white-card-option-3">3rd Blank
+                    <div>
+                        <input id="add-card" type="text">
+                        <button type="button" onclick="addCard(3)">Add Card</button>
+                        or
+                        <input type="file" id="add-image-card-3" accept="image/*">
+                        <button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button>
+                    </div>
+                </div>
             </div>
             <table id="card-list">
             </table>
