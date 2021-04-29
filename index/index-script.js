@@ -211,6 +211,9 @@ async function nudeCheckSendRequest(id, url) {
             if (result.detections.length > 0) {
                 alert("Profile Picture cannot contain nudity.")
                 console.log("lewd");
+                deleteProfile()
+                document.getElementById("image-upload-host").value = null;
+                document.getElementById("image-upload-player").value = null;
             }
             else if (result.detections.length <= 0) {
                 console.log("safe");
@@ -233,3 +236,17 @@ async function nudeCheckSendRequest(id, url) {
 
 var audio = document.getElementById("song");
 audio.volume = 0.2;
+
+function deleteProfile() {
+    // Create a reference to the file to delete
+    var storageRef = firebase.storage().ref();
+    var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
+
+    // Delete the file
+    imageRef.delete().then(() => {
+        // File deleted successfully
+        console.log("Deleted profile picture of " + currentProfile);
+    }).catch((error) => {
+        // Uh-oh, an error occurred!
+    });
+}
