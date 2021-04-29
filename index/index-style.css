@@ -118,6 +118,7 @@ button {
 
 .buttontext {
   position: flex;
+  font-family: "Exo", sans-serif;
 }
 
 @media all and (max-width: 480px) {
