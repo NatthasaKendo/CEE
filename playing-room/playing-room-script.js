@@ -142,8 +142,8 @@ async function generateBlackCard() {
     });
     var usedCard = [];
     for (i = 0; i < 3; i++) {
-        var index = Math.floor((Math.random() * data.black.length) + 1);
-        while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+        var index = Math.floor((Math.random() * data.black.length));
+        while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
         usedCard.push(index);
         $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + (i + 1) + "' class=''>" + data.black[index] + "</td><td><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></td></tr>");
         cardCount += 1;
@@ -151,8 +151,12 @@ async function generateBlackCard() {
 }
 
 function addBlackCard() {
-    cardCount += 1;
-    $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
+    if($("#add-black-card").val() != null && $("#add-black-card").val() != ""){
+        cardCount += 1;
+        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
+    }else{
+        alert("Question cannot be blank.");
+    }
 }
 
 async function chooseBlackCard(cardNumber) {
@@ -315,22 +319,22 @@ async function generateWhiteCard() {
     if(blank >= 1 && cardCount == 0){
         console.log("Generate Cards 1 -----------------")
         for (i = 0; i < 3; i++) {
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 1 + ',"t",' + cardCount;
             $("#white-card-option-1").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
         }
-        index = Math.floor(Math.random() * 3);
+        index = Math.floor((Math.random() * 3)+1);
         chooseCard(1, "t", index);
         console.log("Choose Card 1 : " + index);
     }
     if(blank >= 2 && cardCount == 3){
         for (i = 0; i < 3; i++) {
             console.log("Generate Cards 2 -----------------")
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 2 + ',"t",' + cardCount;
@@ -343,8 +347,8 @@ async function generateWhiteCard() {
     if(blank >= 3 && cardCount == 6){
         console.log("Generate Cards 3 -----------------")
         for (i = 0; i < 3; i++) {
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 3 + ',"t",' + cardCount;
