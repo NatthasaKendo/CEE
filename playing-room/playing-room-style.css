@@ -36,21 +36,20 @@
   height: 50%;
 }
 
-#round{
-  margin-left: 1em; 
-  font-size: 50px; 
-  color: white; 
-  
+#round {
+  margin-left: 1em;
+  font-size: 50px;
+  color: white;
 }
 
-.detail{
+.detail {
   margin-left: 3em;
   font-weight: bold;
 }
 
 /* The Modal (background) */
 .modal {
-  display: none; 
+  display: none;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
@@ -71,6 +70,44 @@
   width: auto; /* Could be more or less, depending on screen size */
 }
 
-#container{
+#container {
   background-color: white;
+}
+
+#black-card-1,
+#black-card-2,
+#black-card-3,
+#black-card-4,
+#black-card-5,
+#black-card-6,
+#black-card-7,
+#black-card-8,
+#black-card-9,
+#black-card-10,
+#black-card-11 {
+  background-color: black;
+  border-radius: 5px;
+  color: white;
+  margin: 10em;
+  padding: 1em;
+}
+
+button {
+  margin-left: 1em;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 15px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+}
+
+button:hover{
+  background-color: yellow;
+  color: black;
 }
