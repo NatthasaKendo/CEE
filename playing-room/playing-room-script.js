@@ -206,7 +206,7 @@ async function generateBlackCard() {
         var index = Math.floor((Math.random() * data.black.length));
         while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
         usedCard.push(index);
-        $("#black-card-option").find("div:last").before("<div><div id='black-card-" + (i + 1) + "' class='black-card'>" + data.black[index] + "</div><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></div>");
+        $("#black-card-option").find("div:last").before("<div id='black-card-" + (i + 1) + "' class='black-card'><div>" + data.black[index] + "</div><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></div>");
         cardCount += 1;
     }
 }
@@ -214,7 +214,7 @@ async function generateBlackCard() {
 function addBlackCard() {
     if($("#add-black-card").val() != null && $("#add-black-card").val() != ""){
         cardCount += 1;
-        $("#black-card-option").find("div:last").before("<div><div id='black-card-" + cardCount + "' class='black-card'>" + $("#add-black-card").val() + "</div><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></div>");
+        $("#black-card-option").find("div:last").before("<div id='black-card-" + cardCount + "' class='black-card'><div>" + $("#add-black-card").val() + "</div><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></div>");
     }else{
         alert("Question cannot be blank.");
     }
@@ -237,8 +237,8 @@ async function chooseBlackCard(cardNumber) {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    console.log("This is the card added :" + $("#black-card-" + cardNumber).text());
-    data.question = $("#black-card-" + cardNumber).text();
+    console.log("This is the card added :" + $("#black-card-" + cardNumber).find("div:first").text());
+    data.question = $("#black-card-" + cardNumber).find("div:first").text();
     data.timerStop = Date.now() + 60000;
     if(cardNumber > 3)  data.blank = $("#blank option:selected").val();
     else data.blank = countBlank(data.question);
