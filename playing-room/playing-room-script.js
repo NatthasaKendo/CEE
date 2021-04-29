@@ -29,6 +29,9 @@ var chosenCard3 = "";
 var isJudge = false;
 var blank = 0;
 var answer = [];
+var timerStop = 0;
+
+var timeout;
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -62,6 +65,7 @@ async function refreshRoom() {
     $("#card-list").css("display", "none");
     $("#result-player-list").css("display", "none");
     $("#back-to-index").css("display", "none");
+    $("#timer").css("display", "none");
 
     // gameState = 0 --> judge choose question card
     //           = 1 --> player choose answer card
@@ -84,7 +88,10 @@ async function refreshRoom() {
     } if (data.gameState == 1) {
         if (isGenerated) {
             console.log("isGenerated =" + isGenerated);
-            generateQuestionCard();
+            timeout = setInterval(countDown, 1000);
+            await generateQuestionCard();
+            await getTimerStop();
+            setTime();
             isGenerated = false;
         }
         if (isJudge) {
@@ -100,6 +107,8 @@ async function refreshRoom() {
             if(blank >= 2)  $("#white-card-option-2").css("display", "block");
             if(blank >= 3)  $("#white-card-option-3").css("display", "block");
         }
+        setTime();
+        $("#timer").css("display", "block");
     } else if (data.gameState == 2) {
         $("#card-list").css("display", "block");
         if (isJudge) {
@@ -122,6 +131,40 @@ function getUrlVars() {
     roomID = vars["roomID"];
     console.log(player);
     console.log(roomID);
+}
+
+async function getTimerStop(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    timerStop = data.timerStop;
+}
+
+function countDown() {
+    setTime(Math.max(0, timerStop - Date.now()));
+    if( timerStop <= Date.now() ) { 
+        clearInterval(timeout);
+        if(isJudge) changeState(); 
+    }
+}
+
+function setTime(remaining) {
+    var minutes = "00" + Math.floor(remaining / 60000);
+    var seconds = "00" + Math.round(remaining / 1000);
+    console.log(minutes + seconds);
+    if(minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN")    $("#timer").text(minutes.slice(minutes.length-2,minutes.length) + ':' + seconds.slice(seconds.length-2,seconds.length));
 }
 
 async function generateBlackCard() {
@@ -178,6 +221,7 @@ async function chooseBlackCard(cardNumber) {
     });
     console.log("This is the card added :" + $("#black-card-" + cardNumber).text());
     data.question = $("#black-card-" + cardNumber).text();
+    data.timerStop = Date.now() + 60000;
     if(cardNumber > 3)  data.blank = $("#blank option:selected").val();
     else data.blank = countBlank(data.question);
     if(data.blank == 0) data.blank = 1;
