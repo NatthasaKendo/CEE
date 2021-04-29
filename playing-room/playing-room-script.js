@@ -322,6 +322,9 @@ async function generateWhiteCard() {
             var cardTemp = 1 + ',"t",' + cardCount;
             $("#white-card-option-1").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
         }
+        index = Math.floor(Math.random() * 3);
+        chooseCard(1, "t", index);
+        console.log("Choose Card 1 : " + index);
     }
     if(blank >= 2 && cardCount == 3){
         for (i = 0; i < 3; i++) {
@@ -333,6 +336,9 @@ async function generateWhiteCard() {
             var cardTemp = 2 + ',"t",' + cardCount;
             $("#white-card-option-2").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
         }
+        index = Math.floor((Math.random() * 3)+4);
+        chooseCard(2, "t", index);
+        console.log("Choose Card 2 : " + index);
     }
     if(blank >= 3 && cardCount == 6){
         console.log("Generate Cards 3 -----------------")
@@ -344,6 +350,9 @@ async function generateWhiteCard() {
             var cardTemp = 3 + ',"t",' + cardCount;
             $("#white-card-option-3").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
         }
+        index = Math.floor((Math.random() * 3)+7);
+        chooseCard(3, "t", index);
+        console.log("Choose Card 3 : " + index);
     }
 }
 
@@ -375,6 +384,7 @@ async function addPictureCard(blankNumber) {
 }
 
 function chooseCard(blankNumber, cardType, cardNumber) {
+    console.log("Switch Choose card : " + blankNumber);
     switch(blankNumber) {
         case 1 :    $(chosenCard1).removeClass("choosing"); break;
         case 2 :    $(chosenCard2).removeClass("choosing"); break;
