@@ -40,6 +40,8 @@
   margin-left: 1em;
   font-size: 50px;
   color: white;
+  font-family: 'Exo', sans-serif;
+  font-weight: bold;
 }
 
 .detail {
@@ -79,9 +81,8 @@
   border-radius: 5px;
   color: white;
   margin: 0.8em;
+  width: auto; 
   padding: 1em;
-  min-width: 200px;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,4 +144,62 @@ button:hover {
 #black-card-add {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+}
+
+.players{
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 1em;
+  font-family: 'Exo', sans-serif;
+  font-size: 1.5rem;
+}
+
+@media all and (orientation: portrait) {
+  .black-card {
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+    margin: 0.8em;
+    padding: 1em;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .white-card-align{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+  }
+  
+  .black-card-align{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+  }
+
+  #round {
+    margin-left: 1em;
+    font-size: 1.5em;
+    color: white;
+    font-family: 'Exo', sans-serif;
+    font-weight: bold;
+  }
+
+  .players{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 1em;
+    font-family: 'Exo', sans-serif;
+    font-size: 3rem;
+  }
+  
+  #black-card-add {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
