@@ -690,7 +690,7 @@ async function resetVar() {
     chosenCard2 = "";
     chosenCard3 = "";
     isJudge = false;
-    $("#black-card-option").html('<div id="black-card-add"><input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="addBlackCard()">Add Question Card</button></div>');
+    $("#black-card-option").html('<div class="black-card-align" id = "black-card-option"></div>');
     $("#white-card-option-1").html('1st Blank<div><input id="add-card-1" type="text"><button type="button" onclick="addCard(1)">Add Card</button>or<input type="file" id="add-image-card-1" accept="image/*"><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></div>');
     $("#white-card-option-2").html('2nd Blank<div><input id="add-card-2" type="text"><button type="button" onclick="addCard(2)">Add Card</button>or<input type="file" id="add-image-card-2" accept="image/*"><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></div>');
     $("#white-card-option-3").html('3rd Blank<div><input id="add-card-3" type="text"><button type="button" onclick="addCard(3)">Add Card</button>or<input type="file" id="add-image-card-3" accept="image/*"><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></div>');
