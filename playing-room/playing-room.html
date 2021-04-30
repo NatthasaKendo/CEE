@@ -19,17 +19,17 @@
         <div class="detail">
             <div class="black-card-align" id="judge-choosing-black-card">
                 <div class="black-card-align" id = "black-card-option"></div>
-            </div>
-            <div class="black-card-align" id="black-card-add">
-                <input id="add-black-card" type="text">
-                There're
-                <select id="blank">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-                blank(s) in this question.
-                <button type="button" onclick="addBlackCard()">Add Question Card</button>
+                <div class="black-card-align" id="black-card-add">
+                    <input id="add-black-card" type="text">
+                    There're
+                    <select id="blank">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    blank(s) in this question.
+                    <button type="button" onclick="addBlackCard()">Add Question Card</button>
+                </div>
             </div>
             <div id = "player-waiting">Waiting for judge to choose black card</div>
             <div id="black-card"></div>
@@ -47,6 +47,7 @@
     
             <div id="judge-waiting">
                 <p>Waiting for other player to choose the card ...</p>
+                <button type="button" onclick="changeState()">Next Round</button>
             </div>
         </div>
         
