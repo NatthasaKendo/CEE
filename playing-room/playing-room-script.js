@@ -689,7 +689,6 @@ async function judgeChoose(cardNumber) {
     data.score[cardNumber] += 1;
     data.gameState = 3;
     data.timerStop = Date.now() + 5000;
-    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -737,6 +736,7 @@ async function nextRound() {
     });
     data.gameState = 0;
     data.round += 1
+    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
