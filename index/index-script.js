@@ -131,6 +131,17 @@ function joinRoomPopUp() {
     }
 }
 
+function helpPopUp() {
+    var x = document.getElementById("id03");
+    if (window.getComputedStyle(x).display === "none") {
+        x.style.display = "flex";
+    }
+    else {
+        x.style.display = "none";
+    }
+}
+
+
 async function uploadProfilePicture(id) {
     //console.log("Ran uploadProfilePicture(id)")
     var file = document.getElementById(id).files[0];

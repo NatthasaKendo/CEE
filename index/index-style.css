@@ -264,3 +264,33 @@ span.psw {
 #profile-status-player {
   color: rgb(0, 255, 0);
 }
+
+#helpButton {
+  width: 40px;
+  height: 40px;
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#questionMark {
+  position: relative;
+}
+
+.modal-content-help {
+  background-color: #4973ff;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+  height: 50%;
+  font-family: "Exo", sans-serif;
+}
+
+#helpHeading {
+  font-weight: bold;
+}
+
+.buttontext {
+  position: relative;
+}
