@@ -19,7 +19,7 @@
         <div class="detail">
             <div class="black-card-align" id="judge-choosing-black-card">
                 <div class="black-card-align" id = "black-card-option">
-                    <div class="black-card-align" id="black-card-add">
+                    <div class="black-card-align" id="black-card-add">Type your own question
                         <input id="add-black-card" type="text">
                         There're
                         <select id="blank">
@@ -28,7 +28,7 @@
                             <option value="3">3</option>
                         </select>
                         blank(s) in this question.
-                        <button type="button" onclick="choosePlayersBlackCard()">Add Question Card</button>
+                        <button type="button" onclick="choosePlayersBlackCard()">Choose</button>
                     </div>
                 </div>
             </div>
@@ -48,37 +48,43 @@
     
             <div id="judge-waiting">
                 <p>Waiting for other player to choose the card ...</p>
-                <button type="button" onclick="changeState()">Next Round</button>
+                <button type="button" onclick="timerStop = 0">Next Round</button>
             </div>
         </div>
         
         <div class="detail">
             <div class="white-card-align" id="player-choosing">
                 <div id="white-card-option-1">1st Blank
-                    <div>
-                        <input id="add-card" type="text">
-                        <button type="button" onclick="addCard(1)">Add Card</button>
-                        or
-                        <input type="file" id="add-image-card-1" accept="image/*">
-                        <button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button>
+                    <div id="card-4" class='white-card'>Type your own card
+                        <input id="text-card-4" type="text">
+                        <button type="button" onclick="chooseCard(1, 'b', 4)">Choose</button>
+                    </div>
+                    <div id="card-5" class='white-card'>Upload picture as a card
+                        <img id="picture-card-5" src="" alt="">
+                        <input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)">
+                        <button type="button" onclick="chooseCard(1, 'p', 5)">Choose</button>
                     </div>
                 </div>
                 <div id="white-card-option-2">2nd Blank
-                    <div>
-                        <input id="add-card" type="text">
-                        <button type="button" onclick="addCard(2)">Add Card</button>
-                        or
-                        <input type="file" id="add-image-card-2" accept="image/*">
-                        <button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button>
+                    <div id="card-9" class='white-card'>Type your own card
+                        <input id="text-card-9" type="text">
+                        <button type="button" onclick="chooseCard(2, 'b', 9)">Choose</button>
+                    </div>
+                    <div id="card-10" class='white-card'>Upload picture as a card
+                        <img id="picture-card-10" src="" alt="">
+                        <input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)">
+                        <button type="button" onclick="chooseCard(2, 'p', 10)">Choose</button>
                     </div>
                 </div>
                 <div id="white-card-option-3">3rd Blank
-                    <div>
-                        <input id="add-card" type="text">
-                        <button type="button" onclick="addCard(3)">Add Card</button>
-                        or
-                        <input type="file" id="add-image-card-3" accept="image/*">
-                        <button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button>
+                    <div id="card-14" class='white-card'>Type your own card
+                        <input id="text-card-14" type="text">
+                        <button type="button" onclick="chooseCard(3, 'b', 14)">Choose</button>
+                    </div>
+                    <div id="card-15" class='white-card'>Upload picture as a card
+                        <img id="picture-card-15" src="" alt="">
+                        <input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)">
+                        <button type="button" onclick="chooseCard(3, 'p', 15)">Choose</button>
                     </div>
                 </div>
             </div>

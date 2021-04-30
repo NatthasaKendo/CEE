@@ -31,7 +31,8 @@ var blank = 0;
 var answer = [];
 var timerStop = 0;
 
-var timeout;
+var timeout1;
+var timeout2;
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -89,7 +90,7 @@ async function refreshRoom() {
     } if (data.gameState == 1) {
         if (isGenerated) {
             console.log("isGenerated =" + isGenerated);
-            timeout = setInterval(countDown1, 1000);
+            timeout1 = setInterval(countDown1, 1000);
             await generateQuestionCard();
             await getTimerStop();
             //setTime();
@@ -118,11 +119,13 @@ async function refreshRoom() {
     } else if (data.gameState == 3) {
         await generatePlayerData();
         generateChoosingCard();
-        timeout = setInterval(countDown2, 1000);
+        if(data.round != data.roundMax){
+            timeout2 = setInterval(countDown2, 1000);
+            await getTimerStop();
+            $("#timer-2").css("display", "flex");
+        }
         await generateQuestionCard();
-        await getTimerStop();
         $("#card-list").css("display", "flex");
-        $("#timer-2").css("display", "flex");
     }
 }
 
@@ -159,7 +162,7 @@ async function getTimerStop(){
 function countDown1() {
     setTime1(Math.max(0, timerStop - Date.now()));
     if( timerStop <= Date.now() ) { 
-        clearInterval(timeout);
+        clearInterval(timeout1);
         if(isJudge) changeState(); 
     }
 }
@@ -167,21 +170,21 @@ function countDown1() {
 function setTime1(remaining) {
     var minutes = "00" + Math.floor(remaining / 60000);
     var seconds = "00" + Math.round(remaining / 1000);
-    console.log(minutes + seconds);
+    console.log("1 ------ " + minutes + seconds);
     if(minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-1").text(minutes.slice(minutes.length-2,minutes.length) + ':' + seconds.slice(seconds.length-2,seconds.length));
 }
 
 function countDown2() {
     setTime2(Math.max(0, timerStop - Date.now()));
     if( timerStop <= Date.now() ) { 
-        clearInterval(timeout);
+        clearInterval(timeout2);
         if(isJudge) nextRound(); 
     }
 }
 
 function setTime2(remaining) {
     var seconds = Math.round(remaining / 1000);
-    console.log(seconds);
+    console.log("2 ------ " + seconds);
     if(seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-2").text(seconds);
 }
 
@@ -244,7 +247,7 @@ async function chooseBlackCard(cardNumber) {
         data.question = $("#black-card-" + cardNumber).find("div:first").text();
     }
     data.timerStop = Date.now() + 60000;
-    if(cardNumber > 3)  data.blank = $("#blank option:selected").val();
+    if(cardNumber < 0)  data.blank = $("#blank option:selected").val();
     else data.blank = countBlank(data.question);
     if(data.blank == 0) data.blank = 1;
     await db.collection("roomID").doc(roomID).set(data).then(() => {
@@ -390,7 +393,7 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 1 + ',"t",' + cardCount;
-            $("#white-card-option-1").find("div:last").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
+            $("#white-card-option-1").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
         index = Math.floor((Math.random() * 3)+1);
         chooseCard(1, "t", index);
@@ -404,9 +407,9 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 2 + ',"t",' + cardCount;
-            $("#white-card-option-2").find("div:last").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
+            $("#white-card-option-2").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
-        index = Math.floor((Math.random() * 3)+4);
+        index = Math.floor((Math.random() * 3)+6);
         chooseCard(2, "t", index);
         console.log("Choose Card 2 : " + index);
     }
@@ -418,39 +421,37 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 3 + ',"t",' + cardCount;
-            $("#white-card-option-3").find("div:last").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></></div>");
+            $("#white-card-option-3").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></></div>");
         }
-        index = Math.floor((Math.random() * 3)+7);
+        index = Math.floor((Math.random() * 3)+11);
         chooseCard(3, "t", index);
         console.log("Choose Card 3 : " + index);
     }
 }
 
-function addCard(blankNumber) {
-    cardCount += 1;
-    var cardTemp = blankNumber + ',"t",' + cardCount;
-    $("#white-card-option-" + blankNumber).find("div:last").before("<div id='card-" + cardCount + "' class='white-card'><div>" + $("#add-card-" + blankNumber).val() + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
-    console.log("Added card with content :" + $("#add-card-" + blankNumber).val());
-}
-
-async function addPictureCard(blankNumber) {
-    var file = document.getElementById("add-image-card-" + blankNumber).files[0];
+async function addPictureCard(cardNumber) {
+    var file = document.getElementById("add-image-card-" + cardNumber).files[0];
     if (file != "" && file != null) {
         console.log(file);
-        //Declare Variables
-        cardCount += 1;
-        var cardTemp = blankNumber + ',"p",' + cardCount;
         var imageName = "picture-card-" + generateId(10);
-        $("#white-card-option-" + blankNumber).find("div:last").before("<div id='card-" + cardCount + "' class='white-card'><img src='' id='picture-card-" + cardCount + "' alt='" + imageName + "' class='picture-card'><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         // Create a root reference
         var storageRef = firebase.storage().ref();
         // Create a reference to 'images/mountains.jpg'
         var imageRef = storageRef.child('card_pictures/' + imageName + '.jpg');
         await imageRef.put(file).then((snapshot) => {
             console.log('Uploaded a blob or file named: ' + imageName + " !");
-            uploadCardPicture("#picture-card-" + cardCount, imageName);
+            updatePictureCard(imageName, cardNumber);
         });
     } else console.log("No image selected");
+}
+
+function updatePictureCard(imageName, cardNumber) {
+    var storageRef = firebase.storage().ref();
+    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        nudeCheckSendRequest(cardNumber, imageName, url);
+    }).catch(function (error) {
+    });
 }
 
 function chooseCard(blankNumber, cardType, cardNumber) {
@@ -462,13 +463,14 @@ function chooseCard(blankNumber, cardType, cardNumber) {
     }
     var cardID = "#";
     if (cardType == "t") cardID += "card-" + cardNumber;
-    else cardID += "picture-card-" + cardNumber;
+    else if(cardType == "p") cardID += "picture-card-" + cardNumber;
+    else    cardID += "text-card-" + cardNumber;
     switch(blankNumber) {
         case 1 :    chosenCard1 = cardID;   break;
         case 2 :    chosenCard2 = cardID;   break;
         case 3 :    chosenCard3 = cardID;   break;
     }
-    $(cardID).addClass("choosing");
+    $("#card-" + cardNumber).addClass("choosing");
     sendChosenCard(blankNumber, cardType);
 }
 
@@ -494,7 +496,13 @@ async function sendChosenCard(blankNumber, cardType) {
             case 2 : answer[1] = $(chosenCard2).find("div:first").text(); break;
             case 3 : answer[2] = $(chosenCard3).find("div:first").text(); break;
         }
-    }else{
+    }else if (cardType == "b"){
+        switch(blankNumber){
+            case 1 : answer[0] = $(chosenCard1).val(); break;
+            case 2 : answer[1] = $(chosenCard2).val(); break;
+            case 3 : answer[2] = $(chosenCard3).val(); break;
+        }
+    }else {
         switch(blankNumber){
             case 1 : answer[0] = $(chosenCard1).attr("alt");    break;
             case 2 : answer[1] = $(chosenCard2).attr("alt");    break;
@@ -511,15 +519,6 @@ async function sendChosenCard(blankNumber, cardType) {
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
-}
-
-function uploadCardPicture(id, imageName) {
-    var storageRef = firebase.storage().ref();
-    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
-        console.log(url);
-        $(id).attr("src", url);
-    }).catch(function (error) {
-    });
 }
 
 async function generateCardOrder() {
@@ -615,6 +614,16 @@ async function generateChoosingCard() {
     }
 }
 
+async function uploadCardPicture(id, imageName){
+    var storageRef = firebase.storage().ref();
+    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        $(id).attr("src",url);
+        $(id).attr("alt",imageName);
+    }).catch(function (error) {
+    });
+}
+
 async function generateFinalResult() {
     var docRef = db.collection("roomID").doc(roomID);
     var data;
@@ -680,6 +689,7 @@ async function judgeChoose(cardNumber) {
     data.score[cardNumber] += 1;
     data.gameState = 3;
     data.timerStop = Date.now() + 5000;
+    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -688,16 +698,20 @@ async function judgeChoose(cardNumber) {
         });
 }
 
-async function resetVar() {
+function resetVar() {
+    clearInterval(timeout1);
+    clearInterval(timeout2);
     cardCount = 0;
     chosenCard1 = "";
     chosenCard2 = "";
     chosenCard3 = "";
     isJudge = false;
-    $("#black-card-option").html('<div class="black-card-align" id="black-card-add"><input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Add Question Card</button></div>');
-    $("#white-card-option-1").html('1st Blank<div><input id="add-card-1" type="text"><button type="button" onclick="addCard(1)">Add Card</button>or<input type="file" id="add-image-card-1" accept="image/*"><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></div>');
-    $("#white-card-option-2").html('2nd Blank<div><input id="add-card-2" type="text"><button type="button" onclick="addCard(2)">Add Card</button>or<input type="file" id="add-image-card-2" accept="image/*"><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></div>');
-    $("#white-card-option-3").html('3rd Blank<div><input id="add-card-3" type="text"><button type="button" onclick="addCard(3)">Add Card</button>or<input type="file" id="add-image-card-3" accept="image/*"><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></div>');
+    tempB = ",'b',";
+    tempP = ",'p',";
+    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
+    $("#white-card-option-1").html('1st BLank<div class="white-card">Type your own card<input id="text-card-4" type="text"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
+    $("#white-card-option-2").html('2nd Blank<div class="white-card">Type your own card<input id="text-card-9" type="text"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP+ '10)">Choose</button></div>');
+    $("#white-card-option-3").html('3rd Blank<div class="white-card">Type your own card<input id="text-card-14" type="text"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#card-list").html("");
     $("#black-card").html("");
     $("#timer-1").text("01:00");
@@ -747,4 +761,51 @@ function countBlank(text) {
     console.log(array)
     console.log(array.length - 1)
     return array.length - 1
+}
+
+async function nudeCheckSendRequest(cardNumber, imageName, url) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            result = JSON.parse(xhr.response).output;
+            console.log(result);
+            if (result.detections.length > 0) {
+                alert("Card Picture cannot contain nudity.")
+                console.log("lewd");
+                deleteProfile();
+                $("#add-image-card-"+cardNumber).val() = null;
+            }
+            else if (result.detections.length <= 0) {
+                console.log("safe");
+                newID = "#picture-card-" + cardNumber;
+                $(newID).attr("src",url);
+                $(newID).attr("alt",imageName);
+            };
+        }
+    };
+
+    xhr.open("POST", "https://api.deepai.org/api/nsfw-detector");
+    xhr.setRequestHeader("api-key", "3478a5dd-416e-49f2-9310-876a3ec18b31");
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+    var imageUrl = encodeURI(url);
+    var param = "image=" + imageUrl;
+    xhr.send(param);
+}
+
+function deleteProfile() {
+    // Create a reference to the file to delete
+    var storageRef = firebase.storage().ref();
+    var imageRef = storageRef.child('card_pictures/' + currentProfile + '.jpg');
+
+    // Delete the file
+    imageRef.delete().then(() => {
+        // File deleted successfully
+        console.log("Deleted profile picture of " + currentProfile);
+    }).catch((error) => {
+        // Uh-oh, an error occurred!
+    });
 }
