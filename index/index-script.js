@@ -218,6 +218,15 @@ async function nudeCheckSendRequest(id, url) {
             else if (result.detections.length <= 0) {
                 console.log("safe");
                 //document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
+                if (currentProfile.slice(0, 7) != "default") {
+                    if (id.slice(0, 5) == "#host") {
+                        document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
+                    }
+                    else if (id.slice(0, 5) == "#play") {
+                        document.getElementById("profile-status-player").innerHTML = "Profile picture updated.";
+                    }
+
+                }
                 $(id).attr("src", url);
             };
         }

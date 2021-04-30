@@ -256,3 +256,11 @@ span.psw {
   width: 150px;
   height: 150px;
 }
+
+#profile-status-host {
+  color: rgb(0, 255, 0);
+}
+
+#profile-status-player {
+  color: rgb(0, 255, 0);
+}

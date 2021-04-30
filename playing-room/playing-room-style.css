@@ -74,17 +74,7 @@
   background-color: white;
 }
 
-#black-card-1,
-#black-card-2,
-#black-card-3,
-#black-card-4,
-#black-card-5,
-#black-card-6,
-#black-card-7,
-#black-card-8,
-#black-card-9,
-#black-card-10,
-#black-card-11 {
+.black-card {
   background-color: black;
   border-radius: 5px;
   color: white;
@@ -107,7 +97,7 @@ button {
   font-weight: bold;
 }
 
-button:hover{
+button:hover {
   background-color: yellow;
   color: black;
 }
