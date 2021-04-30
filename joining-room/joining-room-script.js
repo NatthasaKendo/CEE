@@ -27,7 +27,7 @@ db.collection("roomID").doc(roomID).onSnapshot((doc) => {
 
 function getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
         vars[key] = value;
     });
     player = vars["name"];
@@ -36,7 +36,7 @@ function getUrlVars() {
     console.log(roomID);
 }
 
-async function refreshRoom(){
+async function refreshRoom() {
     $("#room-id").html(roomID)
     var docRef = db.collection("roomID").doc(roomID);
     var data;
@@ -57,30 +57,33 @@ async function refreshRoom(){
     var playerCount = data.name.length;
     $("#player-count").html(playerCount);
     $("#player-list").html("");
-    for(i=0 ; i<playerCount ; i++){
+    for (i = 0; i < playerCount; i++) {
         var profileURL = data.profile_pic[i];
         var name = data.name[i];
+        if (i == 0) {
+            name += " (host)"
+        }
         var tempURL = ""
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
             tempURL = url;
         }).catch(function (error) {
         });
-        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>"+name+"</td></tr>");
+        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
     }
-    if(data.name[0]==player)  host=true;
-    if(host){
-        $("#host-joining-room").css("display","block");
-    }else{
-        $("#player-joining-room").css("display","block");
+    if (data.name[0] == player) host = true;
+    if (host) {
+        $("#host-joining-room").css("display", "block");
+    } else {
+        $("#player-joining-room").css("display", "block");
     }
     console.log(data.round);
-    if((!host) && data.round==1){
+    if ((!host) && data.round == 1) {
         change_page();
     }
 }
 
-async function startGame(){
+async function startGame() {
     var docRef = db.collection("roomID").doc(roomID);
     var data;
     await docRef.get().then(async (doc) => {
@@ -96,7 +99,7 @@ async function startGame(){
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    if($("#round-max").val()>0){
+    if ($("#round-max").val() > 0) {
         data.round = 1;
         data.roundMax = $("#round-max").val() * data.name.length;
         console.log(data.round);
@@ -105,11 +108,11 @@ async function startGame(){
             console.log("Round: 1");
             change_page();
         })
-        .catch((error) => {
-            console.error("Error writing document: ", error);
-        });
-    }else   alert("Round must be at least 1.")
-    
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    } else alert("Round must be at least 1.")
+
 }
 
 var loadFile = function (event) {
@@ -124,3 +127,12 @@ function change_page() {
     console.log("test");
     window.location.href = "../playing-room/playing-room.html" + "?name=" + player + "&roomID=" + roomID;
 }
+
+var waiting_count = 1;
+setInterval(function () {
+    var text = "Waiting for host to start ";
+    var text_with_dot = text + (".".repeat(waiting_count));
+    document.getElementById("waiting").innerHTML = text_with_dot;
+    waiting_count++;
+    if (waiting_count == 4) waiting_count = 1;
+}, 1000);

@@ -22,6 +22,12 @@ body {
   font-size: 50px;
 }
 
+@media all and (max-width: 420px) {
+  .context h1 {
+    font-size: 40px;
+  }
+}
+
 .area {
   background: #4e54c8;
   background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
