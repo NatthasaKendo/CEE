@@ -81,10 +81,10 @@ async function refreshRoom() {
             isGenerated = true;
         }
         if (isJudge) {
-            $("#judge-choosing-black-card").css("display", "block");
+            $("#judge-choosing-black-card").css("display", "flex");
             if (cardCount == 0) await generateBlackCard();
         } else {
-            $("#player-waiting").css("display", "block");
+            $("#player-waiting").css("display", "flex");
         }
     } if (data.gameState == 1) {
         if (isGenerated) {
@@ -96,21 +96,21 @@ async function refreshRoom() {
             isGenerated = false;
         }
         if (isJudge) {
-            $("#judge-waiting").css("display", "block");
+            $("#judge-waiting").css("display", "flex");
         } else {
             $("#white-card-option-1").css("display", "none");
             $("#white-card-option-2").css("display", "none");
             $("#white-card-option-3").css("display", "none");
-            $("#player-choosing").css("display", "block");
+            $("#player-choosing").css("display", "flex");
             await generateBlank();
             if (cardCount == 0) generateWhiteCard();
-            if(blank >= 1)  $("#white-card-option-1").css("display", "block");
-            if(blank >= 2)  $("#white-card-option-2").css("display", "block");
-            if(blank >= 3)  $("#white-card-option-3").css("display", "block");
+            if(blank >= 1)  $("#white-card-option-1").css("display", "flex");
+            if(blank >= 2)  $("#white-card-option-2").css("display", "flex");
+            if(blank >= 3)  $("#white-card-option-3").css("display", "flex");
         }
-        $("#timer-1").css("display", "block");
+        $("#timer-1").css("display", "flex");
     } else if (data.gameState == 2) {
-        $("#card-list").css("display", "block");
+        $("#card-list").css("display", "flex");
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) generateCardOrder();
         } 
@@ -121,8 +121,8 @@ async function refreshRoom() {
         timeout = setInterval(countDown2, 1000);
         await generateQuestionCard();
         await getTimerStop();
-        $("#card-list").css("display", "block");
-        $("#timer-2").css("display", "block");
+        $("#card-list").css("display", "flex");
+        $("#timer-2").css("display", "flex");
     }
 }
 
@@ -597,7 +597,7 @@ async function generateChoosingCard() {
             console.log("Winner is " + data.name[data.chosenCard]);
             if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
             else markup += "<div class='loser'>" + data.name[slot] + "</div>";
-            if (data.round != data.roundMax) $("#next-round").css("display", "block");
+            if (data.round != data.roundMax) $("#next-round").css("display", "flex");
             if (data.round == data.roundMax){
                 generateFinalResult();
                 $("#player-list").css("display", "none");
@@ -651,8 +651,8 @@ async function generateFinalResult() {
         }
     }
     $("#player-list").css("display", "none");
-    $("#result-player-list").css("display", "block");
-    $("#back-to-index").css("display", "block");
+    $("#result-player-list").css("display", "flex");
+    $("#back-to-index").css("display", "flex");
 }
 
 async function judgeChoose(cardNumber) {
