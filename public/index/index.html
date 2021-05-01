@@ -15,6 +15,9 @@
 
   <body>
     <div class="context">
+      <a href="#" onclick="helpPopUp()" id="helpButton">
+        <span class="buttontext" id="questionMark">?</span>
+      </a>
       <h1>Personality Card Game</h1>
       <audio id="song" src="diamond-ring.mp3" autoplay></audio>
       <div id="button">
@@ -22,6 +25,7 @@
           <span class="buttontext">Create a Room</span>
           <div class="liquid"></div>
         </a>
+        <br />
         <a href="#" onclick="joinRoomPopUp()">
           <span class="buttontext">Join a Room</span>
           <div class="liquid"></div>
@@ -42,13 +46,13 @@
               alt="Avatar"
               class="profile-container"
             /><br />
-            <input type="file" id="image-upload-player" accept="image/*" />
-            <button
-              type="button"
-              onclick="uploadProfilePicture('image-upload-player')"
-            >
-              Upload
-            </button>
+            <input
+              type="file"
+              id="image-upload-player"
+              accept="image/*"
+              onchange="uploadProfilePicture('image-upload-player')"
+            />
+            <p id="profile-status-player"></p>
           </div>
 
           <div class="container">
@@ -88,13 +92,13 @@
               alt="Avatar"
               class="profile-container"
             /><br />
-            <input type="file" id="image-upload-host" accept="image/*" />
-            <button
-              type="button"
-              onclick="uploadProfilePicture('image-upload-host')"
-            >
-              Upload
-            </button>
+            <input
+              type="file"
+              id="image-upload-host"
+              accept="image/*"
+              onchange="uploadProfilePicture('image-upload-host')"
+            />
+            <p id="profile-status-host"></p>
           </div>
 
           <div class="container">
@@ -107,6 +111,23 @@
               required
             /><br />
             <button type="button" onclick="createRoom()">Host</button>
+          </div>
+        </form>
+      </div>
+      <div id="id03" class="modal">
+        <form class="modal-content-help animate" method="post">
+          <div class="imgcontainer">
+            <span
+              onclick="document.getElementById('id03').style.display='none'"
+              class="close"
+              title="Close Modal"
+              >&times;</span
+            >
+            <p id="helpHeading">Welcome</p>
+          </div>
+
+          <div class="container">
+            <p id="helpBody">bitch</p>
           </div>
         </form>
       </div>

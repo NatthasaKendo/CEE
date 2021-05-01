@@ -141,9 +141,13 @@ function helpPopUp() {
     }
 }
 
+var updatingHostProfileStatus = false;
+var updatingPlayerProfileStatus = false;
 
 async function uploadProfilePicture(id) {
     //console.log("Ran uploadProfilePicture(id)")
+    if (id == "image-upload-host") updatingHostProfileStatus = true;
+    if (id == "image-upload-player") updatingPlayerProfileStatus = true;
     var file = document.getElementById(id).files[0];
     if (file != "" && file != null) {
         if (currentProfile.slice(0, 7) == "default" || currentProfile == "" || currentProfile == null) {
@@ -231,12 +235,14 @@ async function nudeCheckSendRequest(id, url) {
                 //document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
                 if (currentProfile.slice(0, 7) != "default") {
                     if (id.slice(0, 5) == "#host") {
+                        updatingHostProfileStatus = false;
                         document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
                     }
                     else if (id.slice(0, 5) == "#play") {
+                        updatingPlayerProfileStatus = false;
                         document.getElementById("profile-status-player").innerHTML = "Profile picture updated.";
                     }
-
+                    updatingProfileStatus = false;
                 }
                 $(id).attr("src", url);
             };
@@ -270,3 +276,15 @@ function deleteProfile() {
         // Uh-oh, an error occurred!
     });
 }
+
+var waiting_count = 1;
+setInterval(function () {
+    var text = "Updating profile picture ";
+    var text_with_dot = text + (".".repeat(waiting_count));
+    if (updatingHostProfileStatus)
+        document.getElementById("profile-status-host").innerHTML = text_with_dot;
+    if (updatingPlayerProfileStatus)
+        document.getElementById("profile-status-player").innerHTML = text_with_dot;
+    waiting_count++;
+    if (waiting_count == 4) waiting_count = 1;
+}, 1000);

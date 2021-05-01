@@ -8,11 +8,15 @@
   border-radius: 50px;
   background-color: black;
   color: white;
-  padding: 14px 20px;
+  padding: 10px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: auto;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 20px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
 }
 
 #start:hover {

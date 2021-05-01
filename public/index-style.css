@@ -9,7 +9,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #0c0c0c;
+  background: #4e54c8;
   width: auto;
   height: auto;
 }
@@ -86,9 +86,25 @@ a:hover .liquid {
 }
 
 #button {
-  display: flex;
   justify-content: center;
+  display: flex;
 }
+
+@media all and (orientation: portrait) {
+  #button {
+    justify-content: center;
+    display: block;
+  }
+
+  #button a {
+    display: flex;
+    float: none;
+    align-content: center;
+    text-align: center;
+    margin: auto;
+  }
+}
+
 button {
   border-radius: 50px;
   background-color: black;
@@ -102,11 +118,12 @@ button {
 
 .buttontext {
   position: flex;
+  font-family: "Exo", sans-serif;
 }
 
 @media all and (max-width: 480px) {
   .buttontext {
-    font-size: 15px;
+    font-size: 20px;
   }
 }
 
@@ -238,4 +255,42 @@ span.psw {
 #profile-container img {
   width: 150px;
   height: 150px;
+}
+
+#profile-status-host {
+  color: rgb(0, 255, 0);
+}
+
+#profile-status-player {
+  color: rgb(0, 255, 0);
+}
+
+#helpButton {
+  width: 40px;
+  height: 40px;
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#questionMark {
+  position: relative;
+}
+
+.modal-content-help {
+  background-color: #4973ff;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+  height: 50%;
+  font-family: "Exo", sans-serif;
+}
+
+#helpHeading {
+  font-weight: bold;
+}
+
+.buttontext {
+  position: relative;
 }

@@ -36,21 +36,22 @@
   height: 50%;
 }
 
-#round{
-  margin-left: 1em; 
-  font-size: 50px; 
-  color: white; 
-  
+#round {
+  margin-left: 1em;
+  font-size: 50px;
+  color: white;
+  font-family: 'Exo', sans-serif;
+  font-weight: bold;
 }
 
-.detail{
+.detail {
   margin-left: 3em;
   font-weight: bold;
 }
 
 /* The Modal (background) */
 .modal {
-  display: none; 
+  display: none;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
@@ -71,6 +72,134 @@
   width: auto; /* Could be more or less, depending on screen size */
 }
 
-#container{
+#container {
   background-color: white;
+}
+
+.black-card {
+  background-color: black;
+  border-radius: 5px;
+  color: white;
+  margin: 0.8em;
+  width: auto; 
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  margin-left: 1em;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 15px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: yellow;
+  color: black;
+}
+
+.white-card{
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  margin: 0.8em;
+  padding: 1em;
+  min-width: 200px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.white-card-align{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+}
+
+.black-card-align{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#timer-1 {
+  justify-content: flex-end; 
+  margin-right: 2em;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#black-card-add {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.players{
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 1em;
+  font-family: 'Exo', sans-serif;
+  font-size: 1.5rem;
+}
+
+@media all and (orientation: portrait) {
+  .black-card {
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+    margin: 0.8em;
+    padding: 1em;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .white-card-align{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+  }
+  
+  .black-card-align{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+  }
+
+  #round {
+    margin-left: 1em;
+    font-size: 1.5em;
+    color: white;
+    font-family: 'Exo', sans-serif;
+    font-weight: bold;
+  }
+
+  .players{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 1em;
+    font-family: 'Exo', sans-serif;
+    font-size: 3rem;
+  }
+  
+  #black-card-add {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

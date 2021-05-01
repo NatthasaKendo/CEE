@@ -29,6 +29,10 @@ var chosenCard3 = "";
 var isJudge = false;
 var blank = 0;
 var answer = [];
+var timerStop = 0;
+
+var timeout1;
+var timeout2;
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -62,6 +66,8 @@ async function refreshRoom() {
     $("#card-list").css("display", "none");
     $("#result-player-list").css("display", "none");
     $("#back-to-index").css("display", "none");
+    $("#timer-1").css("display", "none");
+    $("#timer-2").css("display", "none");
 
     // gameState = 0 --> judge choose question card
     //           = 1 --> player choose answer card
@@ -76,40 +82,50 @@ async function refreshRoom() {
             isGenerated = true;
         }
         if (isJudge) {
-            $("#judge-choosing-black-card").css("display", "block");
+            $("#judge-choosing-black-card").css("display", "flex");
             if (cardCount == 0) await generateBlackCard();
         } else {
-            $("#player-waiting").css("display", "block");
+            $("#player-waiting").css("display", "flex");
         }
     } if (data.gameState == 1) {
         if (isGenerated) {
             console.log("isGenerated =" + isGenerated);
-            generateQuestionCard();
+            timeout1 = setInterval(countDown1, 1000);
+            await generateQuestionCard();
+            await getTimerStop();
+            //setTime();
             isGenerated = false;
         }
         if (isJudge) {
-            $("#judge-waiting").css("display", "block");
+            $("#judge-waiting").css("display", "flex");
         } else {
             $("#white-card-option-1").css("display", "none");
             $("#white-card-option-2").css("display", "none");
             $("#white-card-option-3").css("display", "none");
-            $("#player-choosing").css("display", "block");
+            $("#player-choosing").css("display", "flex");
             await generateBlank();
             if (cardCount == 0) generateWhiteCard();
-            if(blank >= 1)  $("#white-card-option-1").css("display", "block");
-            if(blank >= 2)  $("#white-card-option-2").css("display", "block");
-            if(blank >= 3)  $("#white-card-option-3").css("display", "block");
+            if(blank >= 1)  $("#white-card-option-1").css("display", "flex");
+            if(blank >= 2)  $("#white-card-option-2").css("display", "flex");
+            if(blank >= 3)  $("#white-card-option-3").css("display", "flex");
         }
+        $("#timer-1").css("display", "flex");
     } else if (data.gameState == 2) {
-        $("#card-list").css("display", "block");
+        $("#card-list").css("display", "flex");
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) generateCardOrder();
         } 
         generateChoosingCard();
     } else if (data.gameState == 3) {
-        $("#card-list").css("display", "block");
         await generatePlayerData();
         generateChoosingCard();
+        if(data.round != data.roundMax){
+            timeout2 = setInterval(countDown2, 1000);
+            await getTimerStop();
+            $("#timer-2").css("display", "flex");
+        }
+        await generateQuestionCard();
+        $("#card-list").css("display", "flex");
     }
 }
 
@@ -122,6 +138,54 @@ function getUrlVars() {
     roomID = vars["roomID"];
     console.log(player);
     console.log(roomID);
+}
+
+async function getTimerStop(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    timerStop = data.timerStop;
+}
+
+function countDown1() {
+    setTime1(Math.max(0, timerStop - Date.now()));
+    if( timerStop <= Date.now() ) { 
+        clearInterval(timeout1);
+        if(isJudge) changeState(); 
+    }
+}
+
+function setTime1(remaining) {
+    var minutes = "00" + Math.floor(remaining / 60000);
+    var seconds = "00" + Math.round(remaining / 1000);
+    console.log("1 ------ " + minutes + seconds);
+    if(minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-1").text(minutes.slice(minutes.length-2,minutes.length) + ':' + seconds.slice(seconds.length-2,seconds.length));
+}
+
+function countDown2() {
+    setTime2(Math.max(0, timerStop - Date.now()));
+    if( timerStop <= Date.now() ) { 
+        clearInterval(timeout2);
+        if(isJudge) nextRound(); 
+    }
+}
+
+function setTime2(remaining) {
+    var seconds = Math.round(remaining / 1000);
+    console.log("2 ------ " + seconds);
+    if(seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-2").text(seconds);
 }
 
 async function generateBlackCard() {
@@ -142,21 +206,20 @@ async function generateBlackCard() {
     });
     var usedCard = [];
     for (i = 0; i < 3; i++) {
-        var index = Math.floor((Math.random() * data.black.length) + 1);
-        while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+        var index = Math.floor((Math.random() * data.black.length));
+        while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
         usedCard.push(index);
-        $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + (i + 1) + "' class=''>" + data.black[index] + "</td><td><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></td></tr>");
+        $("#black-card-option").find("div:last").before("<div id='black-card-" + (i + 1) + "' class='black-card'><div>" + data.black[index] + "</div><button type='button' onclick='chooseBlackCard(" + (i + 1) + ")'>Choose</button></div>");
         cardCount += 1;
     }
 }
 
-function changeBlank(questionBlank){
-    blank = questionBlank;
-}
-
-function addBlackCard() {
-    cardCount += 1;
-    $("#black-card-option").find("tr:last").before("<tr><td id='black-card-" + cardCount + "' class=''>" + $("#add-black-card").val() + "</td><td><button type='button' onclick='chooseBlackCard(" + cardCount + ")'>Choose</button></td></tr>");
+function choosePlayersBlackCard() {
+    if($("#add-black-card").val() != null && $("#add-black-card").val() != ""){
+        chooseBlackCard(-1);
+    }else{
+        alert("Question cannot be blank.");
+    }
 }
 
 async function chooseBlackCard(cardNumber) {
@@ -176,9 +239,15 @@ async function chooseBlackCard(cardNumber) {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    console.log("This is the card added :" + $("#black-card-" + cardNumber).text());
-    data.question = $("#black-card-" + cardNumber).text();
-    if(cardNumber > 3)  data.blank = blank;
+    if (cardNumber < 0){
+        console.log("This is the card added :" + $("#add-black-card").val());
+        data.question = $("#add-black-card").val();
+    }else{
+        console.log("This is the card added :" + $("#black-card-" + cardNumber).find("div:first").text());
+        data.question = $("#black-card-" + cardNumber).find("div:first").text();
+    }
+    data.timerStop = Date.now() + 60000;
+    if(cardNumber < 0)  data.blank = $("#blank option:selected").val();
     else data.blank = countBlank(data.question);
     if(data.blank == 0) data.blank = 1;
     await db.collection("roomID").doc(roomID).set(data).then(() => {
@@ -319,66 +388,74 @@ async function generateWhiteCard() {
     if(blank >= 1 && cardCount == 0){
         console.log("Generate Cards 1 -----------------")
         for (i = 0; i < 3; i++) {
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 1 + ',"t",' + cardCount;
-            $("#white-card-option-1").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
+            $("#white-card-option-1").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
+        index = Math.floor((Math.random() * 3)+1);
+        chooseCard(1, "t", index);
+        console.log("Choose Card 1 : " + index);
     }
     if(blank >= 2 && cardCount == 3){
         for (i = 0; i < 3; i++) {
             console.log("Generate Cards 2 -----------------")
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 2 + ',"t",' + cardCount;
-            $("#white-card-option-2").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
+            $("#white-card-option-2").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
+        index = Math.floor((Math.random() * 3)+6);
+        chooseCard(2, "t", index);
+        console.log("Choose Card 2 : " + index);
     }
     if(blank >= 3 && cardCount == 6){
         console.log("Generate Cards 3 -----------------")
         for (i = 0; i < 3; i++) {
-            var index = Math.floor((Math.random() * data.white.length) + 1);
-            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length) + 1);
+            var index = Math.floor((Math.random() * data.white.length));
+            while (usedCard.includes(index)) index = Math.floor((Math.random() * data.black.length));
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 3 + ',"t",' + cardCount;
-            $("#white-card-option-3").find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + data.white[index] + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
+            $("#white-card-option-3").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></></div>");
         }
+        index = Math.floor((Math.random() * 3)+11);
+        chooseCard(3, "t", index);
+        console.log("Choose Card 3 : " + index);
     }
 }
 
-function addCard(blankNumber) {
-    cardCount += 1;
-    var cardTemp = blankNumber + ',"t",' + cardCount;
-    $("#white-card-option-" + blankNumber).find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''>" + $("#add-card-" + blankNumber).val() + "</td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
-    console.log("Added card with content :" + $("#add-card-" + blankNumber).val());
-}
-
-async function addPictureCard(blankNumber) {
-    var file = document.getElementById("add-image-card-" + blankNumber).files[0];
+async function addPictureCard(cardNumber) {
+    var file = document.getElementById("add-image-card-" + cardNumber).files[0];
     if (file != "" && file != null) {
         console.log(file);
-        //Declare Variables
-        cardCount += 1;
-        var cardTemp = blankNumber + ',"p",' + cardCount;
         var imageName = "picture-card-" + generateId(10);
-        $("#white-card-option-" + blankNumber).find("tr:last").before("<tr><td id='card-" + cardCount + "' class=''><img src='' id='picture-card-" + cardCount + "' alt='" + imageName + "' class='picture-card'></td><td><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></td></tr>");
         // Create a root reference
         var storageRef = firebase.storage().ref();
         // Create a reference to 'images/mountains.jpg'
         var imageRef = storageRef.child('card_pictures/' + imageName + '.jpg');
         await imageRef.put(file).then((snapshot) => {
             console.log('Uploaded a blob or file named: ' + imageName + " !");
-            uploadCardPicture("#picture-card-" + cardCount, imageName);
+            updatePictureCard(imageName, cardNumber);
         });
     } else console.log("No image selected");
 }
 
+function updatePictureCard(imageName, cardNumber) {
+    var storageRef = firebase.storage().ref();
+    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        nudeCheckSendRequest(cardNumber, imageName, url);
+    }).catch(function (error) {
+    });
+}
+
 function chooseCard(blankNumber, cardType, cardNumber) {
+    console.log("Switch Choose card : " + blankNumber);
     switch(blankNumber) {
         case 1 :    $(chosenCard1).removeClass("choosing"); break;
         case 2 :    $(chosenCard2).removeClass("choosing"); break;
@@ -386,13 +463,14 @@ function chooseCard(blankNumber, cardType, cardNumber) {
     }
     var cardID = "#";
     if (cardType == "t") cardID += "card-" + cardNumber;
-    else cardID += "picture-card-" + cardNumber;
+    else if(cardType == "p") cardID += "picture-card-" + cardNumber;
+    else    cardID += "text-card-" + cardNumber;
     switch(blankNumber) {
         case 1 :    chosenCard1 = cardID;   break;
         case 2 :    chosenCard2 = cardID;   break;
         case 3 :    chosenCard3 = cardID;   break;
     }
-    $(cardID).addClass("choosing");
+    $("#card-" + cardNumber).addClass("choosing");
     sendChosenCard(blankNumber, cardType);
 }
 
@@ -414,11 +492,17 @@ async function sendChosenCard(blankNumber, cardType) {
     });
     if (cardType == "t"){
         switch(blankNumber){
-            case 1 : answer[0] = $(chosenCard1).text(); break;
-            case 2 : answer[1] = $(chosenCard2).text(); break;
-            case 3 : answer[2] = $(chosenCard3).text(); break;
+            case 1 : answer[0] = $(chosenCard1).find("div:first").text(); break;
+            case 2 : answer[1] = $(chosenCard2).find("div:first").text(); break;
+            case 3 : answer[2] = $(chosenCard3).find("div:first").text(); break;
         }
-    }else{
+    }else if (cardType == "b"){
+        switch(blankNumber){
+            case 1 : answer[0] = $(chosenCard1).val(); break;
+            case 2 : answer[1] = $(chosenCard2).val(); break;
+            case 3 : answer[2] = $(chosenCard3).val(); break;
+        }
+    }else {
         switch(blankNumber){
             case 1 : answer[0] = $(chosenCard1).attr("alt");    break;
             case 2 : answer[1] = $(chosenCard2).attr("alt");    break;
@@ -435,15 +519,6 @@ async function sendChosenCard(blankNumber, cardType) {
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
-}
-
-function uploadCardPicture(id, imageName) {
-    var storageRef = firebase.storage().ref();
-    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
-        console.log(url);
-        $(id).attr("src", url);
-    }).catch(function (error) {
-    });
 }
 
 async function generateCardOrder() {
@@ -500,7 +575,7 @@ async function generateChoosingCard() {
         if ((data.round - 1) % data.cardOrder.length == data.cardOrder[i]) continue;
         var slot = data.cardOrder[i];
         var answerData = data.answer[slot].split(", ");
-        var markup = "<tr id='player-card-" + slot + "' class=''></tr>";
+        var markup = "<div id='player-card-" + slot + "' class=''></div>";
         $("#card-list").append(markup);
         for(i=0;i<answerData.length;i++){
             var answer = answerData[i];
@@ -508,25 +583,24 @@ async function generateChoosingCard() {
             markup = "";
             console.log(isPicture);
             console.log(answer);
-            if(i!=0)    markup += "<td>, </td>";
-            markup += "<td>";
+            if(i!=0)    markup += ", ";
             if (isPicture) {
                 console.log("------------Picture Card here------------");
-                markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></td>";
-            } else markup += answer + "</td>";
+                markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
+            } else markup += answer;
             $("#player-card-" + slot).append(markup);
             if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
         }
         markup = "";
         if (isJudge && data.gameState != 3) {
             console.log("This is judge.")
-            markup += "<td><button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button></td></tr>";
+            markup += "<button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button>";
         } else if (data.gameState == 3) {
             console.log("Chosen card is " + data.chosenCard);
             console.log("Winner is " + data.name[data.chosenCard]);
-            if (data.chosenCard == slot) markup += "<td class='winner'>" + data.name[slot] + "</td></tr>";
-            else markup += "<td class='loser'>" + data.name[slot] + "</td></tr>";
-            if (isJudge && data.round != data.roundMax) $("#next-round").css("display", "block");
+            if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
+            else markup += "<div class='loser'>" + data.name[slot] + "</div>";
+            if (data.round != data.roundMax) $("#next-round").css("display", "flex");
             if (data.round == data.roundMax){
                 generateFinalResult();
                 $("#player-list").css("display", "none");
@@ -538,6 +612,16 @@ async function generateChoosingCard() {
         }
         $("#player-card-" + slot).append(markup);
     }
+}
+
+async function uploadCardPicture(id, imageName){
+    var storageRef = firebase.storage().ref();
+    storageRef.child('card_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
+        console.log(url);
+        $(id).attr("src",url);
+        $(id).attr("alt",imageName);
+    }).catch(function (error) {
+    });
 }
 
 async function generateFinalResult() {
@@ -580,8 +664,8 @@ async function generateFinalResult() {
         }
     }
     $("#player-list").css("display", "none");
-    $("#result-player-list").css("display", "block");
-    $("#back-to-index").css("display", "block");
+    $("#result-player-list").css("display", "flex");
+    $("#back-to-index").css("display", "flex");
 }
 
 async function judgeChoose(cardNumber) {
@@ -604,6 +688,7 @@ async function judgeChoose(cardNumber) {
     data.chosenCard = cardNumber;
     data.score[cardNumber] += 1;
     data.gameState = 3;
+    data.timerStop = Date.now() + 5000;
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -612,18 +697,24 @@ async function judgeChoose(cardNumber) {
         });
 }
 
-async function resetVar() {
+function resetVar() {
+    clearInterval(timeout1);
+    clearInterval(timeout2);
     cardCount = 0;
     chosenCard1 = "";
     chosenCard2 = "";
     chosenCard3 = "";
     isJudge = false;
-    $("#black-card-option").html('<table id = "black-card-option"><tr><td><input id="add-black-card" type="text"> (There are  1<input type="checkbox" onclick="changeBlank(1)" >  2<input type="checkbox" onclick="changeBlank(2)" >  3<input type="checkbox" onclick="changeBlank(3)">  blank(s) in this question.) </td><td><button type="button" onclick="addBlackCard()">Add Question Card</button></td></tr>');
-    $("#white-card-option-1").html('<tr><td>1st Blank</td></tr><tr><td><input id="add-card-1" type="text"></td><td><button type="button" onclick="addCard(1)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-1" accept="image/*"></td><td><button type="button" onclick="addPictureCard(1)">Add Picture as a Card</button></td></tr>');
-    $("#white-card-option-2").html('<tr><td>1st Blank</td></tr><tr><td><input id="add-card-2" type="text"></td><td><button type="button" onclick="addCard(2)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-2" accept="image/*"></td><td><button type="button" onclick="addPictureCard(2)">Add Picture as a Card</button></td></tr>');
-    $("#white-card-option-3").html('<tr><td>1st Blank</td></tr><tr><td><input id="add-card-3" type="text"></td><td><button type="button" onclick="addCard(3)">Add Card</button></td><td>or</td><td><input type="file" id="add-image-card-3" accept="image/*"></td><td><button type="button" onclick="addPictureCard(3)">Add Picture as a Card</button></td></tr>');
+    tempB = ",'b',";
+    tempP = ",'p',";
+    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
+    $("#white-card-option-1").html('1st BLank<div class="white-card">Type your own card<input id="text-card-4" type="text"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
+    $("#white-card-option-2").html('2nd Blank<div class="white-card">Type your own card<input id="text-card-9" type="text"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP+ '10)">Choose</button></div>');
+    $("#white-card-option-3").html('3rd Blank<div class="white-card">Type your own card<input id="text-card-14" type="text"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#card-list").html("");
     $("#black-card").html("");
+    $("#timer-1").text("01:00");
+    $("#timer-2").text("5");
 }
 
 async function nextRound() {
@@ -645,6 +736,7 @@ async function nextRound() {
     });
     data.gameState = 0;
     data.round += 1
+    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -669,4 +761,51 @@ function countBlank(text) {
     console.log(array)
     console.log(array.length - 1)
     return array.length - 1
+}
+
+async function nudeCheckSendRequest(cardNumber, imageName, url) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            result = JSON.parse(xhr.response).output;
+            console.log(result);
+            if (result.detections.length > 0) {
+                alert("Card Picture cannot contain nudity.")
+                console.log("lewd");
+                deleteProfile();
+                $("#add-image-card-"+cardNumber).val() = null;
+            }
+            else if (result.detections.length <= 0) {
+                console.log("safe");
+                newID = "#picture-card-" + cardNumber;
+                $(newID).attr("src",url);
+                $(newID).attr("alt",imageName);
+            };
+        }
+    };
+
+    xhr.open("POST", "https://api.deepai.org/api/nsfw-detector");
+    xhr.setRequestHeader("api-key", "3478a5dd-416e-49f2-9310-876a3ec18b31");
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+    var imageUrl = encodeURI(url);
+    var param = "image=" + imageUrl;
+    xhr.send(param);
+}
+
+function deleteProfile() {
+    // Create a reference to the file to delete
+    var storageRef = firebase.storage().ref();
+    var imageRef = storageRef.child('card_pictures/' + currentProfile + '.jpg');
+
+    // Delete the file
+    imageRef.delete().then(() => {
+        // File deleted successfully
+        console.log("Deleted profile picture of " + currentProfile);
+    }).catch((error) => {
+        // Uh-oh, an error occurred!
+    });
 }
