@@ -62,6 +62,7 @@
               type="text"
               placeholder="Enter Name"
               name="uname"
+              onkeypress="return blockSpecialChar(event)"
               required
             /><br />
 
@@ -108,6 +109,7 @@
               type="text"
               placeholder="Enter Name"
               name="uname"
+              onkeypress="return blockSpecialChar(event)"
               required
             /><br />
             <button type="button" onclick="createRoom()">Host</button>
@@ -138,7 +140,7 @@
               assigned room ID.<br />
               <br />
               You can upload your own profile picture or just use the default
-              generated one. <br />(You can't choose nude pictures, of cousre.
+              generated one. <br />(You can't choose nude pictures, of course.
               We have an AI detection for that.)
             </p>
           </div>

@@ -229,6 +229,10 @@ async function nudeCheckSendRequest(id, url) {
                 deleteProfile()
                 document.getElementById("image-upload-host").value = null;
                 document.getElementById("image-upload-player").value = null;
+                updatingHostProfileStatus = false;
+                updatingPlayerProfileStatus = false;
+                document.getElementById("profile-status-host").innerHTML = "";
+                document.getElementById("profile-status-player").innerHTML = "";
             }
             else if (result.detections.length <= 0) {
                 console.log("safe");
@@ -288,3 +292,9 @@ setInterval(function () {
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
 }, 1000);
+
+function blockSpecialChar(e) {
+    var k;
+    document.all ? k = e.keyCode : k = e.which;
+    return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
+}

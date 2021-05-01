@@ -71,6 +71,8 @@ async function refreshRoom() {
         });
         $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
     }
+    console.log(data.name[0])
+    console.log(player)
     if (data.name[0] == player) host = true;
     if (host) {
         $("#host-joining-room").css("display", "block");
