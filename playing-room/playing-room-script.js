@@ -117,6 +117,7 @@ async function refreshRoom() {
     } else if (data.gameState == 2) {
         clearInterval(dot);
         if(!isGenerated){
+            console.log("Generated here *******");
             await generateChoosingCard();
             isGenerated = true;
         }
@@ -599,42 +600,38 @@ async function generateChoosingCard() {
     console.log(data.answer);
     $("#card-list").html("");
     for (i = 0; i < data.cardOrder.length; i++) {
-        if ((data.round - 1) % data.cardOrder.length == data.cardOrder[i]) continue;
-        for (i = 0; i < data.player; i++) {
-            console.log("-------> " + i);
-            var slot = data.cardOrder[i];
-            if ((data.round - 1) % data.player == slot) continue;
-            var answerData = data.answer[slot].split(", ");
-            var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
-            $("#card-list").append(markup);
-            console.log(answerData);
-            for(i=0;i<answerData.length;i++){
-                var answer = answerData[i];
-                if(answer == "" || answer == null)  continue;
-                var isPicture = (answer.length == 23 && answer.slice(0, 13) == "picture-card-") ? true : false;
-                markup = "";
-                console.log(isPicture);
-                console.log(answer);
-                if (i != 0) markup += ", ";
-                if (isPicture) {
-                    console.log("------------Picture Card here------------");
-                    markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
-                } else markup += answer;
-                $("#player-card-" + slot).append(markup);
-                if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
-            }
+        var slot = data.cardOrder[i];
+        if ((data.round - 1) % data.player == slot) continue;
+        var answerData = data.answer[slot].split(", ");
+        var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
+        $("#card-list").append(markup);
+        console.log(answerData);
+        for(j=0;j<answerData.length;j++){
+            var answer = answerData[j];
+            if(answer == "" || answer == null)  continue;
+            var isPicture = (answer.length == 23 && answer.slice(0, 13) == "picture-card-") ? true : false;
             markup = "";
-            if (isJudge && data.gameState != 3) {
-                console.log("This is judge.")
-                markup += "<button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button>";
-            } else if (data.gameState == 3) {
-                console.log("Chosen card is " + data.chosenCard);
-                console.log("Winner is " + data.name[data.chosenCard]);
-                if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
-                else markup += "<div class='loser'>" + data.name[slot] + "</div>";
-            }
+            console.log(isPicture);
+            console.log(answer);
+            if (i != 0) markup += ", ";
+            if (isPicture) {
+                console.log("------------Picture Card here------------");
+                markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
+            } else markup += answer;
             $("#player-card-" + slot).append(markup);
+            if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
         }
+        markup = "";
+        if (isJudge && data.gameState != 3) {
+            console.log("This is judge.")
+            markup += "<button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button>";
+        } else if (data.gameState == 3) {
+            console.log("Chosen card is " + data.chosenCard);
+            console.log("Winner is " + data.name[data.chosenCard]);
+            if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
+            else markup += "<div class='loser'>" + data.name[slot] + "</div>";
+        }
+        $("#player-card-" + slot).append(markup);
     }
 }
 
