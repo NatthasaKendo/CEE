@@ -119,8 +119,9 @@ button:hover {
 
 .white-card-align {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  flex-wrap: wrap; 
 }
 
 .black-card-align {
@@ -201,6 +202,12 @@ button:hover {
     flex-direction: column;
     align-items: stretch;
   }
+
+  #result-player-list{
+    padding: 5rem;
+    border-collapse: collapse;
+    text-align: center;
+  }
 }
 
 #judge-waiting-p {
@@ -213,7 +220,24 @@ button:hover {
   height: 100%;
 }
 
-
 #result-player-list{
-  margin: 0%;
+  padding: 5rem;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#result-player-list tr td{
+  padding: 0.5rem;
+}
+
+#result-player-list tr:nth-child(3) td:nth-child(2){
+  color: gold;
+}
+
+#result-player-list tr:nth-child(4) td:nth-child(2){
+  color: silver;
+}
+
+#result-player-list tr:nth-child(5) td:nth-child(2){
+  color: brown;
 }
