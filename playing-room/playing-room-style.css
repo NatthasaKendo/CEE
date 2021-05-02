@@ -15,10 +15,6 @@
   display: none;
 }
 
-.choosing {
-  background-color: rebeccapurple;
-}
-
 .loser {
   background-color: rgb(255, 0, 0);
 }
@@ -131,6 +127,10 @@ button:hover {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.choosing {
+  background-color: #a1a1a1;
 }
 
 #timer-1 {
