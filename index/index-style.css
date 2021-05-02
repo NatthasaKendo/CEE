@@ -268,14 +268,21 @@ span.psw {
 #helpButton {
   width: 50px;
   height: 50px;
-  background: black;
+  padding: 0%;
+  margin: 0%;
   position: fixed;
-  top: 0;
-  left: 0;
-  display: inline-block;
-  align-content: center;
-  text-align: center;
-}
+  top: 2em;
+  left: 2em;
+} 
+#helpButton img{
+  width: 50px;
+  height: 50px;
+  z-index: 2;
+  position: fixed;
+  top: 2em;
+  left: 2em;
+} 
+
 
 #questionMark {
   position: relative;
