@@ -98,9 +98,12 @@ async function refreshRoom() {
             timeout1 = setInterval(countDown1, 1000);
             await generateQuestionCard();
             await getTimerStop();
+            $("#ready").attr("onclick","ready(1)");
+            $("#ready").text("Ready");
             //setTime();
             isGenerated = false;
         }
+        await generatePlayerData();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
             $("#judge-waiting").css("display", "flex");
@@ -364,7 +367,7 @@ async function generatePlayerData() {
     console.log(player);
     $("#round").text("Round: " + data.round);
     $("#player-count").html(playerCount);
-    $("#player-list").html("<tr><th></th><th>Player</th><th></th><th>Score</th></tr>");
+    $("#player-list").html("<tr><th></th><th>Player</th><th></th><th></th><th>Score</th></tr>");
     for (i = 0; i < playerCount; i++) {
         var markup = "";
         var profileURL = data.profile_pic[i];
@@ -373,12 +376,15 @@ async function generatePlayerData() {
         var judgeState = (i == judge) ? "(Judge)" : "";
         var score = data.score[i];
         var tempURL = "";
+        var isReady = "";
+        if(data.gameState == 1 && data.ready[i]) isReady = "Ready";
+        console.log(isReady);
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
             tempURL = url;
         }).catch(function (error) {
         });
-        markup += "<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td><td>" + judgeState + "</td><td>" + score + "</td></tr>";
+        markup += "<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td><td>" + judgeState + "</td><td>" + isReady + "</td><td>" + score + "</td></tr>";
         $("#player-list").append(markup);
         console.log("Added player " + name + " successfully");
     }
@@ -530,7 +536,7 @@ function chooseCard(blankNumber, cardType, cardNumber) {
         case 2: chosenCard2 = cardID; break;
         case 3: chosenCard3 = cardID; break;
     }
-    $("#card-" + cardNumber).addClass("choosing");
+    $(cardID).addClass("choosing");
     sendChosenCard(blankNumber, cardType);
 }
 
@@ -847,6 +853,40 @@ async function backToIndex() {
                 console.error("Error writing document: ", error);
             });
     }
+}
+
+async function ready(isReady){
+    console.log("ready");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    if(isReady){
+        data.ready[playerSlot] = true;
+        $("#ready").attr("onclick","ready(0)");
+        $("#ready").text("Not Ready");
+    }else{
+        data.ready[playerSlot] = false;
+        $("#ready").attr("onclick","ready(1)");
+        $("#ready").text("Ready");
+    }
+    await db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
 }
 
 async function deleteRoom() {

@@ -33,7 +33,7 @@ async function createRoom() {
     } else {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0, timerStop: 0, player: 0 };
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0, timerStop: 0, player: 0, ready: [] };
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
@@ -91,6 +91,7 @@ async function addMember(name, roomID) {
         data.profile_pic.push(currentProfile);
         data.score.push(0);
         data.player += 1;
+        data.ready.push(false);
         //console.log(data.name);
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
