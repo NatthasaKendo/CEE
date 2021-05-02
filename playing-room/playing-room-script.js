@@ -115,14 +115,7 @@ async function refreshRoom() {
         }
         $("#timer-1").css("display", "flex");
     } else if (data.gameState == 2) {
-        $("#card-list").css("display", "flex");
-        if (isJudge) {
-            if (data.cardOrder == "" || data.cardOrder == null) generateCardOrder();
-        } 
         clearInterval(dot);
-        console.log(2);
-        await generateChoosingCard();
-        isGenerated = true;
         if(!isGenerated){
             await generateChoosingCard();
             isGenerated = true;
