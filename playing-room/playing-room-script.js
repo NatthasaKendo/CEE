@@ -613,7 +613,7 @@ async function generateChoosingCard() {
             markup = "";
             console.log(isPicture);
             console.log(answer);
-            if (i != 0) markup += ", ";
+            if (j != 0) markup += ", ";
             if (isPicture) {
                 console.log("------------Picture Card here------------");
                 markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
