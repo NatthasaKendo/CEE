@@ -1,3 +1,4 @@
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 var firebaseConfig = {
@@ -114,8 +115,14 @@ async function refreshRoom() {
         }
         $("#timer-1").css("display", "flex");
     } else if (data.gameState == 2) {
+        $("#card-list").css("display", "flex");
+        if (isJudge) {
+            if (data.cardOrder == "" || data.cardOrder == null) generateCardOrder();
+        } 
         clearInterval(dot);
         console.log(2);
+        await generateChoosingCard();
+        isGenerated = true;
         if(!isGenerated){
             await generateChoosingCard();
             isGenerated = true;
@@ -202,6 +209,8 @@ function countDown2() {
 }
 
 async function buttonNextStage(){
+    clearInterval(timeout1);
+    clearInterval(timeout2);
     timeout1 = 0;
     timeout2 = 0;
     await changeState();
@@ -596,40 +605,43 @@ async function generateChoosingCard() {
     });
     console.log(data.answer);
     $("#card-list").html("");
-    for (i = 0; i < data.player; i++) {
-        console.log("-------> " + i);
-        var slot = data.cardOrder[i];
-        if ((data.round - 1) % data.player == slot) continue;
-        var answerData = data.answer[slot].split(", ");
-        var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
-        $("#card-list").append(markup);
-        console.log(answerData);
-        for(i=0;i<answerData.length;i++){
-            var answer = answerData[i];
-            if(answer == "" || answer == null)  continue;
-            var isPicture = (answer.length == 23 && answer.slice(0, 13) == "picture-card-") ? true : false;
+    for (i = 0; i < data.cardOrder.length; i++) {
+        if ((data.round - 1) % data.cardOrder.length == data.cardOrder[i]) continue;
+        for (i = 0; i < data.player; i++) {
+            console.log("-------> " + i);
+            var slot = data.cardOrder[i];
+            if ((data.round - 1) % data.player == slot) continue;
+            var answerData = data.answer[slot].split(", ");
+            var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
+            $("#card-list").append(markup);
+            console.log(answerData);
+            for(i=0;i<answerData.length;i++){
+                var answer = answerData[i];
+                if(answer == "" || answer == null)  continue;
+                var isPicture = (answer.length == 23 && answer.slice(0, 13) == "picture-card-") ? true : false;
+                markup = "";
+                console.log(isPicture);
+                console.log(answer);
+                if (i != 0) markup += ", ";
+                if (isPicture) {
+                    console.log("------------Picture Card here------------");
+                    markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
+                } else markup += answer;
+                $("#player-card-" + slot).append(markup);
+                if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
+            }
             markup = "";
-            console.log(isPicture);
-            console.log(answer);
-            if (i != 0) markup += ", ";
-            if (isPicture) {
-                console.log("------------Picture Card here------------");
-                markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
-            } else markup += answer;
+            if (isJudge && data.gameState != 3) {
+                console.log("This is judge.")
+                markup += "<button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button>";
+            } else if (data.gameState == 3) {
+                console.log("Chosen card is " + data.chosenCard);
+                console.log("Winner is " + data.name[data.chosenCard]);
+                if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
+                else markup += "<div class='loser'>" + data.name[slot] + "</div>";
+            }
             $("#player-card-" + slot).append(markup);
-            if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
         }
-        markup = "";
-        if (isJudge && data.gameState != 3) {
-            console.log("This is judge.")
-            markup += "<button type='button' onclick='judgeChoose(" + slot + ")'>Choose</button>";
-        } else if (data.gameState == 3) {
-            console.log("Chosen card is " + data.chosenCard);
-            console.log("Winner is " + data.name[data.chosenCard]);
-            if (data.chosenCard == slot) markup += "<div class='winner'>" + data.name[slot] + "</div>";
-            else markup += "<div class='loser'>" + data.name[slot] + "</div>";
-        }
-        $("#player-card-" + slot).append(markup);
     }
 }
 
@@ -723,6 +735,10 @@ function resetVar() {
     isJudge = false;
     tempB = ",'b',";
     tempP = ",'p',";
+    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
+    $("#white-card-option-1").html('1st Blank<div class="white-card">Type your own card<input id="text-card-4" type="text"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
+    $("#white-card-option-2").html('2nd Blank<div class="white-card">Type your own card<input id="text-card-9" type="text"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
+    $("#white-card-option-3").html('3rd Blank<div class="white-card">Type your own card<input id="text-card-14" type="text"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<input id="add-black-card" type="text" autocomplete="off">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
     $("#white-card-option-1").html('1st Blank<div class="white-card">Type your own card<input id="text-card-4" type="text" autocomplete="off"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
     $("#white-card-option-2").html('2nd Blank<div class="white-card">Type your own card<input id="text-card-9" type="text" autocomplete="off"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
