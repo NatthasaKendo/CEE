@@ -216,11 +216,11 @@ button:hover {
 #result-player-list{
   padding: 5rem;
   border-collapse: collapse;
-  margin: 0%;
+  text-align: center;
 }
 
 #result-player-list tr td{
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 #result-player-list tr:nth-child(3) td:nth-child(2){
