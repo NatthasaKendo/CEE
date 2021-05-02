@@ -144,7 +144,7 @@ async function refreshRoom() {
         }else{
             generateFinalResult();
             $("#player-list").css("display", "none");
-            // $("#result-player-list").css("display", "flex");
+            $("#result-player-list").css("display", "flex");
             $("#back-to-index").css("display", "flex");
             $(".modal").css("display", "flex");
             $(".modal").css("justify-content", "center");
@@ -699,7 +699,7 @@ async function generateFinalResult() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    $("#result-player-list").html("<tr><td>Final Result</td></tr><tr><th></th><th>Place</th><th>Player</th><th></th><th>Score</th></tr>");
+    $("#result-player-list").html("<tr><td>Final Result</td></tr><tr><th>Place</th><th></th><th>Player</th><th></th><th>Score</th></tr>");
     var playerScore = [];
     for (i = 0; i < data.name.length; i++) {
         playerScore.push({ score: data.score[i], name: data.name[i], profile: data.profile_pic[i] });
@@ -708,7 +708,7 @@ async function generateFinalResult() {
     var place = 1;
     for (i = 0; i < data.name.length; i++) {
         var tempURL = "";
-        var profileURL = player.profile[i];
+        var profileURL = playerScore[i].profile;
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
             tempURL = url;
@@ -716,9 +716,9 @@ async function generateFinalResult() {
         });
         console.log((playerScore[i]).name + "   ->   " + (playerScore[i]).score);
         if (i != 0 && (playerScore[i - 1]).score == (playerScore[i]).score) {
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (place - 1) + "</td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
+            $("#result-player-list").append("<tr><td>" + (place - 1) + "</td><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
         } else {
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (i + 1) + "</td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
+            $("#result-player-list").append("<tr><td>" + (i + 1) + "</td><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
             place += 1;
         }
     }
@@ -795,7 +795,10 @@ async function nextRound() {
     data.gameState = 0;
     data.round += 1
     data.cardOrder = ""
-    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
+    for(i=0;i<data.answer.length;i++){
+        data.answer[i] = "";
+        data.ready[i] = false;
+    }
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
