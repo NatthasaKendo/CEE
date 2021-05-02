@@ -297,3 +297,13 @@ span.psw {
 .buttontext {
   position: relative;
 }
+
+#host-special-charater-alert {
+  color: red;
+  display: none;
+}
+
+#player-special-charater-alert {
+  color: red;
+  display: none;
+}

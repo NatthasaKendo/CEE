@@ -295,8 +295,49 @@ setInterval(function () {
     if (waiting_count == 4) waiting_count = 1;
 }, 1000);
 
-function blockSpecialChar(e) {
-    var k;
-    document.all ? k = e.keyCode : k = e.which;
-    return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
+function blockSpecialChar(id) {
+    console.log("Keypress");
+    var name = $(id).val();
+    console.log(name);
+    var newname = "";
+    for(i=0;i<name.length;i++){
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+            console.log("Wrong character");
+            $("#special-charater-alert").css("display","block");
+        }else   newname += c;
+    }
+    $(id).val(newname);
 }
+
+$( "#player-name" ).on('input propertychange',function(e) {
+    var name = $(this).val();
+    var newname = "";
+    console.log(name);
+    for(i=0;i<name.length;i++){
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+            console.log("Wrong character");
+            $("#player-special-charater-alert").css("display","block");
+        }else newname += c;
+    }
+    $(this).val(newname);
+});
+
+$( "#host-name" ).on('input propertychange',function(e) {
+    var name = $(this).val();
+    var newname = "";
+    console.log(name);
+    $("#host-special-charater-alert").css("display","none");
+    for(i=0;i<name.length;i++){
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+            console.log("Wrong character");
+            $("#host-special-charater-alert").css("display","block");
+        }else   newname += c;
+    }
+    $(this).val(newname);
+});
