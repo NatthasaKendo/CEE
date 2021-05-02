@@ -20,6 +20,7 @@
         <p>Player Count: <span id="player-count"> </span></p>
         <br />
         <table id="player-list"></table>
+
         <div id="player-joining-room">
           <p id="waiting">Waiting for host to start ...</p>
         </div>
@@ -32,6 +33,9 @@
           <br />
           <button type="button" onclick="startGame()" id="start">Start</button>
         </div>
+
+        <button type="button" id="leave-room" onclick="leaveRoom()">Leave Room</button>
+
       </div>
     </div>
 
