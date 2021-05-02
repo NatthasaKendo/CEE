@@ -213,7 +213,24 @@ button:hover {
   height: 100%;
 }
 
-
 #result-player-list{
+  padding: 5rem;
+  border-collapse: collapse;
   margin: 0%;
+}
+
+#result-player-list tr td{
+  padding: 1rem;
+}
+
+#result-player-list tr:nth-child(3) td:nth-child(2){
+  color: gold;
+}
+
+#result-player-list tr:nth-child(4) td:nth-child(2){
+  color: silver;
+}
+
+#result-player-list tr:nth-child(5) td:nth-child(2){
+  color: brown;
 }

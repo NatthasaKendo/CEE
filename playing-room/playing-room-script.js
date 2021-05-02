@@ -364,7 +364,7 @@ async function generatePlayerData() {
     console.log(player);
     $("#round").text("Round: " + data.round);
     $("#player-count").html(playerCount);
-    $("#player-list").html("<tr><th></th><th>Player</th><th></th><th>Score</th></tr>");
+    $("#player-list").html("<tr><th></th><th>Player</th><th>Score</th></tr>");
     for (i = 0; i < playerCount; i++) {
         var markup = "";
         var profileURL = data.profile_pic[i];
