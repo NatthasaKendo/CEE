@@ -755,6 +755,56 @@ function generateId(len) {
     return Array.from(arr, dec2hex).join('')
 }
 
+async function backToIndex(){
+    console.log("Leaving room...");
+
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            alert("Room doesn't exist.");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    //console.log("data " + data);
+    var idx = 0;
+    for(i=0;i<data.name.length;i++){
+        if(data.name[i]==player){
+            idx = i;
+            break;
+        }
+    }
+    if(data.player==1)  deleteRoom();
+    else{
+        data.player -= 1;
+        db.collection("roomID").doc(roomID).set(data).then(() => {
+            console.log("Document successfully overwritten!");
+            console.log("Player " + player + " has leave the room.");
+            window.location.href = "../index/index.html";
+        })
+        .catch((error) => {
+                console.error("Error writing document: ", error);
+        });
+    }
+}
+
+async function deleteRoom() {
+    db.collection("roomID").doc(roomID).delete().then(() => {
+        console.log("Document " + roomID + " successfully deleted!");
+        window.location.href = "../index/index.html";
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
+
 function countBlank(text) {
     var blank = "____";
     var array = text.split(blank)
