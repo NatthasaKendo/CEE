@@ -241,3 +241,13 @@ button:hover {
 #result-player-list tr:nth-child(5) td:nth-child(2){
   color: brown;
 }
+
+#picture-card-5,#picture-card-10,#picture-card-15{
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
