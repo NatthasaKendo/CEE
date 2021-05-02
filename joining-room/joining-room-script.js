@@ -77,6 +77,13 @@ async function refreshRoom() {
         if (data.name[0] == player) host = true;
         if (host) {
             $("#host-joining-room").css("display", "block");
+            if(playerCount > 1){
+                $("#start").attr("onclick","startGame()");
+                $("#start").css("background","black");
+            }else{
+                $("#start").attr("onclick","");
+                $("#start").css("background","gray");
+            }
         } else {
             $("#player-joining-room").css("display", "block");
         }
@@ -146,12 +153,13 @@ async function leaveRoom(){
             break;
         }
     }
-    if(data.name.length==1)  deleteRoom();
+    if(data.player==1)  deleteRoom();
     else{
         data.answer.splice(idx, 1);
         data.name.splice(idx, 1);
         data.profile_pic.splice(idx, 1);
         data.score.splice(idx, 1);
+        data.player -= 1;
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
             console.log("Player " + player + " has leave the room.");
