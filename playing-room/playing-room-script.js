@@ -77,6 +77,8 @@ async function refreshRoom() {
     //           = 3 --> end of round
 
     if (data.gameState == 0) {
+        clearInterval(timeout1);
+        clearInterval(timeout2);
         if (!isGenerated) {
             resetVar();
             await generatePlayerData();
@@ -123,6 +125,7 @@ async function refreshRoom() {
         }
         $("#card-list").css("display", "flex");
     } else if (data.gameState == 3) {
+        clearInterval(timeout1);
         console.log(3);
         if(isGenerated){
             await generatePlayerData();
@@ -179,11 +182,28 @@ async function getTimerStop() {
     timerStop = data.timerStop;
 }
 
-function countDown1() {
+async function countDown1() {
     setTime1(Math.max(0, timerStop - Date.now()));
     if (timerStop <= Date.now()) {
         clearInterval(timeout1);
-        if (isJudge) changeState();
+        if (isJudge){
+            var docRef = db.collection("roomID").doc(roomID);
+            var data;
+            await docRef.get().then(async (doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    data = doc.data();
+                    console.log("Returning data" + data);
+                    return data;
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+            if(data.gameState == 1) changeState();
+        }
     }
 }
 
@@ -194,19 +214,34 @@ function setTime1(remaining) {
     if (minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN") $("#timer-1").text(minutes.slice(minutes.length - 2, minutes.length) + ':' + seconds.slice(seconds.length - 2, seconds.length));
 }
 
-function countDown2() {
+async function countDown2() {
     setTime2(Math.max(0, timerStop - Date.now()));
     if (timerStop <= Date.now()) {
         clearInterval(timeout2);
-        if (isJudge) nextRound();
+        if (isJudge){
+            var docRef = db.collection("roomID").doc(roomID);
+            var data;
+            await docRef.get().then(async (doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
+                    data = doc.data();
+                    console.log("Returning data" + data);
+                    return data;
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+            if(data.gameState == 3) nextRound();
+        }
     }
 }
 
 async function buttonNextStage(){
     clearInterval(timeout1);
     clearInterval(timeout2);
-    timeout1 = 0;
-    timeout2 = 0;
     await changeState();
 }
 
@@ -716,8 +751,6 @@ async function judgeChoose(cardNumber) {
 }
 
 function resetVar() {
-    clearInterval(timeout1);
-    clearInterval(timeout2);
     cardCount = 0;
     chosenCard1 = "";
     chosenCard2 = "";
