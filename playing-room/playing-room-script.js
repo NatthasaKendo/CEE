@@ -114,17 +114,23 @@ async function refreshRoom() {
         $("#card-list").css("display", "flex");
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) generateCardOrder();
-        }
-        generateChoosingCard();
+        } 
+        console.log(2);
+        await generateChoosingCard();
+        isGenerated = true;
     } else if (data.gameState == 3) {
-        await generatePlayerData();
-        generateChoosingCard();
-        if (data.round != data.roundMax) {
+        console.log(3);
+        if(isGenerated){
+            await generatePlayerData();
+            await generateQuestionCard();
+            await generateChoosingCard();
+            isGenerated = false;
+        }
+        if(data.round != data.roundMax){
             timeout2 = setInterval(countDown2, 1000);
             await getTimerStop();
             $("#timer-2").css("display", "flex");
         }
-        await generateQuestionCard();
         $("#card-list").css("display", "flex");
     }
 }
@@ -180,6 +186,11 @@ function countDown2() {
         clearInterval(timeout2);
         if (isJudge) nextRound();
     }
+}
+
+async function buttonNextStage(){
+    clearInterval(timeout1);
+    await changeState();
 }
 
 function setTime2(remaining) {
@@ -256,7 +267,7 @@ async function chooseBlackCard(cardNumber) {
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
-    changeState();
+    await changeState();
 }
 
 async function generateQuestionCard() {
@@ -577,7 +588,8 @@ async function generateChoosingCard() {
         var answerData = data.answer[slot].split(", ");
         var markup = "<div id='player-card-" + slot + "' class=''></div>";
         $("#card-list").append(markup);
-        for (i = 0; i < answerData.length; i++) {
+        console.log(answerData);
+        for(i=0;i<answerData.length;i++){
             var answer = answerData[i];
             var isPicture = (answer.length == 23 && answer.slice(0, 13) == "picture-card-") ? true : false;
             markup = "";
@@ -736,7 +748,8 @@ async function nextRound() {
     });
     data.gameState = 0;
     data.round += 1
-    for (i = 0; i < data.answer.length; i++)   data.answer[i] = "";
+    data.cardOrder = ""
+    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
