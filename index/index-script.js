@@ -72,9 +72,9 @@ async function addMember(name, roomID) {
     //console.log("data " + data);
     var nameList = data.name;
     //console.log("nameList " + nameList);
-    if(data.round != 0){
+    if (data.round != 0) {
         alert("Cannot join a room that alredy started.")
-    }else if (checkNameExist(name, nameList)) {
+    } else if (checkNameExist(name, nameList)) {
         alert("Name already exists.");
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
@@ -294,51 +294,51 @@ setInterval(function () {
         document.getElementById("profile-status-player").innerHTML = text_with_dot;
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
-}, 1000);
+}, 500);
 
 function blockSpecialChar(id) {
     console.log("Keypress");
     var name = $(id).val();
     console.log(name);
     var newname = "";
-    for(i=0;i<name.length;i++){
+    for (i = 0; i < name.length; i++) {
         var c = name[i];
         console.log("Character is '" + c + "'");
-        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+        if (!(('a' < c && c < 'z') || ('A' < c && c < 'Z') || ('0' < c && c < '9'))) {
             console.log("Wrong character");
-            $("#special-charater-alert").css("display","block");
-        }else   newname += c;
+            $("#special-charater-alert").css("display", "block");
+        } else newname += c;
     }
     $(id).val(newname);
 }
 
-$( "#player-name" ).on('input propertychange',function(e) {
+$("#player-name").on('input propertychange', function (e) {
     var name = $(this).val();
     var newname = "";
     console.log(name);
-    for(i=0;i<name.length;i++){
+    for (i = 0; i < name.length; i++) {
         var c = name[i];
         console.log("Character is '" + c + "'");
-        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
             console.log("Wrong character");
-            $("#player-special-charater-alert").css("display","block");
-        }else newname += c;
+            $("#player-special-charater-alert").css("display", "block");
+        } else newname += c;
     }
     $(this).val(newname);
 });
 
-$( "#host-name" ).on('input propertychange',function(e) {
+$("#host-name").on('input propertychange', function (e) {
     var name = $(this).val();
     var newname = "";
     console.log(name);
-    $("#host-special-charater-alert").css("display","none");
-    for(i=0;i<name.length;i++){
+    $("#host-special-charater-alert").css("display", "none");
+    for (i = 0; i < name.length; i++) {
         var c = name[i];
         console.log("Character is '" + c + "'");
-        if(!(('a'<c && c<'z') || ('A'<c && c<'Z') || ('0'<c && c<'9'))){
+        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
             console.log("Wrong character");
-            $("#host-special-charater-alert").css("display","block");
-        }else   newname += c;
+            $("#host-special-charater-alert").css("display", "block");
+        } else newname += c;
     }
     $(this).val(newname);
 });

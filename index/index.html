@@ -62,9 +62,12 @@
               type="text"
               placeholder="Enter Name"
               name="uname"
+              autocomplete="off"
               required
             />
-            <div id="player-special-charater-alert">Name can only contain a-z, A-Z, 0-9.</div>
+            <div id="player-special-charater-alert">
+              Name can only contain a-z, A-Z, 0-9.
+            </div>
             <br />
 
             <label for="psw"><b>RoomID: </b></label>
@@ -73,6 +76,7 @@
               type="text"
               placeholder="Enter RoomID"
               name="psw"
+              autocomplete="off"
               required
             />
             <button type="button" onclick="joinRoom()">Join</button>
@@ -110,9 +114,12 @@
               type="text"
               placeholder="Enter Name"
               name="uname"
+              autocomplete="off"
               required
             />
-            <div id="host-special-charater-alert">Name can only contain a-z, A-Z, 0-9.</div>
+            <div id="host-special-charater-alert">
+              Name can only contain a-z, A-Z, 0-9.
+            </div>
             <br />
             <button type="button" onclick="createRoom()">Host</button>
           </div>

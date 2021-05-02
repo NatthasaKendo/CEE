@@ -9,14 +9,14 @@
   border-radius: 50%;
 }
 
-.choosing {
-  background-color: rebeccapurple;
-}
-
 #judge-waiting,
 #player-choosing,
 #card-list {
   display: none;
+}
+
+.choosing {
+  background-color: rebeccapurple;
 }
 
 .loser {
@@ -40,7 +40,7 @@
   margin-left: 1em;
   font-size: 50px;
   color: white;
-  font-family: 'Exo', sans-serif;
+  font-family: "Exo", sans-serif;
   font-weight: bold;
 }
 
@@ -81,7 +81,7 @@
   border-radius: 5px;
   color: white;
   margin: 0.8em;
-  width: auto; 
+  width: auto;
   padding: 1em;
   display: flex;
   flex-direction: column;
@@ -108,7 +108,7 @@ button:hover {
   color: black;
 }
 
-.white-card{
+.white-card {
   background-color: white;
   border-radius: 5px;
   color: black;
@@ -121,21 +121,20 @@ button:hover {
   align-items: center;
 }
 
-.white-card-align{
+.white-card-align {
   display: flex;
   flex-direction: row;
   align-items: center;
-  
 }
 
-.black-card-align{
+.black-card-align {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
 #timer-1 {
-  justify-content: flex-end; 
+  justify-content: flex-end;
   margin-right: 2em;
   font-size: 20px;
   font-weight: bold;
@@ -147,11 +146,11 @@ button:hover {
   align-items: stretch;
 }
 
-.players{
+.players {
   display: flex;
   justify-content: flex-start;
   margin-left: 1em;
-  font-family: 'Exo', sans-serif;
+  font-family: "Exo", sans-serif;
   font-size: 1.5rem;
 }
 
@@ -167,14 +166,14 @@ button:hover {
     flex-direction: column;
     align-items: center;
   }
-  .white-card-align{
+  .white-card-align {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 3rem;
   }
-  
-  .black-card-align{
+
+  .black-card-align {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -185,21 +184,31 @@ button:hover {
     margin-left: 1em;
     font-size: 1.5em;
     color: white;
-    font-family: 'Exo', sans-serif;
+    font-family: "Exo", sans-serif;
     font-weight: bold;
   }
 
-  .players{
+  .players {
     display: flex;
     justify-content: flex-start;
     margin-left: 1em;
-    font-family: 'Exo', sans-serif;
+    font-family: "Exo", sans-serif;
     font-size: 3rem;
   }
-  
+
   #black-card-add {
     display: flex;
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+#judge-waiting-p {
+  font-size: 100%;
+}
+
+#player-waiting {
+  font-size: 100%;
+  width: 100%;
+  height: 100%;
 }
