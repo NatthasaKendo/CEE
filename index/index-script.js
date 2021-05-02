@@ -72,7 +72,9 @@ async function addMember(name, roomID) {
     //console.log("data " + data);
     var nameList = data.name;
     //console.log("nameList " + nameList);
-    if (checkNameExist(name, nameList)) {
+    if(data.round != 0){
+        alert("Cannot join a room that alredy started.")
+    }else if (checkNameExist(name, nameList)) {
         alert("Name already exists.");
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
