@@ -193,6 +193,12 @@ function setTime2(remaining) {
     if(seconds != "" && seconds != null && seconds != "00NaN")    $("#timer-2").text(seconds);
 }
 
+async function buttonNextStage(){
+    clearInterval(timeout1);
+    clearInterval(timeout2);
+    await changeState();
+}
+
 async function generateBlackCard() {
     var docRef = db.collection("data").doc("card");
     var data;
