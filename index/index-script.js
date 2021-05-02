@@ -18,6 +18,14 @@ const db = firebase.firestore();
 
 var currentProfile = "default" + Math.floor((Math.random() * 4) + 1);
 
+$( document ).ready(function() {
+    $("#helpButton").hover(function(){
+        $("#helpButton img").css("filter", "invert(100%)");
+    },function(){
+        $("#helpButton img").css("filter", "invert(0%)");
+    })
+});
+
 async function createRoom() {
     var hostName = $("#host-name").val();
     if (hostName == "" || hostName == null) {
