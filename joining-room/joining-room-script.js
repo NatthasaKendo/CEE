@@ -54,7 +54,7 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    if(data != null){
+    if (data != null) {
         var playerCount = data.name.length;
         $("#player-count").html(playerCount);
         $("#player-list").html("");
@@ -77,12 +77,12 @@ async function refreshRoom() {
         if (data.name[0] == player) host = true;
         if (host) {
             $("#host-joining-room").css("display", "block");
-            if(playerCount > 1){
-                $("#start").attr("onclick","startGame()");
-                $("#start").css("background","black");
-            }else{
-                $("#start").attr("onclick","");
-                $("#start").css("background","gray");
+            if (playerCount > 1) {
+                $("#start").attr("onclick", "startGame()");
+                $("#start").css("background", "black");
+            } else {
+                $("#start").attr("onclick", "");
+                $("#start").css("background", "gray");
             }
         } else {
             $("#player-joining-room").css("display", "block");
@@ -126,7 +126,7 @@ async function startGame() {
 
 }
 
-async function leaveRoom(){
+async function leaveRoom() {
     console.log("Leaving room...");
 
     var docRef = db.collection("roomID").doc(roomID);
@@ -147,14 +147,14 @@ async function leaveRoom(){
     });
     //console.log("data " + data);
     var idx = 0;
-    for(i=0;i<data.name.length;i++){
-        if(data.name[i]==player){
+    for (i = 0; i < data.name.length; i++) {
+        if (data.name[i] == player) {
             idx = i;
             break;
         }
     }
-    if(data.player==1)  deleteRoom();
-    else{
+    if (data.player == 1) deleteRoom();
+    else {
         data.answer.splice(idx, 1);
         data.name.splice(idx, 1);
         data.profile_pic.splice(idx, 1);
@@ -165,9 +165,9 @@ async function leaveRoom(){
             console.log("Player " + player + " has leave the room.");
             window.location.href = "../index/index.html";
         })
-        .catch((error) => {
+            .catch((error) => {
                 console.error("Error writing document: ", error);
-        });
+            });
     }
 }
 
@@ -200,4 +200,4 @@ setInterval(function () {
     document.getElementById("waiting").innerHTML = text_with_dot;
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
-}, 1000);
+}, 500);
