@@ -18,6 +18,14 @@ const db = firebase.firestore();
 
 var currentProfile = "default" + Math.floor((Math.random() * 4) + 1);
 
+$(document).ready(function () {
+    $("#helpButton").hover(function () {
+        $("#helpButton img").css("filter", "invert(100%)");
+    }, function () {
+        $("#helpButton img").css("filter", "invert(0%)");
+    })
+});
+
 async function createRoom() {
     var hostName = $("#host-name").val();
     if (hostName == "" || hostName == null) {
@@ -25,7 +33,7 @@ async function createRoom() {
     } else {
         console.log("Creating room with id:");
         const roomID = generateRoomId();
-        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0, timerStop: 0 };
+        var data = { answer: [], name: [], profile_pic: [], question: "", round: 0, roundMax: 0, timer: 0, score: [], gameState: 0, chosenCard: 0, cardOrder: "", blank: 0, timerStop: 0, player: 0 };
         db.collection("roomID").doc(roomID).set(data).then(() => {
             addMember(hostName, roomID);
         })
@@ -44,6 +52,8 @@ async function joinRoom() {
     } else {
         var roomID = $("#room-id").val();
         console.log(roomID);
+        if (roomID == "" || roomID == null)
+            alert("Room Code cannot be blank.");
         if (playerName != null && playerName != "") {
             addMember(playerName, roomID);
         }
@@ -72,7 +82,9 @@ async function addMember(name, roomID) {
     //console.log("data " + data);
     var nameList = data.name;
     //console.log("nameList " + nameList);
-    if (checkNameExist(name, nameList)) {
+    if (data.round != 0) {
+        alert("Cannot join a room that alredy started.")
+    } else if (checkNameExist(name, nameList)) {
         alert("Name already exists.");
     } else if (!(checkNameExist(name, nameList))) {
         data.answer.push("");
@@ -80,6 +92,7 @@ async function addMember(name, roomID) {
         console.log(currentProfile);
         data.profile_pic.push(currentProfile);
         data.score.push(0);
+        data.player += 1;
         //console.log(data.name);
         db.collection("roomID").doc(roomID).set(data).then(() => {
             console.log("Document successfully overwritten!");
@@ -141,9 +154,13 @@ function helpPopUp() {
     }
 }
 
+var updatingHostProfileStatus = false;
+var updatingPlayerProfileStatus = false;
 
 async function uploadProfilePicture(id) {
     //console.log("Ran uploadProfilePicture(id)")
+    if (id == "image-upload-host") updatingHostProfileStatus = true;
+    if (id == "image-upload-player") updatingPlayerProfileStatus = true;
     var file = document.getElementById(id).files[0];
     if (file != "" && file != null) {
         if (currentProfile.slice(0, 7) == "default" || currentProfile == "" || currentProfile == null) {
@@ -225,18 +242,24 @@ async function nudeCheckSendRequest(id, url) {
                 deleteProfile()
                 document.getElementById("image-upload-host").value = null;
                 document.getElementById("image-upload-player").value = null;
+                updatingHostProfileStatus = false;
+                updatingPlayerProfileStatus = false;
+                document.getElementById("profile-status-host").innerHTML = "";
+                document.getElementById("profile-status-player").innerHTML = "";
             }
             else if (result.detections.length <= 0) {
                 console.log("safe");
                 //document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
                 if (currentProfile.slice(0, 7) != "default") {
                     if (id.slice(0, 5) == "#host") {
+                        updatingHostProfileStatus = false;
                         document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
                     }
                     else if (id.slice(0, 5) == "#play") {
+                        updatingPlayerProfileStatus = false;
                         document.getElementById("profile-status-player").innerHTML = "Profile picture updated.";
                     }
-
+                    updatingProfileStatus = false;
                 }
                 $(id).attr("src", url);
             };
@@ -270,3 +293,62 @@ function deleteProfile() {
         // Uh-oh, an error occurred!
     });
 }
+
+var waiting_count = 1;
+setInterval(function () {
+    var text = "Updating profile picture ";
+    var text_with_dot = text + (".".repeat(waiting_count));
+    if (updatingHostProfileStatus)
+        document.getElementById("profile-status-host").innerHTML = text_with_dot;
+    if (updatingPlayerProfileStatus)
+        document.getElementById("profile-status-player").innerHTML = text_with_dot;
+    waiting_count++;
+    if (waiting_count == 4) waiting_count = 1;
+}, 500);
+
+function blockSpecialChar(id) {
+    console.log("Keypress");
+    var name = $(id).val();
+    console.log(name);
+    var newname = "";
+    for (i = 0; i < name.length; i++) {
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if (!(('a' < c && c < 'z') || ('A' < c && c < 'Z') || ('0' < c && c < '9'))) {
+            console.log("Wrong character");
+            $("#special-charater-alert").css("display", "block");
+        } else newname += c;
+    }
+    $(id).val(newname);
+}
+
+$("#player-name").on('input propertychange', function (e) {
+    var name = $(this).val();
+    var newname = "";
+    console.log(name);
+    for (i = 0; i < name.length; i++) {
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
+            console.log("Wrong character");
+            $("#player-special-charater-alert").css("display", "block");
+        } else newname += c;
+    }
+    $(this).val(newname);
+});
+
+$("#host-name").on('input propertychange', function (e) {
+    var name = $(this).val();
+    var newname = "";
+    console.log(name);
+    $("#host-special-charater-alert").css("display", "none");
+    for (i = 0; i < name.length; i++) {
+        var c = name[i];
+        console.log("Character is '" + c + "'");
+        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
+            console.log("Wrong character");
+            $("#host-special-charater-alert").css("display", "block");
+        } else newname += c;
+    }
+    $(this).val(newname);
+});

@@ -18,10 +18,10 @@ const db = firebase.firestore();
 
 var currentProfile = "default" + Math.floor((Math.random() * 4) + 1);
 
-$( document ).ready(function() {
-    $("#helpButton").hover(function(){
+$(document).ready(function () {
+    $("#helpButton").hover(function () {
         $("#helpButton img").css("filter", "invert(100%)");
-    },function(){
+    }, function () {
         $("#helpButton img").css("filter", "invert(0%)");
     })
 });
@@ -52,6 +52,8 @@ async function joinRoom() {
     } else {
         var roomID = $("#room-id").val();
         console.log(roomID);
+        if (roomID == "" || roomID == null)
+            alert("Room Code cannot be blank.");
         if (playerName != null && playerName != "") {
             addMember(playerName, roomID);
         }

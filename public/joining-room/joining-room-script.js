@@ -54,32 +54,43 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    var playerCount = data.name.length;
-    $("#player-count").html(playerCount);
-    $("#player-list").html("");
-    for (i = 0; i < playerCount; i++) {
-        var profileURL = data.profile_pic[i];
-        var name = data.name[i];
-        if (i == 0) {
-            name += " (host)"
+    if (data != null) {
+        var playerCount = data.name.length;
+        $("#player-count").html(playerCount);
+        $("#player-list").html("");
+        for (i = 0; i < playerCount; i++) {
+            var profileURL = data.profile_pic[i];
+            var name = data.name[i];
+            if (i == 0) {
+                name += " (host)"
+            }
+            var tempURL = ""
+            var storageRef = firebase.storage().ref();
+            await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
+                tempURL = url;
+            }).catch(function (error) {
+            });
+            $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
         }
-        var tempURL = ""
-        var storageRef = firebase.storage().ref();
-        await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
-            tempURL = url;
-        }).catch(function (error) {
-        });
-        $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
-    }
-    if (data.name[0] == player) host = true;
-    if (host) {
-        $("#host-joining-room").css("display", "block");
-    } else {
-        $("#player-joining-room").css("display", "block");
-    }
-    console.log(data.round);
-    if ((!host) && data.round == 1) {
-        change_page();
+        console.log(data.name[0])
+        console.log(player)
+        if (data.name[0] == player) host = true;
+        if (host) {
+            $("#host-joining-room").css("display", "block");
+            if (playerCount > 1) {
+                $("#start").attr("onclick", "startGame()");
+                $("#start").css("background", "black");
+            } else {
+                $("#start").attr("onclick", "");
+                $("#start").css("background", "gray");
+            }
+        } else {
+            $("#player-joining-room").css("display", "block");
+        }
+        console.log(data.round);
+        if ((!host) && data.round == 1) {
+            change_page();
+        }
     }
 }
 
@@ -115,6 +126,51 @@ async function startGame() {
 
 }
 
+async function leaveRoom() {
+    console.log("Leaving room...");
+
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            alert("Room doesn't exist.");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    //console.log("data " + data);
+    var idx = 0;
+    for (i = 0; i < data.name.length; i++) {
+        if (data.name[i] == player) {
+            idx = i;
+            break;
+        }
+    }
+    if (data.player == 1) deleteRoom();
+    else {
+        data.answer.splice(idx, 1);
+        data.name.splice(idx, 1);
+        data.profile_pic.splice(idx, 1);
+        data.score.splice(idx, 1);
+        data.player -= 1;
+        db.collection("roomID").doc(roomID).set(data).then(() => {
+            console.log("Document successfully overwritten!");
+            console.log("Player " + player + " has leave the room.");
+            window.location.href = "../index/index.html";
+        })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    }
+}
+
 var loadFile = function (event) {
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
@@ -122,6 +178,15 @@ var loadFile = function (event) {
         URL.revokeObjectURL(output.src) // free memory
     }
 };
+
+async function deleteRoom() {
+    db.collection("roomID").doc(roomID).delete().then(() => {
+        console.log("Document " + roomID + " successfully deleted!");
+        window.location.href = "../index/index.html";
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+}
 
 function change_page() {
     console.log("test");
@@ -135,4 +200,4 @@ setInterval(function () {
     document.getElementById("waiting").innerHTML = text_with_dot;
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
-}, 1000);
+}, 500);
