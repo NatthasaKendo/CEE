@@ -874,12 +874,14 @@ function deleteProfile() {
 }
 
 var waiting_count = 1;
+
 setInterval(function () {
-    var text = "Waiting for judge to choose black card ";
-    var text_with_dot = text + (".".repeat(waiting_count));
-    document.getElementById("player-waiting").innerHTML = text_with_dot;
+    var text1 = "Waiting for judge to choose black card ";
     var text2 = "Waiting for other player to choose the card ";
-    document.getElementById("judge-waiting-p").innerHTML = text_with_dot;
+    var text1_with_dot = text1 + (".".repeat(waiting_count));
+    var text2_with_dot = text2 + (".".repeat(waiting_count));
+    document.getElementById("player-waiting").innerHTML = text1_with_dot;
+    document.getElementById("judge-waiting-p").innerHTML = text2_with_dot;
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
 }, 500);
