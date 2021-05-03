@@ -28,6 +28,32 @@ $(document).ready(function () {
     updateProfile("#player-image", currentProfile)
 });
 
+$("form").submit(function (e) {
+    e.preventDefault();
+});
+
+$('#host-name').keypress(async function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        await createRoom();
+    }
+});
+
+$('#player-name').keypress(async function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        await joinRoom();
+    }
+});
+
+
+$('#room-id').keypress(async function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        await joinRoom();
+    }
+});
+
 async function createRoom() {
     var hostName = $("#host-name").val();
     if (hostName == "" || hostName == null) {
@@ -57,7 +83,7 @@ async function joinRoom() {
         if (roomID == "" || roomID == null)
             alert("Room Code cannot be blank.");
         if (playerName != null && playerName != "") {
-            addMember(playerName, roomID);
+            await addMember(playerName, roomID);
         }
     }
 }
