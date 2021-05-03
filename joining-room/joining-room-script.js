@@ -20,7 +20,11 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
-window.onload = initialize();
+
+$(document).ready(function () {
+    initialize();
+});
+
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
