@@ -124,7 +124,7 @@ async function refreshRoom() {
             await getTimerStop();
             $("#ready").attr("onclick","ready(1)");
             $("#ready").text("Ready");
-            $("#black-card").css("display", "block");
+            $("#black-card").css("display", "flex");
             //setTime();
             isGenerated = false;
         }
@@ -160,7 +160,7 @@ async function refreshRoom() {
             await updatePlayerData();
             await generateQuestionCard();
             await generateChoosingCard();
-            $("#black-card").css("display", "block");
+            $("#black-card").css("display", "flex");
             isGenerated = false;
         }
         if(data.round != data.roundMax){
