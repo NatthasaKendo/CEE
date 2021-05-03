@@ -20,6 +20,8 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
+window.onload = initialize();
+
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
     refreshRoom();
@@ -34,6 +36,46 @@ function getUrlVars() {
     roomID = vars["roomID"];
     console.log(player);
     console.log(roomID);
+}
+
+async function initialize(){
+
+    $("#host-joining-room").css("display", "none");
+    $("#player-joining-room").css("display", "none");
+
+    $("#room-id").html(roomID)
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    var host = false;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    if (data != null) {
+        if (data.name[0] == player) host = true;
+        if (host) {
+            $("#host-joining-room").css("display", "block");
+            if (playerCount > 1) {
+                $("#start").attr("onclick", "startGame()");
+                $("#start").css("background", "black");
+            } else {
+                $("#start").attr("onclick", "");
+                $("#start").css("background", "gray");
+            }
+        } else {
+            $("#player-joining-room").css("display", "block");
+        }
+        console.log(data.round);
+    }
 }
 
 async function refreshRoom() {
@@ -72,11 +114,11 @@ async function refreshRoom() {
             });
             $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
         }
-        console.log(data.name[0])
-        console.log(player)
+        console.log(data.name[0]);
+        console.log(player);
+        console.log(host);
         if (data.name[0] == player) host = true;
         if (host) {
-            $("#host-joining-room").css("display", "block");
             if (playerCount > 1) {
                 $("#start").attr("onclick", "startGame()");
                 $("#start").css("background", "black");
@@ -84,8 +126,6 @@ async function refreshRoom() {
                 $("#start").attr("onclick", "");
                 $("#start").css("background", "gray");
             }
-        } else {
-            $("#player-joining-room").css("display", "block");
         }
         console.log(data.round);
         if ((!host) && data.round == 1) {

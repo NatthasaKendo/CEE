@@ -53,11 +53,6 @@
   border-radius: 50%;
 }
 
-#host-joining-room,
-#player-joining-room {
-  display: none;
-}
-
 input[type="number"] {
   width: auto;
   padding: 12px 20px;
