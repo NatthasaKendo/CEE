@@ -43,7 +43,7 @@ function getUrlVars() {
     console.log(roomID);
 }
 
-async function initialize(){
+async function initialize() {
 
     $("#host-joining-room").css("display", "none");
     $("#player-joining-room").css("display", "none");
@@ -78,7 +78,7 @@ async function initialize(){
                 $("#start").attr("onclick", "");
                 $("#start").addClass("not-ready");
                 $("#start").removeClass("ready");
-                $('#start').prop('title', 'Must be at least 2 or  more people to start.'); 
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.');
             }
         } else {
             $("#player-joining-room").css("display", "block");
@@ -106,12 +106,13 @@ async function refreshRoom() {
         console.log("Error getting document:", error);
     });
     if (data != null) {
-        if(document.title != "Joining Room: "+roomID){
-            document.title = "Joining Room: "+roomID;
+        if (document.title != "Joining Room: " + roomID) {
+            document.title = "Joining Room: " + roomID;
         }
         var playerCount = data.name.length;
         $("#player-count").html(playerCount);
         $("#player-list").html("");
+        $("#player-list").append("<tbody>");
         for (i = 0; i < playerCount; i++) {
             var profileURL = data.profile_pic[i];
             var name = data.name[i];
@@ -126,6 +127,8 @@ async function refreshRoom() {
             });
             $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
         }
+        $("#player-list").append("</tbody>");
+
         console.log(data.name[0]);
         console.log(player);
         console.log(host);
@@ -140,7 +143,7 @@ async function refreshRoom() {
                 $("#start").attr("onclick", "");
                 $("#start").addClass("not-ready");
                 $("#start").removeClass("ready");
-                $('#start').prop('title', 'Must be at least 2 or  more people to start.'); 
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.');
             }
         }
         console.log(data.round);

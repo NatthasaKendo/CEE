@@ -10,7 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
-    <title>Room</title>
+    <title>Joining Room</title>
   </head>
 
   <body>
@@ -18,7 +18,7 @@
       <h1>Room Code: <span id="room-id"></span></h1>
       <div id="list">
         <p>Player Count: <span id="player-count"> </span></p>
-        <br />
+        <br>
         <table id="player-list"></table>
 
         <div id="player-joining-room">
@@ -26,12 +26,14 @@
         </div>
 
         <div id="host-joining-room">
-          <span
-            >Each player will be a judge for
-            <input type="number" id="round-max" value="3" /> turn(s).</span
-          >
-          <br />
-          <button type="button" onclick="" id="start">Start</button>
+          <span>Each player will be a judge for
+            <input type="number" id="round-max" value="3"> turn(s).
+          </span>
+          <br>
+          <div>
+            <button class="" type="button" onclick="" id="start" title="Must be at least 2 or more player to start the game.">Start</button>
+          </div>
+          
         </div>
 
         <button type="button" id="leave-room" onclick="leaveRoom()">Leave Room</button>

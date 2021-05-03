@@ -1,4 +1,6 @@
 #list {
+  width: 100%;
+  height: 100%;
   margin-left: 2em;
   font-size: 20px;
   font-weight: bold;
@@ -6,7 +8,6 @@
 
 #start {
   border-radius: 50px;
-  background-color: black;
   color: white;
   padding: 10px 20px;
   margin: 8px 0;
@@ -17,10 +18,6 @@
   font-size: 20px;
   font-family: "Exo", sans-serif;
   font-weight: bold;
-}
-
-#start:hover {
-  opacity: 0.8;
 }
 
 #leave-room {
@@ -53,9 +50,20 @@
   border-radius: 50%;
 }
 
-#host-joining-room,
-#player-joining-room {
-  display: none;
+.ready {
+  background-color: black;
+}
+
+.ready:hover {
+  background-color: rgb(95, 211, 95);
+}
+
+.not-ready {
+  background-color: gray;
+}
+
+.not-ready:hover {
+  opacity: 0.5;
 }
 
 input[type="number"] {
@@ -65,4 +73,20 @@ input[type="number"] {
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
+}
+
+thead,
+tbody {
+  display: block;
+}
+
+tbody {
+  height: 100%; /* Just for the demo          */
+  overflow-y: auto; /* Trigger vertical scroll    */
+  overflow-x: hidden; /* Hide the horizontal scroll */
+}
+
+table {
+  height: 50%; /* Just for the demo          */
+  width: 50%;
 }

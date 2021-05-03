@@ -20,6 +20,13 @@ var player = "";
 var roomID = "";
 getUrlVars();
 
+
+$(document).ready(function () {
+    initialize();
+    $("[title]").tooltip({ position: "bottom right", opacity: 1 });
+});
+
+
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
     refreshRoom();
@@ -34,6 +41,50 @@ function getUrlVars() {
     roomID = vars["roomID"];
     console.log(player);
     console.log(roomID);
+}
+
+async function initialize() {
+
+    $("#host-joining-room").css("display", "none");
+    $("#player-joining-room").css("display", "none");
+
+    $("#room-id").html(roomID)
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    var host = false;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    if (data != null) {
+        if (data.name[0] == player) host = true;
+        if (host) {
+            $("#host-joining-room").css("display", "block");
+            if (data.name.length > 1) {
+                $("#start").attr("onclick", "startGame()");
+                $("#start").addClass("ready");
+                $("#start").removeClass("not-ready");
+                $('#start').prop('title', 'Click to Start!');
+            } else {
+                $("#start").attr("onclick", "");
+                $("#start").addClass("not-ready");
+                $("#start").removeClass("ready");
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.');
+            }
+        } else {
+            $("#player-joining-room").css("display", "block");
+        }
+        console.log(data.round);
+    }
 }
 
 async function refreshRoom() {
@@ -55,9 +106,13 @@ async function refreshRoom() {
         console.log("Error getting document:", error);
     });
     if (data != null) {
+        if (document.title != "Joining Room: " + roomID) {
+            document.title = "Joining Room: " + roomID;
+        }
         var playerCount = data.name.length;
         $("#player-count").html(playerCount);
         $("#player-list").html("");
+        $("#player-list").append("<tbody>");
         for (i = 0; i < playerCount; i++) {
             var profileURL = data.profile_pic[i];
             var name = data.name[i];
@@ -72,20 +127,24 @@ async function refreshRoom() {
             });
             $("#player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td></tr>");
         }
-        console.log(data.name[0])
-        console.log(player)
+        $("#player-list").append("</tbody>");
+
+        console.log(data.name[0]);
+        console.log(player);
+        console.log(host);
         if (data.name[0] == player) host = true;
         if (host) {
-            $("#host-joining-room").css("display", "block");
-            if (playerCount > 1) {
+            if (data.name.length > 1) {
                 $("#start").attr("onclick", "startGame()");
-                $("#start").css("background", "black");
+                $("#start").addClass("ready");
+                $("#start").removeClass("not-ready");
+                $('#start').prop('title', 'Click to Start!');
             } else {
                 $("#start").attr("onclick", "");
-                $("#start").css("background", "gray");
+                $("#start").addClass("not-ready");
+                $("#start").removeClass("ready");
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.');
             }
-        } else {
-            $("#player-joining-room").css("display", "block");
         }
         console.log(data.round);
         if ((!host) && data.round == 1) {

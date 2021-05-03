@@ -11,6 +11,7 @@ body {
 
 .context {
   width: 100%;
+  height: 75%;
   position: fixed;
   top: 10vh;
   z-index: 100;

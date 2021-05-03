@@ -31,10 +31,28 @@ var isJudge = false;
 var blank = 0;
 var answer = [];
 var timerStop = 0;
+var gameState = 0;
 
 var timeout1;
 var timeout2;
 var dot;
+
+$(document).ready(async function () {
+    $("#judge-choosing-black-card").css("display", "none");
+    $("#player-waiting").css("display", "none");
+    $("#judge-waiting").css("display", "none");
+    $("#player-choosing").css("display", "none");
+    $("#waiting").css("display", "none");
+    $("#next-round").css("display", "none");
+    $("#card-list").css("display", "none");
+    $("#result-player-list").css("display", "none");
+    $("#back-to-index").css("display", "none");
+    $("#timer-1").css("display", "none");
+    $("#timer-2").css("display", "none");
+    $("#black-card").css("display", "none");
+    await generatePlayerData();
+});
+
 
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
@@ -58,18 +76,24 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-
-    $("#judge-choosing-black-card").css("display", "none");
-    $("#player-waiting").css("display", "none");
-    $("#judge-waiting").css("display", "none");
-    $("#player-choosing").css("display", "none");
-    $("#waiting").css("display", "none");
-    $("#next-round").css("display", "none");
-    $("#card-list").css("display", "none");
-    $("#result-player-list").css("display", "none");
-    $("#back-to-index").css("display", "none");
-    $("#timer-1").css("display", "none");
-    $("#timer-2").css("display", "none");
+    if(document.title != "LAC Room: "+roomID){
+        document.title = "LAC Room: "+roomID;
+    }
+    if((data.gameState != gameState) || (data.gameState==0 && (!isGenerated))){
+        $("#judge-choosing-black-card").css("display", "none");
+        $("#player-waiting").css("display", "none");
+        $("#judge-waiting").css("display", "none");
+        $("#player-choosing").css("display", "none");
+        $("#waiting").css("display", "none");
+        $("#next-round").css("display", "none");
+        $("#card-list").css("display", "none");
+        $("#result-player-list").css("display", "none");
+        $("#back-to-index").css("display", "none");
+        $("#timer-1").css("display", "none");
+        $("#timer-2").css("display", "none");
+        $("#black-card").css("display", "none");
+        gameState = data.gameState;
+    }
 
     // gameState = 0 --> judge choose question card
     //           = 1 --> player choose answer card
@@ -81,11 +105,11 @@ async function refreshRoom() {
         clearInterval(timeout2);
         if (!isGenerated) {
             resetVar();
-            await generatePlayerData();
             dot = setInterval(animatedDot,500);
             console.log("generate at stage " + 0);
             isGenerated = true;
         }
+        await updatePlayerData();
         if (isJudge) {
             $("#judge-choosing-black-card").css("display", "flex");
             if (cardCount == 0) await generateBlackCard();
@@ -98,9 +122,13 @@ async function refreshRoom() {
             timeout1 = setInterval(countDown1, 1000);
             await generateQuestionCard();
             await getTimerStop();
+            $("#ready").attr("onclick","ready(1)");
+            $("#ready").text("Ready");
+            $("#black-card").css("display", "flex");
             //setTime();
             isGenerated = false;
         }
+        await updatePlayerData();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
             $("#judge-waiting").css("display", "flex");
@@ -121,16 +149,19 @@ async function refreshRoom() {
         if(!isGenerated){
             console.log("Generated here *******");
             await generateChoosingCard();
+            $("#black-card").css("display", "flex");
             isGenerated = true;
         }
+        await updatePlayerData();
         $("#card-list").css("display", "flex");
     } else if (data.gameState == 3) {
         clearInterval(timeout1);
         console.log(3);
         if(isGenerated){
-            await generatePlayerData();
+            await updatePlayerData();
             await generateQuestionCard();
             await generateChoosingCard();
+            $("#black-card").css("display", "flex");
             isGenerated = false;
         }
         if(data.round != data.roundMax){
@@ -141,7 +172,7 @@ async function refreshRoom() {
         }else{
             generateFinalResult();
             $("#player-list").css("display", "none");
-            // $("#result-player-list").css("display", "flex");
+            $("#result-player-list").css("display", "table");
             $("#back-to-index").css("display", "flex");
             $(".modal").css("display", "flex");
             $(".modal").css("justify-content", "center");
@@ -364,7 +395,7 @@ async function generatePlayerData() {
     console.log(player);
     $("#round").text("Round: " + data.round);
     $("#player-count").html(playerCount);
-    $("#player-list").html("<tr><th></th><th>Player</th><th>Score</th></tr>");
+    $("#player-list").html("<tr><th></th><th>Player</th><th></th><th></th><th>Score</th></tr>");
     for (i = 0; i < playerCount; i++) {
         var markup = "";
         var profileURL = data.profile_pic[i];
@@ -373,17 +404,69 @@ async function generatePlayerData() {
         var judgeState = (i == judge) ? "(Judge)" : "";
         var score = data.score[i];
         var tempURL = "";
+        var isReady = "Ready";
+        console.log(isReady);
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
             tempURL = url;
         }).catch(function (error) {
         });
-        markup += "<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td><td>" + judgeState + "</td><td>" + score + "</td></tr>";
+        markup += "<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + name + "</td><td>" + judgeState + "</td><td>" + isReady + "</td><td>" + score + "</td></tr>";
         $("#player-list").append(markup);
         console.log("Added player " + name + " successfully");
     }
     if (data.name[judge] == player) isJudge = true;
     console.log(isJudge);
+    await updatePlayerData();
+}
+
+async function updatePlayerData(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    $("#round").text("Round: " + data.round);
+    $("#player-count").html(data.name.legth);
+    if (data.name[(data.round - 1) % data.name.length] == player) isJudge = true;
+    var c = 0;
+    $('#player-list').children('tr').each(function () {
+        if(c != 0){
+            var playerJudge = (c-1 == (data.round - 1) % data.name.length)? true : false;
+            var d = 0;
+            var judgeState = (playerJudge) ? "(Judge)" : "";
+            var score = data.score[c-1];
+            console.log(data.ready[c-1]);
+            var isReady = data.ready[c-1]
+            console.log(isReady);
+            $(this).children('td').each(function () {
+                if(d > 1){
+                    switch(d){
+                        case(2) :   $(this).text(judgeState);   break;
+                        case(3) :   $(this).text("Ready");  break;
+                        case(4) :   $(this).text(score);    break;
+                    }
+                    if(d==3){
+                        if(isReady) $(this).css("visibility","visible");
+                        else    $(this).css("visibility","hidden");
+                    }
+                }
+                d += 1;
+            });
+            console.log(this);
+        }
+        c += 1;
+    });
 }
 
 async function changeState() {
@@ -460,9 +543,10 @@ async function generateWhiteCard() {
         }
         index = Math.floor((Math.random() * 3) + 1);
         chooseCard(1, "t", index);
+        cardCount += 2;
         console.log("Choose Card 1 : " + index);
     }
-    if (blank >= 2 && cardCount == 3) {
+    if (blank >= 2 && cardCount == 5) {
         for (i = 0; i < 3; i++) {
             console.log("Generate Cards 2 -----------------")
             var index = Math.floor((Math.random() * data.white.length));
@@ -474,9 +558,10 @@ async function generateWhiteCard() {
         }
         index = Math.floor((Math.random() * 3) + 6);
         chooseCard(2, "t", index);
+        cardCount += 2;
         console.log("Choose Card 2 : " + index);
     }
-    if (blank >= 3 && cardCount == 6) {
+    if (blank >= 3 && cardCount == 10) {
         console.log("Generate Cards 3 -----------------")
         for (i = 0; i < 3; i++) {
             var index = Math.floor((Math.random() * data.white.length));
@@ -488,6 +573,7 @@ async function generateWhiteCard() {
         }
         index = Math.floor((Math.random() * 3) + 11);
         chooseCard(3, "t", index);
+        cardCount += 2;
         console.log("Choose Card 3 : " + index);
     }
 }
@@ -530,7 +616,7 @@ function chooseCard(blankNumber, cardType, cardNumber) {
         case 2: chosenCard2 = cardID; break;
         case 3: chosenCard3 = cardID; break;
     }
-    $("#card-" + cardNumber).addClass("choosing");
+    $(cardID).addClass("choosing");
     sendChosenCard(blankNumber, cardType);
 }
 
@@ -635,7 +721,7 @@ async function generateChoosingCard() {
         var slot = data.cardOrder[i];
         if ((data.round - 1) % data.player == slot) continue;
         var answerData = data.answer[slot].split(", ");
-        var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
+        var markup = "<div id='player-card-" + slot + "' class='white-card-preview'></div>";
         $("#card-list").append(markup);
         console.log(answerData);
         for(j=0;j<answerData.length;j++){
@@ -693,7 +779,7 @@ async function generateFinalResult() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    $("#result-player-list").html("<tr><td>Final Result</td></tr><tr><th></th><th>Place</th><th>Player</th><th></th><th>Score</th></tr>");
+    $("#result-player-list").html("<tr><td>Final Result</td></tr><tr><th>Place</th><th></th><th>Player</th><th></th><th>Score</th></tr>");
     var playerScore = [];
     for (i = 0; i < data.name.length; i++) {
         playerScore.push({ score: data.score[i], name: data.name[i], profile: data.profile_pic[i] });
@@ -702,7 +788,7 @@ async function generateFinalResult() {
     var place = 1;
     for (i = 0; i < data.name.length; i++) {
         var tempURL = "";
-        var profileURL = player.profile[i];
+        var profileURL = playerScore[i].profile;
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
             tempURL = url;
@@ -710,9 +796,9 @@ async function generateFinalResult() {
         });
         console.log((playerScore[i]).name + "   ->   " + (playerScore[i]).score);
         if (i != 0 && (playerScore[i - 1]).score == (playerScore[i]).score) {
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (place - 1) + "</td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
+            $("#result-player-list").append("<tr><td>" + (place - 1) + "</td><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
         } else {
-            $("#result-player-list").append("<tr><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (i + 1) + "</td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
+            $("#result-player-list").append("<tr><td>" + (i + 1) + "</td><td><img src='" + tempURL + "' class='profile-container'></td><td>" + (playerScore[i]).name + "</td><td>" + (playerScore[i]).score + "</td></tr>");
             place += 1;
         }
     }
@@ -752,6 +838,7 @@ function resetVar() {
     chosenCard1 = "";
     chosenCard2 = "";
     chosenCard3 = "";
+    answer = [];
     isJudge = false;
     tempB = ",'b',";
     tempP = ",'p',";
@@ -789,7 +876,10 @@ async function nextRound() {
     data.gameState = 0;
     data.round += 1
     data.cardOrder = ""
-    for(i=0;i<data.answer.length;i++)   data.answer[i] = "";
+    for(i=0;i<data.answer.length;i++){
+        data.answer[i] = "";
+        data.ready[i] = false;
+    }
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -847,6 +937,40 @@ async function backToIndex() {
                 console.error("Error writing document: ", error);
             });
     }
+}
+
+async function ready(isReady){
+    console.log("ready");
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    if(isReady){
+        data.ready[playerSlot] = true;
+        $("#ready").attr("onclick","ready(0)");
+        $("#ready").text("Not Ready");
+    }else{
+        data.ready[playerSlot] = false;
+        $("#ready").attr("onclick","ready(1)");
+        $("#ready").text("Ready");
+    }
+    await db.collection("roomID").doc(roomID).set(data).then(() => {
+        console.log("Document successfully overwritten!");
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
 }
 
 async function deleteRoom() {

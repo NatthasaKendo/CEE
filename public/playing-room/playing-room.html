@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div id = "player-waiting">Waiting for judge to choose black card</div>
-            <div id="black-card"></div>
+            <div id="black-card" class="black-card"></div>
             <div class="players">
                 <table id="player-list">
                 </table>
@@ -48,7 +48,7 @@
     
             <div id="judge-waiting">
                 <p id="judge-waiting-p">Waiting for other player to choose the card ...</p>
-                <p>Waiting for time to run out or</p>
+                <br>
                 <button type="button" onclick="buttonNextStage()">Skip to next stage</button>
             </div>
         </div>
@@ -87,8 +87,8 @@
                         <input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)">
                         <button type="button" onclick="chooseCard(3, 'p', 15)">Choose</button>
                     </div>
-            </div>
-
+                </div>
+                <button type="button" id="ready" onclick="ready(1)">Ready</button>
             </div>
             <table id="card-list">
             </table>
