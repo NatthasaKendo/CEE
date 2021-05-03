@@ -68,7 +68,7 @@ async function initialize(){
         if (data.name[0] == player) host = true;
         if (host) {
             $("#host-joining-room").css("display", "block");
-            if (playerCount > 1) {
+            if (data.name.length > 1) {
                 $("#start").attr("onclick", "startGame()");
                 $("#start").css("background", "black");
             } else {
