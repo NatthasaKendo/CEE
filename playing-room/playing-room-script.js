@@ -721,7 +721,7 @@ async function generateChoosingCard() {
         var slot = data.cardOrder[i];
         if ((data.round - 1) % data.player == slot) continue;
         var answerData = data.answer[slot].split(", ");
-        var markup = "<div id='player-card-" + slot + "' class='white-card'></div>";
+        var markup = "<div id='player-card-" + slot + "' class='white-card-preview'></div>";
         $("#card-list").append(markup);
         console.log(answerData);
         for(j=0;j<answerData.length;j++){
