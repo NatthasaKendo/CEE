@@ -6,7 +6,6 @@
 
 #start {
   border-radius: 50px;
-  background-color: black;
   color: white;
   padding: 10px 20px;
   margin: 8px 0;
@@ -17,10 +16,6 @@
   font-size: 20px;
   font-family: "Exo", sans-serif;
   font-weight: bold;
-}
-
-#start:hover {
-  opacity: 0.8;
 }
 
 #leave-room {
@@ -51,6 +46,22 @@
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
   border-radius: 50%;
+}
+
+.ready {
+  background-color: black;
+}
+
+.ready:hover {
+  background-color: rgb(95, 211, 95);
+}
+
+.not-ready {
+  background-color: gray;
+}
+
+.not-ready:hover {
+  opacity: 0.5;
 }
 
 input[type="number"] {

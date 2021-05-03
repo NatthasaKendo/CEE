@@ -23,6 +23,7 @@ getUrlVars();
 
 $(document).ready(function () {
     initialize();
+    $("[title]").tooltip({ position: "bottom right", opacity: 1 });
 });
 
 
@@ -70,10 +71,14 @@ async function initialize(){
             $("#host-joining-room").css("display", "block");
             if (data.name.length > 1) {
                 $("#start").attr("onclick", "startGame()");
-                $("#start").css("background", "black");
+                $("#start").addClass("ready");
+                $("#start").removeClass("not-ready");
+                $('#start').prop('title', 'Click to Start!');
             } else {
                 $("#start").attr("onclick", "");
-                $("#start").css("background", "gray");
+                $("#start").addClass("not-ready");
+                $("#start").removeClass("ready");
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.'); 
             }
         } else {
             $("#player-joining-room").css("display", "block");
@@ -126,12 +131,16 @@ async function refreshRoom() {
         console.log(host);
         if (data.name[0] == player) host = true;
         if (host) {
-            if (playerCount > 1) {
+            if (data.name.length > 1) {
                 $("#start").attr("onclick", "startGame()");
-                $("#start").css("background", "black");
+                $("#start").addClass("ready");
+                $("#start").removeClass("not-ready");
+                $('#start').prop('title', 'Click to Start!');
             } else {
                 $("#start").attr("onclick", "");
-                $("#start").css("background", "gray");
+                $("#start").addClass("not-ready");
+                $("#start").removeClass("ready");
+                $('#start').prop('title', 'Must be at least 2 or  more people to start.'); 
             }
         }
         console.log(data.round);
