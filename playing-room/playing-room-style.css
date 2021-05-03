@@ -101,7 +101,7 @@ button {
 }
 
 button:hover {
-  background-color: yellow;
+  background-color: rgb(95, 211, 95);
   color: black;
 }
 
@@ -112,7 +112,8 @@ button:hover {
   margin: 0.8em;
   padding: 1em;
   display: flex;
-  width: fit-content;
+  font-size: xx-large;
+  width: 10rem;
   flex-direction: column;
   align-items: center;
 }
@@ -280,8 +281,4 @@ button:hover {
   width: 150px;
   height: 150px;
   overflow: hidden;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
 }
