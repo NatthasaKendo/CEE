@@ -171,7 +171,7 @@ async function refreshRoom() {
         }else{
             generateFinalResult();
             $("#player-list").css("display", "none");
-            $("#result-player-list").css("display", "flex");
+            $("#result-player-list").css("display", "table");
             $("#back-to-index").css("display", "flex");
             $(".modal").css("display", "flex");
             $(".modal").css("justify-content", "center");
