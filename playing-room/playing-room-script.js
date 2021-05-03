@@ -149,6 +149,7 @@ async function refreshRoom() {
         if(!isGenerated){
             console.log("Generated here *******");
             await generateChoosingCard();
+            $("#black-card").css("display", "flex");
             isGenerated = true;
         }
         await updatePlayerData();
