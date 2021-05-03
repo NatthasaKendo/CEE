@@ -24,6 +24,8 @@ $(document).ready(function () {
     }, function () {
         $("#helpButton img").css("filter", "invert(0%)");
     })
+    updateProfile("#host-image", currentProfile)
+    updateProfile("#player-image", currentProfile)
 });
 
 async function createRoom() {
@@ -124,7 +126,7 @@ function generateRoomId() {
 }
 
 function createRoomPopUp() {
-    updateProfile("#host-image");
+    //updateProfile("#host-image");
     var x = document.getElementById("id02");
     if (window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
@@ -135,7 +137,7 @@ function createRoomPopUp() {
 }
 
 function joinRoomPopUp() {
-    updateProfile("#player-image");
+    //updateProfile("#player-image");
     var x = document.getElementById("id01");
     if (window.getComputedStyle(x).display === "none") {
         x.style.display = "flex";
@@ -166,7 +168,6 @@ async function uploadProfilePicture(id) {
     if (file != "" && file != null) {
         if (currentProfile.slice(0, 7) == "default" || currentProfile == "" || currentProfile == null) {
             var imageName = generateId(10);
-            currentProfile = "randomize-" + imageName;
         }
         console.log(file);
         //Declare Variables
@@ -174,10 +175,10 @@ async function uploadProfilePicture(id) {
         // Create a root reference
         var storageRef = firebase.storage().ref();
         // Create a reference to 'images/mountains.jpg'
-        var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
+        var imageRef = storageRef.child('profile_pictures/' + imageName + '.jpg');
         imageRef.put(file).then((snapshot) => {
-            console.log('Uploaded a blob or file named: ' + currentProfile + " !");
-            updateProfile("#" + id.slice(13, id.length) + "-image");
+            console.log('Uploaded a blob or file named: ' + imageName + " !");
+            updateProfile("#" + id.slice(13, id.length) + "-image", imageName);
         });
     } else alert("No image selected");
 }
@@ -196,11 +197,11 @@ function deleteProfilePicture(imageName) {
     });
 }
 
-function updateProfile(id) {
+function updateProfile(id, imageName) {
     var storageRef = firebase.storage().ref();
-    storageRef.child('profile_pictures/' + currentProfile + '.jpg').getDownloadURL().then(function (url) {
+    storageRef.child('profile_pictures/' + imageName + '.jpg').getDownloadURL().then(function (url) {
         console.log(url);
-        nudeCheckSendRequest(id, url);
+        nudeCheckSendRequest(id, url, imageName);
     }).catch(function (error) {
     });
 }
@@ -227,7 +228,7 @@ function generateId(len) {
     return Array.from(arr, dec2hex).join('')
 }
 
-async function nudeCheckSendRequest(id, url) {
+async function nudeCheckSendRequest(id, url, imageName) {
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
@@ -240,16 +241,17 @@ async function nudeCheckSendRequest(id, url) {
             if (result.detections.length > 0) {
                 alert("Profile Picture cannot contain nudity.")
                 console.log("lewd");
-                deleteProfile()
                 document.getElementById("image-upload-host").value = null;
                 document.getElementById("image-upload-player").value = null;
                 updatingHostProfileStatus = false;
                 updatingPlayerProfileStatus = false;
                 document.getElementById("profile-status-host").innerHTML = "";
                 document.getElementById("profile-status-player").innerHTML = "";
+                deleteProfilePicture(imageName);
             }
             else if (result.detections.length <= 0) {
                 console.log("safe");
+                currentProfile = imageName;
                 //document.getElementById("profile-status-host").innerHTML = "Profile picture updated.";
                 if (currentProfile.slice(0, 7) != "default") {
                     if (id.slice(0, 5) == "#host") {
@@ -280,20 +282,6 @@ async function nudeCheckSendRequest(id, url) {
 
 var audio = document.getElementById("song");
 audio.volume = 0.2;
-
-function deleteProfile() {
-    // Create a reference to the file to delete
-    var storageRef = firebase.storage().ref();
-    var imageRef = storageRef.child('profile_pictures/' + currentProfile + '.jpg');
-
-    // Delete the file
-    imageRef.delete().then(() => {
-        // File deleted successfully
-        console.log("Deleted profile picture of " + currentProfile);
-    }).catch((error) => {
-        // Uh-oh, an error occurred!
-    });
-}
 
 var waiting_count = 1;
 setInterval(function () {
