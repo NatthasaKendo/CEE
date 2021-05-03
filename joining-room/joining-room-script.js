@@ -135,6 +135,7 @@ async function refreshRoom() {
         if (data.name[0] == player) host = true;
         if (host) {
             $("#host-joining-room").css("display", "block");
+            $("#player-joining-room").css("display", "none");
             if (data.name.length > 1) {
                 $("#start").attr("onclick", "startGame()");
                 $("#start").addClass("ready");
@@ -147,6 +148,7 @@ async function refreshRoom() {
                 $('#start').prop('title', 'Must be at least 2 or  more people to start.');
             }
         } else {
+            $("#host-joining-room").css("display", "none");
             $("#player-joining-room").css("display", "block");
         }
         console.log(data.round);
