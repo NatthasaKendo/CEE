@@ -76,6 +76,9 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
+    if(document.title != "LAC Room: "+roomID){
+        document.title = "LAC Room: "+roomID;
+    }
     if((data.gameState != gameState) || (data.gameState==0 && (!isGenerated))){
         $("#judge-choosing-black-card").css("display", "none");
         $("#player-waiting").css("display", "none");
