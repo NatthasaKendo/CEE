@@ -49,8 +49,8 @@ $(document).ready(async function () {
     $("#back-to-index").css("display", "none");
     $("#timer-1").css("display", "none");
     $("#timer-2").css("display", "none");
+    $("#black-card").css("display", "none");
     await generatePlayerData();
-    await updatePlayerData();
 });
 
 
@@ -88,6 +88,7 @@ async function refreshRoom() {
         $("#back-to-index").css("display", "none");
         $("#timer-1").css("display", "none");
         $("#timer-2").css("display", "none");
+        $("#black-card").css("display", "none");
         gameState = data.gameState;
     }
 
@@ -101,11 +102,11 @@ async function refreshRoom() {
         clearInterval(timeout2);
         if (!isGenerated) {
             resetVar();
-            await updatePlayerData();
             dot = setInterval(animatedDot,500);
             console.log("generate at stage " + 0);
             isGenerated = true;
         }
+        await updatePlayerData();
         if (isJudge) {
             $("#judge-choosing-black-card").css("display", "flex");
             if (cardCount == 0) await generateBlackCard();
@@ -120,6 +121,7 @@ async function refreshRoom() {
             await getTimerStop();
             $("#ready").attr("onclick","ready(1)");
             $("#ready").text("Ready");
+            $("#black-card").css("display", "block");
             //setTime();
             isGenerated = false;
         }
@@ -146,6 +148,7 @@ async function refreshRoom() {
             await generateChoosingCard();
             isGenerated = true;
         }
+        await updatePlayerData();
         $("#card-list").css("display", "flex");
     } else if (data.gameState == 3) {
         clearInterval(timeout1);
@@ -154,6 +157,7 @@ async function refreshRoom() {
             await updatePlayerData();
             await generateQuestionCard();
             await generateChoosingCard();
+            $("#black-card").css("display", "block");
             isGenerated = false;
         }
         if(data.round != data.roundMax){
@@ -396,8 +400,7 @@ async function generatePlayerData() {
         var judgeState = (i == judge) ? "(Judge)" : "";
         var score = data.score[i];
         var tempURL = "";
-        var isReady = "";
-        if((data.gameState == 1 && data.ready[i]) || (i==judge)) isReady = "Ready";
+        var isReady = "Ready";
         console.log(isReady);
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
@@ -410,6 +413,7 @@ async function generatePlayerData() {
     }
     if (data.name[judge] == player) isJudge = true;
     console.log(isJudge);
+    await updatePlayerData();
 }
 
 async function updatePlayerData(){
@@ -434,26 +438,28 @@ async function updatePlayerData(){
     var c = 0;
     $('#player-list').children('tr').each(function () {
         if(c != 0){
-            var playerJudge = (c-1 == (data.round - 1) % data.name.length)? true : false
+            var playerJudge = (c-1 == (data.round - 1) % data.name.length)? true : false;
             var d = 0;
             var judgeState = (playerJudge) ? "(Judge)" : "";
             var score = data.score[c-1];
-            var isReady = "";
-            if((data.gameState == 1 && data.ready[c-1]) || (playerJudge)) isReady = "Ready";
-            console.log(judgeState);
+            console.log(data.ready[c-1]);
+            var isReady = data.ready[c-1]
             console.log(isReady);
-            console.log(score);
             $(this).children('td').each(function () {
                 if(d > 1){
                     switch(d){
                         case(2) :   $(this).text(judgeState);   break;
-                        case(3) :   $(this).text(isReady);  break;
+                        case(3) :   $(this).text("Ready");  break;
                         case(4) :   $(this).text(score);    break;
                     }
-                    if(d==3 && playerJudge) $(this).css('visibility', 'hidden');
+                    if(d==3){
+                        if(isReady) $(this).css("visibility","visible");
+                        else    $(this).css("visibility","hidden");
+                    }
                 }
                 d += 1;
             });
+            console.log(this);
         }
         c += 1;
     });
