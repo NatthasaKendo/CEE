@@ -37,6 +37,23 @@ var timeout1;
 var timeout2;
 var dot;
 
+$(document).ready(async function () {
+    $("#judge-choosing-black-card").css("display", "none");
+    $("#player-waiting").css("display", "none");
+    $("#judge-waiting").css("display", "none");
+    $("#player-choosing").css("display", "none");
+    $("#waiting").css("display", "none");
+    $("#next-round").css("display", "none");
+    $("#card-list").css("display", "none");
+    $("#result-player-list").css("display", "none");
+    $("#back-to-index").css("display", "none");
+    $("#timer-1").css("display", "none");
+    $("#timer-2").css("display", "none");
+    await generatePlayerData();
+    await updatePlayerData();
+});
+
+
 db.collection("roomID").doc(roomID).onSnapshot((doc) => {
     console.log("Current data: ", doc.data());
     refreshRoom();
@@ -59,7 +76,7 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    if(data.gameState != gameState){
+    if((data.gameState != gameState) || (data.gameState==0 && (!isGenerated))){
         $("#judge-choosing-black-card").css("display", "none");
         $("#player-waiting").css("display", "none");
         $("#judge-waiting").css("display", "none");
@@ -84,7 +101,7 @@ async function refreshRoom() {
         clearInterval(timeout2);
         if (!isGenerated) {
             resetVar();
-            await generatePlayerData();
+            await updatePlayerData();
             dot = setInterval(animatedDot,500);
             console.log("generate at stage " + 0);
             isGenerated = true;
@@ -106,7 +123,7 @@ async function refreshRoom() {
             //setTime();
             isGenerated = false;
         }
-        await generatePlayerData();
+        await updatePlayerData();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
             $("#judge-waiting").css("display", "flex");
@@ -134,7 +151,7 @@ async function refreshRoom() {
         clearInterval(timeout1);
         console.log(3);
         if(isGenerated){
-            await generatePlayerData();
+            await updatePlayerData();
             await generateQuestionCard();
             await generateChoosingCard();
             isGenerated = false;
@@ -380,7 +397,7 @@ async function generatePlayerData() {
         var score = data.score[i];
         var tempURL = "";
         var isReady = "";
-        if(data.gameState == 1 && data.ready[i]) isReady = "Ready";
+        if((data.gameState == 1 && data.ready[i]) || (i==judge)) isReady = "Ready";
         console.log(isReady);
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
@@ -393,6 +410,53 @@ async function generatePlayerData() {
     }
     if (data.name[judge] == player) isJudge = true;
     console.log(isJudge);
+}
+
+async function updatePlayerData(){
+    var docRef = db.collection("roomID").doc(roomID);
+    var data;
+    await docRef.get().then(async (doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            data = doc.data();
+            console.log("Returning data" + data);
+            return data;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    $("#round").text("Round: " + data.round);
+    $("#player-count").html(data.name.legth);
+    if (data.name[(data.round - 1) % data.name.length] == player) isJudge = true;
+    var c = 0;
+    $('#player-list').children('tr').each(function () {
+        if(c != 0){
+            var playerJudge = (c-1 == (data.round - 1) % data.name.length)? true : false
+            var d = 0;
+            var judgeState = (playerJudge) ? "(Judge)" : "";
+            var score = data.score[c-1];
+            var isReady = "";
+            if((data.gameState == 1 && data.ready[c-1]) || (playerJudge)) isReady = "Ready";
+            console.log(judgeState);
+            console.log(isReady);
+            console.log(score);
+            $(this).children('td').each(function () {
+                if(d > 1){
+                    switch(d){
+                        case(2) :   $(this).text(judgeState);   break;
+                        case(3) :   $(this).text(isReady);  break;
+                        case(4) :   $(this).text(score);    break;
+                    }
+                    if(d==3 && playerJudge) $(this).css('visibility', 'hidden');
+                }
+                d += 1;
+            });
+        }
+        c += 1;
+    });
 }
 
 async function changeState() {
@@ -764,6 +828,7 @@ function resetVar() {
     chosenCard1 = "";
     chosenCard2 = "";
     chosenCard3 = "";
+    answer = [];
     isJudge = false;
     tempB = ",'b',";
     tempP = ",'p',";
