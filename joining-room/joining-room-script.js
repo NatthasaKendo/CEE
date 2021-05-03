@@ -101,6 +101,9 @@ async function refreshRoom() {
         console.log("Error getting document:", error);
     });
     if (data != null) {
+        if(document.title != "Joining Room: "+roomID){
+            document.title = "Joining Room: "+roomID;
+        }
         var playerCount = data.name.length;
         $("#player-count").html(playerCount);
         $("#player-list").html("");
