@@ -114,7 +114,7 @@ button:hover {
   padding: 1em;
   display: flex;
   font-size: xx-large;
-  width: 10rem;
+  width: 20rem;
   flex-direction: column;
   align-items: center;
 }
