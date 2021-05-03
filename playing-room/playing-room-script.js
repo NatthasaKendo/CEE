@@ -739,10 +739,11 @@ async function generateChoosingCard() {
             if (j != 0) markup += ", ";
             if (isPicture) {
                 console.log("------------Picture Card here------------");
-                markup += "<img src='' id='picture-card-" + slot + "' alt='" + answer + "' class='picture-card'></img></div>";
+                markup += "<img src='' id='picture-card-" + slot + "-" + j + "' alt='" + answer + "' class='picture-card'></img></div>";
             } else markup += answer;
             $("#player-card-" + slot).append(markup);
-            if (isPicture) uploadCardPicture("#picture-card-" + slot, answer);
+            console.log("#picture-card-" + slot + "-" + j);
+            if (isPicture) await uploadCardPicture("#picture-card-" + slot + "-" + j, answer);
         }
         markup = "";
         if (isJudge && data.gameState != 3) {
