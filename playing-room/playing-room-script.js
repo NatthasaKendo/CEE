@@ -31,6 +31,7 @@ var isJudge = false;
 var blank = 0;
 var answer = [];
 var timerStop = 0;
+var gameState = 0;
 
 var timeout1;
 var timeout2;
@@ -58,18 +59,20 @@ async function refreshRoom() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-
-    $("#judge-choosing-black-card").css("display", "none");
-    $("#player-waiting").css("display", "none");
-    $("#judge-waiting").css("display", "none");
-    $("#player-choosing").css("display", "none");
-    $("#waiting").css("display", "none");
-    $("#next-round").css("display", "none");
-    $("#card-list").css("display", "none");
-    $("#result-player-list").css("display", "none");
-    $("#back-to-index").css("display", "none");
-    $("#timer-1").css("display", "none");
-    $("#timer-2").css("display", "none");
+    if(data.gameState != gameState){
+        $("#judge-choosing-black-card").css("display", "none");
+        $("#player-waiting").css("display", "none");
+        $("#judge-waiting").css("display", "none");
+        $("#player-choosing").css("display", "none");
+        $("#waiting").css("display", "none");
+        $("#next-round").css("display", "none");
+        $("#card-list").css("display", "none");
+        $("#result-player-list").css("display", "none");
+        $("#back-to-index").css("display", "none");
+        $("#timer-1").css("display", "none");
+        $("#timer-2").css("display", "none");
+        gameState = data.gameState;
+    }
 
     // gameState = 0 --> judge choose question card
     //           = 1 --> player choose answer card
