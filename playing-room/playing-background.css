@@ -5,6 +5,14 @@
   padding: 0px;
 }
 
+@media all and (orientation: portrait) {
+  * {
+    margin: 0px;
+    padding: 0px;
+    width: 90%;
+  }
+}
+
 body {
   font-family: "Exo", sans-serif;
   font-size: 15px;

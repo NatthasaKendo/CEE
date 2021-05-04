@@ -10,17 +10,17 @@
 }
 
 #judge-waiting,
-#player-choosing{
+#player-choosing {
   display: none;
   flex-direction: column;
 }
 
-#card-list{
-  display: none; 
+#card-list {
+  display: none;
   flex-direction: row;
 }
 
-img.check{
+img.check {
   width: 4rem;
 }
 
@@ -114,10 +114,23 @@ button:hover {
   color: black;
 }
 
-#white-card-option-1,#white-card-option-2,#white-card-option-3{
+#white-card-option-1,
+#white-card-option-2,
+#white-card-option-3 {
   display: flex;
   align-items: flex-start;
   font-size: 2rem;
+}
+
+#white-card-option-1-scroll,
+#white-card-option-2-scroll,
+#white-card-option-3-scroll {
+  display: flex;
+  align-items: flex-start;
+  font-size: 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 80%;
 }
 
 .white-card-preview {
@@ -150,7 +163,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 .black-card-align {
@@ -184,7 +197,7 @@ button:hover {
   font-size: 1.5rem;
 }
 
-#next-round{
+#next-round {
   font-size: 1.5rem;
 }
 
@@ -198,39 +211,41 @@ button:hover {
   height: auto;
 }
 
-#result-player-list{
+#result-player-list {
   padding: 5rem;
   border-collapse: collapse;
   text-align: center;
 }
 
-#result-player-list tr td{
+#result-player-list tr td {
   padding: 0.5rem;
 }
 
-#result-player-list tr:nth-child(3) td:nth-child(2){
+#result-player-list tr:nth-child(3) td:nth-child(2) {
   color: gold;
 }
 
-#result-player-list tr:nth-child(4) td:nth-child(2){
+#result-player-list tr:nth-child(4) td:nth-child(2) {
   color: silver;
 }
 
-#result-player-list tr:nth-child(5) td:nth-child(2){
+#result-player-list tr:nth-child(5) td:nth-child(2) {
   color: brown;
 }
 
-#picture-card-5,#picture-card-10,#picture-card-15{
+#picture-card-5,
+#picture-card-10,
+#picture-card-15 {
   width: 150px;
   height: 150px;
   overflow: hidden;
 }
 
-#blank{
+#blank {
   height: 1.5rem;
 }
 
-#black-with-player{
+#black-with-player {
   display: flex;
 }
 
@@ -244,7 +259,7 @@ button:hover {
     font-size: 3rem;
     font-weight: bold;
   }
-  #blank{
+  #blank {
     height: 3rem;
     width: 5rem;
   }
@@ -257,7 +272,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: -webkit-fill-available; 
+    width: -webkit-fill-available;
     font-size: -webkit-xxx-large;
   }
   .picture-card {
@@ -313,7 +328,7 @@ button:hover {
     flex-wrap: wrap;
     justify-content: center;
   }
-  input[type="text"]{
+  input[type="text"] {
     width: auto;
     padding: 12px 20px;
     margin: 8px 0;
@@ -322,7 +337,7 @@ button:hover {
     box-sizing: border-box;
   }
 
-  #result-player-list{
+  #result-player-list {
     padding: 5rem;
     border-collapse: collapse;
     text-align: center;
@@ -341,7 +356,7 @@ button:hover {
     font-weight: bold;
     font-size: x-large;
   }
-  
+
   button:hover {
     background-color: rgb(95, 211, 95);
     color: black;
@@ -351,4 +366,8 @@ button:hover {
     width: auto;
     height: auto;
   }
+}
+
+td {
+  text-align: center;
 }

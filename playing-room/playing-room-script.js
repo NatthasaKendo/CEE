@@ -120,7 +120,7 @@ async function refreshRoom() {
         }
     } else if (data.gameState == 1) {
         if (isGenerated) {
-            $("#skip-button").css("visibility","hidden")
+            $("#skip-button").css("visibility", "hidden")
             console.log("isGenerated =" + isGenerated);
             timeout1 = setInterval(countDown1, 1000);
             await generateQuestionCard();
@@ -140,11 +140,17 @@ async function refreshRoom() {
             $("#white-card-option-1").css("display", "none");
             $("#white-card-option-2").css("display", "none");
             $("#white-card-option-3").css("display", "none");
+            $("#white-card-option-1-scroll").css("display", "none");
+            $("#white-card-option-2-scroll").css("display", "none");
+            $("#white-card-option-3-scroll").css("display", "none");
             $("#player-choosing").css("display", "flex");
             if (cardCount == 0) generateWhiteCard();
             if (blank >= 1) $("#white-card-option-1").css("display", "flex");
             if (blank >= 2) $("#white-card-option-2").css("display", "flex");
             if (blank >= 3) $("#white-card-option-3").css("display", "flex");
+            if (blank >= 1) $("#white-card-option-1-scroll").css("display", "flex");
+            if (blank >= 2) $("#white-card-option-2-scroll").css("display", "flex");
+            if (blank >= 3) $("#white-card-option-3-scroll").css("display", "flex");
         }
         $("#timer-1").css("display", "flex");
     } else if (data.gameState == 2) {
@@ -217,7 +223,7 @@ async function getTimerStop() {
 
 async function countDown1() {
     setTime1(Math.max(0, timerStop - Date.now()));
-    if(timerStop - Date.now() <= 70000) $("#skip-button").css("visibility","visible")
+    if (timerStop - Date.now() <= 70000) $("#skip-button").css("visibility", "visible")
     if (timerStop <= Date.now()) {
         clearInterval(timeout1);
         if (isJudge) {
@@ -496,6 +502,7 @@ async function changeState() {
             console.error("Error writing document: ", error);
         });
     console.log("Game State: " + data.gameState);
+    await refreshRoom();
 }
 
 async function generateBlank() {
@@ -542,7 +549,7 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 1 + ',"t",' + cardCount;
-            $("#white-card-option-1").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
+            $("#white-card-option-1-scroll").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
         index = Math.floor((Math.random() * 3) + 1);
         chooseCard(1, "t", index);
@@ -557,7 +564,7 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 2 + ',"t",' + cardCount;
-            $("#white-card-option-2").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
+            $("#white-card-option-2-scroll").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></div>");
         }
         index = Math.floor((Math.random() * 3) + 6);
         chooseCard(2, "t", index);
@@ -572,7 +579,7 @@ async function generateWhiteCard() {
             usedCard.push(index);
             cardCount += 1;
             var cardTemp = 3 + ',"t",' + cardCount;
-            $("#white-card-option-3").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></></div>");
+            $("#white-card-option-3-scroll").find("div:first").before("<div id='card-" + cardCount + "' class='white-card'><div>" + data.white[index] + "</div><button type='button' onclick='chooseCard(" + cardTemp + ")'>Choose</button></></div>");
         }
         index = Math.floor((Math.random() * 3) + 11);
         chooseCard(3, "t", index);
@@ -1078,7 +1085,7 @@ function animatedDot() {
     var text2 = "Waiting for other player to choose the card ";
     var text1_with_dot = text1 + (".".repeat(waiting_count));
     var text2_with_dot = text2 + (".".repeat(waiting_count));
-    if(gameState == 0)    document.getElementById("black-card").innerHTML = text1_with_dot;
+    if (gameState == 0) document.getElementById("black-card").innerHTML = text1_with_dot;
     document.getElementById("judge-waiting-p").innerHTML = text2_with_dot;
     waiting_count++;
     if (waiting_count == 4) waiting_count = 1;
