@@ -121,6 +121,14 @@ button:hover {
   background-color: #000000;
 }
 
+#skip-button:hover {
+  background-color: rgb(95, 211, 95);
+}
+
+#ready:hover {
+  background-color: rgb(95, 211, 95);
+}
+
 #white-card-option-1,
 #white-card-option-2,
 #white-card-option-3 {
@@ -171,6 +179,10 @@ button:hover {
   font-weight: bold;
   position: absolute;
   bottom: 1rem;
+}
+
+.white-card-preview > button:hover {
+  background-color: rgb(95, 211, 95);
 }
 
 .black-card {
