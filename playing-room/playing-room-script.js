@@ -124,6 +124,7 @@ async function refreshRoom() {
         }
     } else if (data.gameState == 1) {
         if (isGenerated) {
+            $("#skip-button").css("visibility","hidden")
             console.log("isGenerated =" + isGenerated);
             timeout1 = setInterval(countDown1, 1000);
             await generateQuestionCard();
@@ -153,7 +154,6 @@ async function refreshRoom() {
     } else if (data.gameState == 2) {
         clearInterval(dot);
         if (!isGenerated) {
-            console.log("Generated here *******");
             await generateChoosingCard();
             $("#black-card").css("display", "flex");
             isGenerated = true;
@@ -221,6 +221,7 @@ async function getTimerStop() {
 
 async function countDown1() {
     setTime1(Math.max(0, timerStop - Date.now()));
+    if(timerStop - Date.now() <= 20000) $("#skip-button").css("visibility","visible")
     if (timerStop <= Date.now()) {
         clearInterval(timeout1);
         if (isJudge) {
