@@ -125,11 +125,11 @@ async function refreshRoom() {
             await generateBlank();
             await generateQuestionCard();
             await getTimerStop();
-            if(cardCount == 0)  await generateWhiteCard();
             $("#ready").attr("onclick", "ready(1)");
             $("#ready").text("Ready");
             isGenerated = false;
         }
+        if(cardCount == 0)  await generateWhiteCard();
         await updatePlayerData();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
