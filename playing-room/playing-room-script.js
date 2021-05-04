@@ -877,14 +877,14 @@ function resetVar() {
     isJudge = false;
     tempB = ",'b',";
     tempP = ",'p',";
-    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<br><input id="add-black-card" type="text" autocomplete="off"><br>There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<br><button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
+    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<br><input id="add-black-card" type="text" autocomplete="off"><br><span id="blank-input">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<br></span><button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
     $("#white-card-option-1-scroll").html('<div id="card-4" class="white-card">Type your own card<input id="text-card-4" type="text" autocomplete="off"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div id="card-5" class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
     $("#white-card-option-2-scroll").html('<div id="card-9" class="white-card">Type your own card<input id="text-card-9" type="text" autocomplete="off"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div id="card-10" class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
     $("#white-card-option-3-scroll").html('<div id="card-14" class="white-card">Type your own card<input id="text-card-14" type="text" autocomplete="off"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div id="card-15" class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#card-list").html("");
     $("#black-card").html("Judge is choosing a question card ");
     $("#timer-1").text("01:00");
-    $("#timer-2").text("");
+    $("#timer-2").text("10");
 }
 
 async function nextRound() {

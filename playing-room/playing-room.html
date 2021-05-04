@@ -14,8 +14,10 @@
 
 <body>
     <div class="context">
-        <h1><span id="round">Round: 0</span></h1>
+        <div id="header-round">
+            <h1><span id="round">Round: 0</span></h1>
         <div id="timer-1">01:00</div>
+        </div>
         <div class="detail">
             <div id="black-with-player">
                 <div id="black-card" class="black-card">
@@ -35,15 +37,17 @@
             </div>
             <div id="judge-choosing-black-card">
                 <div class="black-card-align" id = "black-card-option">
-                    <div class="black-card" id="black-card-add">Type your own question<br>
-                        <input id="add-black-card" type="text" autocomplete="off"><br>
-                        There're
-                        <select id="blank">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                        blank(s) in this question.<br>
+                    <div class="black-card" id="black-card-add">Type your own question
+                        <input id="add-black-card" type="text" autocomplete="off">
+                        <span id="blank-input">
+                            There're
+                            <select id="blank">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                            blank(s) in this question.<br>
+                        </span>
                         <button type="button" onclick="choosePlayersBlackCard()">Choose</button>
                     </div>
                 </div>
@@ -109,7 +113,7 @@
             </div>
             <div id="next-round" >
                 Next Round start in ...
-                <div id="timer-2">5</div>
+                <div id="timer-2">10</div>
             </div>
         </div>
         

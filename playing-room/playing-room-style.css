@@ -35,10 +35,16 @@ td {
 
 .loser {
   background-color: rgb(255, 0, 0);
+  text-align: center;
+  position: absolute;
+  bottom: 1rem;
 }
 
 .winner {
   background-color: rgb(0, 255, 157);
+  text-align: center;
+  position: absolute;
+  bottom: 1rem;
 }
 
 #next-roound {
@@ -90,22 +96,9 @@ td {
   background-color: white;
 }
 
-.black-card {
-  background-color: black;
-  border-radius: 5px;
-  color: white;
-  margin: 0.8em;
-  width: 13rem;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: large;
-}
-
 button {
   margin-left: 1em;
-  background-color: #a1a1a1;
+  background-color: black;
   color: white;
   padding: 10px 20px;
   margin: 8px 0;
@@ -133,7 +126,8 @@ button:hover {
 #white-card-option-3 {
   display: flex;
   align-items: flex-start;
-  font-size: 2rem;
+  font-size: large;
+  text-align: center;
 }
 
 #white-card-option-1-scroll,
@@ -152,12 +146,68 @@ button:hover {
   border-radius: 5px;
   color: black;
   margin: 0.8em;
-  padding: 1em;
+  width: 13rem;
+  height: 15rem;
+  padding: 1rem;
   display: flex;
-  font-size: large;
-  width: 15rem;
   flex-direction: column;
   align-items: center;
+  font-size: large;
+  position: relative;
+}
+
+.white-card-preview > button {
+  margin-left: 1rem;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 15px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1rem;
+}
+
+.black-card {
+  background-color: black;
+  border-radius: 5px;
+  color: white;
+  margin: 0.8em;
+  width: 13rem;
+  height: 15rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: large;
+  position: relative;
+}
+
+.black-card > button {
+  margin-left: 1rem;
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 15px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1rem;
+}
+
+.black-card > button:hover {
+  background-color: rgb(95, 211, 95);
+  color: black;
 }
 
 .white-card {
@@ -165,12 +215,36 @@ button:hover {
   border-radius: 5px;
   color: black;
   margin: 0.8em;
-  padding: 1em;
+  width: 18rem;
+  height: 20rem;
+  padding: 1rem;
   display: flex;
-  font-size: large;
-  width: 13rem;
   flex-direction: column;
   align-items: center;
+  font-size: large;
+  position: relative;
+}
+
+.white-card > button {
+  margin-left: 1rem;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: -webkit-fill-available;
+  max-width: 200px;
+  font-size: 15px;
+  font-family: "Exo", sans-serif;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1rem;
+}
+
+.white-card > button:hover {
+  background-color: rgb(95, 211, 95);
+  color: white;
 }
 
 .white-card-align {
@@ -264,9 +338,39 @@ button:hover {
 }
 
 @media all and (orientation: portrait) {
+  .black-card > div {
+    font-size: xx-large;
+  }
+
+  #judge-choosing-black-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  #header-round {
+    flex-direction: row;
+  }
+
+  #black-with-player {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #card-list {
+    flex-direction: column;
+    width: 100%;
+  }
+
   #judge-waiting-p {
     font-size: 2rem;
   }
+
+  #next-round {
+    font-size: 2rem;
+    width: auto;
+    flex-wrap: wrap;
+  }
+
   #timer-1 {
     justify-content: flex-end;
     margin-right: 1.5em;
@@ -277,22 +381,12 @@ button:hover {
     height: 3rem;
     width: 5rem;
   }
-  .white-card {
-    background-color: white;
-    border-radius: 5px;
-    color: black;
-    margin: 0.8em;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: -webkit-fill-available;
-    font-size: -webkit-xxx-large;
-  }
+
   .picture-card {
     width: 20rem;
     height: 10rem;
   }
+
   .black-card {
     background-color: black;
     border-radius: 5px;
@@ -304,7 +398,85 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
+
+  .white-card {
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    margin: 0.8em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    height: auto;
+    font-size: larger;
+    position: relative;
+  }
+
+  .white-card-preview {
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    margin: 0.8em;
+    padding: 1em;
+    width: auto;
+    font-size: xx-large;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .black-card > button {
+    margin-left: 1em;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    width: -webkit-fill-available;
+    font-size: xx-large;
+    font-family: "Exo", sans-serif;
+    font-weight: bold;
+    position: absolute;
+    bottom: 1rem;
+  }
+
+  .white-card > button {
+    margin-left: 1em;
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    width: 80%;
+    max-width: 200px;
+    font-size: xx-large;
+    font-family: "Exo", sans-serif;
+    font-weight: bold;
+    position: absolute;
+    bottom: 1rem;
+  }
+
+  .white-card-preview > button {
+    margin-left: 1em;
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    width: 80%;
+    max-width: 200px;
+    font-size: xx-large;
+    font-family: "Exo", sans-serif;
+    font-weight: bold;
+    position: absolute;
+    bottom: 1rem;
+  }
+
   .white-card-align {
     display: flex;
     flex-direction: column;
@@ -340,8 +512,15 @@ button:hover {
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+    height: 20rem;
     justify-content: center;
   }
+
+  #blank-input {
+    text-align: center;
+    font-size: x-large;
+  }
+
   input[type="text"] {
     width: auto;
     padding: 12px 20px;
@@ -356,6 +535,12 @@ button:hover {
     border-collapse: collapse;
     text-align: center;
   }
+
+  #skip-button,
+  #ready {
+    width: 25%;
+  }
+
   button {
     margin-left: 1em;
     background-color: black;
@@ -363,12 +548,13 @@ button:hover {
     padding: 10px 20px;
     margin: 8px 0;
     border: none;
-    cursor: pointer;
-    width: -webkit-fill-available;
-    font-size: 15px;
+    width: 80%;
+    width: 200px;
+    font-size: xx-large;
     font-family: "Exo", sans-serif;
     font-weight: bold;
-    font-size: x-large;
+    display: inline-block;
+    text-align: center;
   }
 
   button:hover {
