@@ -321,33 +321,24 @@ setInterval(function () {
     if (waiting_count == 4) waiting_count = 1;
 }, 500);
 
-function blockSpecialChar(id) {
-    console.log("Keypress");
-    var name = $(id).val();
-    console.log(name);
-    var newname = "";
-    for (i = 0; i < name.length; i++) {
-        var c = name[i];
-        console.log("Character is '" + c + "'");
-        if (!(('a' < c && c < 'z') || ('A' < c && c < 'Z') || ('0' < c && c < '9'))) {
-            console.log("Wrong character");
-            $("#special-charater-alert").css("display", "block");
-        } else newname += c;
-    }
-    $(id).val(newname);
-}
-
 $("#player-name").on('input propertychange', function (e) {
     var name = $(this).val();
     var newname = "";
     console.log(name);
-    for (i = 0; i < name.length; i++) {
-        var c = name[i];
-        console.log("Character is '" + c + "'");
-        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
-            console.log("Wrong character");
-            $("#player-special-charater-alert").css("display", "block");
-        } else newname += c;
+    $("#player-special-charater-alert").css("visibility", "hidden");
+    if(name.length > 20){
+        newname = name.slice(0,20);
+        console.log("More than 20 characters");
+        $("#player-special-charater-alert").css("visibility", "visible");
+    }else{
+        for (i = 0; i < name.length; i++) {
+            var c = name[i];
+            console.log("Character is '" + c + "'");
+            if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
+                console.log("Wrong character");
+                $("#player-special-charater-alert").css("visibility", "visible");
+            } else newname += c;
+        }
     }
     $(this).val(newname);
 });
@@ -356,14 +347,20 @@ $("#host-name").on('input propertychange', function (e) {
     var name = $(this).val();
     var newname = "";
     console.log(name);
-    $("#host-special-charater-alert").css("display", "none");
-    for (i = 0; i < name.length; i++) {
-        var c = name[i];
-        console.log("Character is '" + c + "'");
-        if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
-            console.log("Wrong character");
-            $("#host-special-charater-alert").css("display", "block");
-        } else newname += c;
+    $("#host-special-charater-alert").css("visibility", "hidden");
+    if(name.length > 20){
+        newname = name.slice(0,20);
+        console.log("More than 20 characters");
+        $("#host-special-charater-alert").css("visibility", "visible");
+    }else{
+        for (i = 0; i < name.length; i++) {
+            var c = name[i];
+            console.log("Character is '" + c + "'");
+            if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9'))) {
+                console.log("Wrong character");
+                $("#host-special-charater-alert").css("visibility", "visible");
+            } else newname += c;
+        }
     }
     $(this).val(newname);
 });

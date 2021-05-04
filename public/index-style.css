@@ -311,12 +311,16 @@ span.psw {
 
 #host-special-charater-alert {
   color: red;
-  display: none;
+  visibility: hidden;
+  text-align: center;
+  font-size: smaller;
 }
 
 #player-special-charater-alert {
   color: red;
-  display: none;
+  visibility: hidden;
+  text-align: center;
+  font-size: smaller;
 }
 
 #helpBox {
@@ -331,5 +335,5 @@ span.psw {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 90%;
 }
