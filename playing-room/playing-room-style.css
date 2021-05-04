@@ -105,7 +105,7 @@ td {
 
 button {
   margin-left: 1em;
-  background-color: black;
+  background-color: #a1a1a1;
   color: white;
   padding: 10px 20px;
   margin: 8px 0;
@@ -121,6 +121,10 @@ button {
 button:hover {
   background-color: rgb(95, 211, 95);
   color: black;
+}
+
+#skip-button,#ready{
+  background-color: #000000;
 }
 
 #white-card-option-1,
