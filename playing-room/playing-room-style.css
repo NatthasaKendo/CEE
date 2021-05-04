@@ -10,10 +10,14 @@
 }
 
 #judge-waiting,
-#player-choosing,
-#card-list {
+#player-choosing{
   display: none;
   flex-direction: column;
+}
+
+#card-list{
+  display: none; 
+  flex-direction: row;
 }
 
 .loser {
@@ -222,7 +226,20 @@ button:hover {
   height: 1.5rem;
 }
 
+#black-with-player{
+  display: flex;
+}
+
 @media all and (orientation: portrait) {
+  #judge-waiting-p {
+    font-size: 2rem;
+  }
+  #timer-1 {
+    justify-content: flex-end;
+    margin-right: 1.5em;
+    font-size: 3rem;
+    font-weight: bold;
+  }
   #blank{
     height: 3rem;
     width: 5rem;
