@@ -223,7 +223,7 @@ async function countDown1() {
     setTime1(Math.max(0, timerStop - Date.now()));
     if (timerStop <= Date.now()) {
         clearInterval(timeout1);
-        if (isJudge) {
+        /*if (isJudge) {
             var docRef = db.collection("roomID").doc(roomID);
             var data;
             await docRef.get().then(async (doc) => {
@@ -240,7 +240,7 @@ async function countDown1() {
                 console.log("Error getting document:", error);
             });
             if (data.gameState == 1) changeState();
-        }
+        }*/
     }
 }
 

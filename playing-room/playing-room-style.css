@@ -218,7 +218,15 @@ button:hover {
   overflow: hidden;
 }
 
+#blank{
+  height: 1.5rem;
+}
+
 @media all and (orientation: portrait) {
+  #blank{
+    height: 3rem;
+    width: 5rem;
+  }
   .white-card {
     background-color: white;
     border-radius: 5px;
@@ -279,8 +287,10 @@ button:hover {
 
   #black-card-add {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   input[type="text"]{
     width: auto;
@@ -312,7 +322,7 @@ button:hover {
   }
   
   button:hover {
-    background-color: yellow;
+    background-color: rgb(95, 211, 95);
     color: black;
   }
   #player-waiting {
