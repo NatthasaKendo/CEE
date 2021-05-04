@@ -220,7 +220,7 @@ async function countDown1() {
     if(timerStop - Date.now() <= 70000) $("#skip-button").css("visibility","visible")
     if (timerStop <= Date.now()) {
         clearInterval(timeout1);
-        if (isJudge) {
+        /*if (isJudge) {
             var docRef = db.collection("roomID").doc(roomID);
             var data;
             await docRef.get().then(async (doc) => {
@@ -237,7 +237,7 @@ async function countDown1() {
                 console.log("Error getting document:", error);
             });
             if (data.gameState == 1) changeState();
-        }
+        }*/
     }
 }
 
