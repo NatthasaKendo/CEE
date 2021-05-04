@@ -24,6 +24,10 @@ img.check{
   width: 4rem;
 }
 
+td{
+  padding: 0.5rem;
+}
+
 .loser {
   background-color: rgb(255, 0, 0);
 }
