@@ -135,6 +135,7 @@ async function refreshRoom() {
             isGenerated = false;
         }
         await updatePlayerData();
+        await generateBlank();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
             $("#judge-waiting").css("display", "flex");
@@ -143,7 +144,6 @@ async function refreshRoom() {
             $("#white-card-option-2").css("display", "none");
             $("#white-card-option-3").css("display", "none");
             $("#player-choosing").css("display", "flex");
-            await generateBlank();
             if (cardCount == 0) generateWhiteCard();
             if (blank >= 1) $("#white-card-option-1").css("display", "flex");
             if (blank >= 2) $("#white-card-option-2").css("display", "flex");
@@ -247,7 +247,7 @@ async function countDown1() {
 function setTime1(remaining) {
     var minutes = "00" + Math.floor(remaining / 60000);
     var seconds = "00" + Math.round(remaining / 1000);
-    //console.log("1 ------ " + minutes + seconds);
+    console.log("1 ------ " + minutes + seconds);
     if (minutes != "" && minutes != null && minutes != "00NaN" && seconds != "" && seconds != null && seconds != "00NaN") $("#timer-1").text(minutes.slice(minutes.length - 2, minutes.length) + ':' + seconds.slice(seconds.length - 2, seconds.length));
 }
 
@@ -859,7 +859,7 @@ async function judgeChoose(cardNumber) {
     data.chosenCard = cardNumber;
     data.score[cardNumber] += 1;
     data.gameState = 3;
-    data.timerStop = Date.now() + 5000;
+    data.timerStop = Date.now() + (8*blank*1000);
     await db.collection("roomID").doc(roomID).set(data).then(() => {
         console.log("Document successfully overwritten!");
     })
@@ -888,7 +888,7 @@ function resetVar() {
     $("#card-list").html("");
     $("#black-card").html("");
     $("#timer-1").text("01:00");
-    $("#timer-2").text("5");
+    $("#timer-2").text("");
 }
 
 async function nextRound() {
