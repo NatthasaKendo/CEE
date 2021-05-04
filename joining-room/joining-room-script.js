@@ -23,7 +23,6 @@ getUrlVars();
 
 $(document).ready(function () {
     initialize();
-    $("[title]").tooltip({ position: "bottom right", opacity: 1 });
 });
 
 
