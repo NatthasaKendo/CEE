@@ -20,6 +20,10 @@
   flex-direction: row;
 }
 
+img.check{
+  width: 4rem;
+}
+
 .loser {
   background-color: rgb(255, 0, 0);
 }
