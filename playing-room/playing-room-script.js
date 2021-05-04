@@ -121,18 +121,16 @@ async function refreshRoom() {
     } else if (data.gameState == 1) {
         if (isGenerated) {
             $("#skip-button").css("visibility", "hidden")
-            console.log("isGenerated =" + isGenerated);
             timeout1 = setInterval(countDown1, 1000);
+            await generateBlank();
             await generateQuestionCard();
             await getTimerStop();
+            if(cardCount == 0)  await generateWhiteCard();
             $("#ready").attr("onclick", "ready(1)");
             $("#ready").text("Ready");
-            //$("#black-card").css("display", "flex");
-            //setTime();
             isGenerated = false;
         }
         await updatePlayerData();
-        await generateBlank();
         if (isJudge) {
             if (data.cardOrder == "" || data.cardOrder == null) await generateCardOrder();
             $("#judge-waiting").css("display", "flex");
@@ -144,7 +142,6 @@ async function refreshRoom() {
             $("#white-card-option-2-scroll").css("display", "none");
             $("#white-card-option-3-scroll").css("display", "none");
             $("#player-choosing").css("display", "flex");
-            if (cardCount == 0) generateWhiteCard();
             if (blank >= 1) $("#white-card-option-1").css("display", "flex");
             if (blank >= 2) $("#white-card-option-2").css("display", "flex");
             if (blank >= 3) $("#white-card-option-3").css("display", "flex");
@@ -157,7 +154,6 @@ async function refreshRoom() {
         clearInterval(dot);
         if (!isGenerated) {
             await generateChoosingCard();
-            //$("#black-card").css("display", "flex");
             isGenerated = true;
         }
         await updatePlayerData();
@@ -169,7 +165,6 @@ async function refreshRoom() {
             await updatePlayerData();
             await generateQuestionCard();
             await updateChoosingCard();
-            //$("#black-card").css("display", "flex");
             isGenerated = false;
         }
         if (data.round != data.roundMax) {
@@ -541,7 +536,7 @@ async function generateWhiteCard() {
         console.log("Error getting document:", error);
     });
     var usedCard = [];
-    if (blank >= 1 && cardCount == 0) {
+    if (blank >= 1) {
         console.log("Generate Cards 1 -----------------")
         for (i = 0; i < 3; i++) {
             var index = Math.floor((Math.random() * data.white.length));
@@ -556,7 +551,7 @@ async function generateWhiteCard() {
         cardCount += 2;
         console.log("Choose Card 1 : " + index);
     }
-    if (blank >= 2 && cardCount == 5) {
+    if (blank >= 2) {
         for (i = 0; i < 3; i++) {
             console.log("Generate Cards 2 -----------------")
             var index = Math.floor((Math.random() * data.white.length));
@@ -571,7 +566,7 @@ async function generateWhiteCard() {
         cardCount += 2;
         console.log("Choose Card 2 : " + index);
     }
-    if (blank >= 3 && cardCount == 10) {
+    if (blank >= 3) {
         console.log("Generate Cards 3 -----------------")
         for (i = 0; i < 3; i++) {
             var index = Math.floor((Math.random() * data.white.length));
@@ -882,14 +877,10 @@ function resetVar() {
     isJudge = false;
     tempB = ",'b',";
     tempP = ",'p',";
-    $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<input id="add-black-card" type="text">There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
-    $("#white-card-option-1").html('1st Blank<div class="white-card">Type your own card<input id="text-card-4" type="text"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
-    $("#white-card-option-2").html('2nd Blank<div class="white-card">Type your own card<input id="text-card-9" type="text"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
-    $("#white-card-option-3").html('3rd Blank<div class="white-card">Type your own card<input id="text-card-14" type="text"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#black-card-option").html('<div class="black-card" id="black-card-add">Type your own question<br><input id="add-black-card" type="text" autocomplete="off"><br>There are<select id="blank"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>blank(s) in this question.<br><button type="button" onclick="choosePlayersBlackCard()">Choose</button></div>');
-    $("#white-card-option-1").html('1st Blank<div id="card-4" class="white-card">Type your own card<input id="text-card-4" type="text" autocomplete="off"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div id="card-5" class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
-    $("#white-card-option-2").html('2nd Blank<div id="card-9" class="white-card">Type your own card<input id="text-card-9" type="text" autocomplete="off"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div id="card-10" class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
-    $("#white-card-option-3").html('3rd Blank<div id="card-14" class="white-card">Type your own card<input id="text-card-14" type="text" autocomplete="off"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div id="card-15" class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
+    $("#white-card-option-1-scroll").html('<div id="card-4" class="white-card">Type your own card<input id="text-card-4" type="text" autocomplete="off"><button type="button" onclick="chooseCard(1' + tempB + '4)">Choose</button></div><div id="card-5" class="white-card">Upload picture as a card<img id="picture-card-5" src="" alt=""><input type="file" id="add-image-card-5" accept="image/*" onchange="addPictureCard(5)"><button type="button" onclick="chooseCard(1' + tempP + '5)">Choose</button></div>');
+    $("#white-card-option-2-scroll").html('<div id="card-9" class="white-card">Type your own card<input id="text-card-9" type="text" autocomplete="off"><button type="button" onclick="chooseCard(2' + tempB + '9)">Choose</button></div><div id="card-10" class="white-card">Upload picture as a card<img id="picture-card-10" src="" alt=""><input type="file" id="add-image-card-10" accept="image/*" onchange="addPictureCard(10)"><button type="button" onclick="chooseCard(2' + tempP + '10)">Choose</button></div>');
+    $("#white-card-option-3-scroll").html('<div id="card-14" class="white-card">Type your own card<input id="text-card-14" type="text" autocomplete="off"><button type="button" onclick="chooseCard(3' + tempB + '14)">Choose</button></div><div id="card-15" class="white-card">Upload picture as a card<img id="picture-card-15" src="" alt=""><input type="file" id="add-image-card-15" accept="image/*" onchange="addPictureCard(15)"><button type="button" onclick="chooseCard(3' + tempP + '15)">Choose</button></div>');
     $("#card-list").html("");
     $("#black-card").html("Judge is choosing a question card ");
     $("#timer-1").text("01:00");
