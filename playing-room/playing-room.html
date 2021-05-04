@@ -17,23 +17,9 @@
         <h1><span id="round">Round: 0</span></h1>
         <div id="timer-1">01:00</div>
         <div class="detail">
-            <div id="judge-choosing-black-card">
-                <div class="black-card-align" id = "black-card-option">
-                    <div class="black-card" id="black-card-add">Type your own question
-                        <input id="add-black-card" type="text" autocomplete="off">
-                        There're
-                        <select id="blank">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                        blank(s) in this question.
-                        <button type="button" onclick="choosePlayersBlackCard()">Choose</button>
-                    </div>
-                </div>
+            <div id="black-card" class="black-card">
+                Judge is choosing a question card 
             </div>
-            <div id = "player-waiting">Waiting for judge to choose black card</div>
-            <div id="black-card" class="black-card"></div>
             <div class="players">
                 <table id="player-list">
                 </table>
@@ -42,6 +28,21 @@
                         <table id="result-player-list">
                         </table>
                         <button id="back-to-index" type="button" onclick="backToIndex()">Back to Main Page</button>
+                    </div>
+                </div>
+            </div>
+            <div id="judge-choosing-black-card">
+                <div class="black-card-align" id = "black-card-option">
+                    <div class="black-card" id="black-card-add">Type your own question<br>
+                        <input id="add-black-card" type="text" autocomplete="off"><br>
+                        There're
+                        <select id="blank">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                        blank(s) in this question.<br>
+                        <button type="button" onclick="choosePlayersBlackCard()">Choose</button>
                     </div>
                 </div>
             </div>
