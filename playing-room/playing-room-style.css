@@ -16,15 +16,20 @@
 }
 
 #card-list {
-  display: none;
   flex-direction: row;
+  display: flex;
+  align-items: flex-start;
+  font-size: 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 80%;
 }
 
 img.check {
   width: 4rem;
 }
 
-td{
+td {
   padding: 0.5rem;
 }
 

@@ -144,7 +144,7 @@ async function refreshRoom() {
             $("#white-card-option-2-scroll").css("display", "none");
             $("#white-card-option-3-scroll").css("display", "none");
             $("#player-choosing").css("display", "flex");
-            if (cardCount == 0) generateWhiteCard();
+            if (cardCount == 0) await generateWhiteCard();
             if (blank >= 1) $("#white-card-option-1").css("display", "flex");
             if (blank >= 2) $("#white-card-option-2").css("display", "flex");
             if (blank >= 3) $("#white-card-option-3").css("display", "flex");
