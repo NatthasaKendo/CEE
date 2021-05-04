@@ -22,11 +22,14 @@
                     <div class="black-card" id="black-card-add">Type your own question
                         <input id="add-black-card" type="text" autocomplete="off">
                         There're
-                        <select id="blank">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
+                        <div class="dropdown">
+                            <select name="one" class="dropdown-select">
+                              <option value="">Select…</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                            </select>
+                          </div>
                         blank(s) in this question.
                         <button type="button" onclick="choosePlayersBlackCard()">Choose</button>
                     </div>
