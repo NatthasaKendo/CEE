@@ -407,7 +407,7 @@ async function generatePlayerData() {
         var judgeState = (i == judge) ? "(Judge)" : "";
         var score = data.score[i];
         var tempURL = "";
-        var isReady = "Ready";
+        var isReady = "";
         console.log(isReady);
         var storageRef = firebase.storage().ref();
         await storageRef.child('profile_pictures/' + profileURL + '.jpg').getDownloadURL().then(function (url) {
@@ -456,7 +456,7 @@ async function updatePlayerData() {
                 if (d > 1) {
                     switch (d) {
                         case (2): $(this).text(judgeState); break;
-                        case (3): $(this).text("Ready"); break;
+                        case (3): $(this).html("<img class='check' src='check.png' alt='Ready'>"); break;
                         case (4): $(this).text(score); break;
                     }
                     if (d == 3) {
