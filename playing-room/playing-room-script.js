@@ -536,7 +536,7 @@ async function generateWhiteCard() {
         console.log("Error getting document:", error);
     });
     var usedCard = [];
-    if (blank >= 1) {
+    if (blank >= 1 && cardCount == 0) {
         console.log("Generate Cards 1 -----------------")
         for (i = 0; i < 3; i++) {
             var index = Math.floor((Math.random() * data.white.length));
@@ -551,7 +551,7 @@ async function generateWhiteCard() {
         cardCount += 2;
         console.log("Choose Card 1 : " + index);
     }
-    if (blank >= 2) {
+    if (blank >= 2 && cardCount == 5) {
         for (i = 0; i < 3; i++) {
             console.log("Generate Cards 2 -----------------")
             var index = Math.floor((Math.random() * data.white.length));
@@ -566,7 +566,7 @@ async function generateWhiteCard() {
         cardCount += 2;
         console.log("Choose Card 2 : " + index);
     }
-    if (blank >= 3) {
+    if (blank >= 3 && cardCount == 10) {
         console.log("Generate Cards 3 -----------------")
         for (i = 0; i < 3; i++) {
             var index = Math.floor((Math.random() * data.white.length));
